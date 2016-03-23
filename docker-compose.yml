@@ -13,12 +13,10 @@ services:
       POSTGRES_PASSWORD: pgsecret
       PGDATA: /swcdbstore/pgdata
     ports:
-      - "8432:5432"
+      - "5432:5432"
   swc-upload:
     build: ./swc-upload
     command: node /app/app.js
-    #volumes:
-    #  - ./swc-upload:/app
     ports:
       - "8080:3000"
     links:
