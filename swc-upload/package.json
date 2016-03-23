@@ -1,0 +1,28 @@
+{
+  "name": "swc-upload",
+  "version": "0.0.1",
+  "private": true,
+  "description": "New Swagger API Project",
+  "keywords": [],
+  "author": "",
+  "license": "",
+  "main": "app.js",
+  "dependencies": {
+    "cors": "^2.7.1",
+    "express": "^4.12.3",
+    "multer": "^1.1.0",
+    "pg": "^4.5.1",
+    "sequelize": "^3.20.0",
+    "sequelize-cli": "^2.3.1",
+    "swagger-express-mw": "^0.1.0",
+    "swagger-tools": "^0.10.1"
+  },
+  "devDependencies": {
+    "should": "^7.1.0",
+    "supertest": "^1.0.0"
+  },
+  "scripts": {
+    "start": "swagger project start",
+    "test": "swagger project test"
+  }
+}

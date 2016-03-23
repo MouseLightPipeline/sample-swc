@@ -1,0 +1,27 @@
+version: '2'
+services:
+  swc-datastore:
+    image: postgres:latest
+    volumes:
+      - /swcdbstore
+    entrypoint: /bin/bash
+  swc-db-server:
+    image: postgres:latest
+    volumes_from:
+      - swc-datastore
+    environment:
+      POSTGRES_PASSWORD: pgsecret
+      PGDATA: /swcdbstore/pgdata
+    ports:
+      - "8432:5432"
+  swc-upload:
+    build: ./swc-upload
+    command: node /app/app.js
+    #volumes:
+    #  - ./swc-upload:/app
+    ports:
+      - "8080:3000"
+    links:
+      - swc-db-server:database
+    depends_on:
+      - swc-db-server
