@@ -6,7 +6,7 @@ var gulp = require('gulp'),
 gulp.task('develop', function () {
   livereload.listen();
   nodemon({
-    script: 'bin/www',
+    script: 'app.js',
     ext: 'js jade coffee html',
     stdout: false
   }).on('readable', function () {

@@ -2,6 +2,7 @@
 @import "font-awesome.min.css";
 body {
 	font-family: "LatoWebLight";
+  background-color: #e3ae43;
 }
 
 h1 {
@@ -42,8 +43,7 @@ p.partial {
 }
 
 #description {
-  min-height: 700px;
-  padding: 50px;
+  padding: 50px 0px 50px 0px;
 }
 
 #footer {

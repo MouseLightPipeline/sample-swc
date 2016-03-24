@@ -27,6 +27,7 @@ io.on('connection', function(socket) {
 });
 
 module.exports.app = app; // for testing
+module.exports.io = io; // for testing
 
 var config = {
   appRoot: __dirname      // required config

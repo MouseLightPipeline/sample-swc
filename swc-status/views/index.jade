@@ -8,48 +8,25 @@ block content
       p(class="partial") A service to manage raw SWC file input and output.  This service is the base of the NDB system and is generally not directly accessed by users.
       br
       p(class="lead")
-      a(id="apilink" href="/foo", class="btn btn-primary-outline btn-med") API
-      br
-      br
+      //a(id="apilink" href="/foo", class="btn btn-primary-outline btn-med") API
+      //br
+      //br
       h4 Service is #[span(id="service_status") down]
       p.
         #[span(id="file_count") ?] files containing #[span(id="sample_count") ?] samples in the database
-  div(id="description", class="container-fluid green")
+  div(id="description", class="green")
     div(class="row")
       h3(class="centered") Services Provided
     br
     div(class="row")
-      div(class="col-xs-3 centered")
-      div(class="col-xs-3 centered")
+      div(class="col-md-2 col-xs-1 centered")
+      div(class="col-md-4 col-xs-5 centered")
         i(class="fa fa-cloud-upload fa-3x")
-        p(class="lead") Upload files
-      div(class="col-xs-3 centered")
+        p(class="lead") Upload raw SWC files
+      div(class="col-md-4 col-xs-5 centered")
         i(class="fa fa-search fa-3x")
         p(class="lead") Query raw files and neuron samples
   div(id="footer", class="container-fluid dark")
     Copyright © 2016 Howard Hughes Medical Institute
-    div(class="pull-xs-right").
-      Service address: #[span(id="host") Unknown service host]
-  script.
-    var host = 'http://' + '#{serviceHost}' + ':9651';
-    var socket = io(host);
-    socket.on('connect', function(msg) {
-      $('#service_status').text('up');
-    });
-    socket.on('reconnect', function(msg) {
-      $('#service_status').text('up');
-    });
-    socket.on('disconnect', function(msg) {
-      $('#service_status').text('down');
-    });
-    socket.on('error', function(msg) {
-      $('#service_status').text('throwing errors');
-    });
-    socket.on('file_count', function(msg) {
-      $('#file_count').text(msg);
-    });
-    socket.on('sample_count', function(msg) {
-      $('#sample_count').text(msg);
-    });
-    $('#host').text(host);
-    $('#apilink').attr("href", host + '/docs');
+    div(class="pull-md-right").
+  script(src='js/io.js')

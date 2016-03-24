@@ -8,6 +8,31 @@ var routes = require('./routes/index');
 
 var app = express();
 
+var http = require('http').Server(app);
+var io = require('socket.io')(http);
+
+var connected = false;
+
+var serviceSocket = null;
+
+var fileCount = 0;
+
+var sampleCount = 0;
+
+connectToServiceIO();
+
+io.on('connection', function(socket) {
+  console.log('Status client connected.')
+  
+  socket.emit('connected', connected);
+  socket.emit('file_count', fileCount);
+  socket.emit('sample_count', sampleCount);
+  
+  socket.on('disconnect', function(){
+    console.log('Status client disconnected.')
+  });
+});
+
 var env = process.env.NODE_ENV || 'development';
 app.locals.ENV = env;
 app.locals.ENV_DEVELOPMENT = env == 'development';
@@ -60,3 +85,49 @@ app.use(function(err, req, res, next) {
 
 
 module.exports = app;
+
+app.set('port', process.env.PORT || 9652);
+
+var server = http.listen(app.get('port'), function() {
+  console.log('Express server listening on port ' + server.address().port);
+});
+
+
+function connectToServiceIO() {
+  serviceHost = 'localhost';
+
+  if (env === 'production') {
+    serviceHost = 'swcservice';
+  }
+  
+  var host = 'http://' + serviceHost + ':9651';
+  
+  var client = require('socket.io-client');
+ 
+  var serviceSocket = client.connect('http://localhost:9651');
+  
+  serviceSocket.on('connect', function(msg) {
+    connected = true;
+    io.emit('connected', connected);
+  });
+  serviceSocket.on('reconnect', function(msg) {
+    connected = true;
+    io.emit('connected', connected);
+  });
+  serviceSocket.on('disconnect', function(msg) {
+    connected = false;
+    io.emit('connected', connected);
+  });
+  serviceSocket.on('error', function(msg) {
+    connected = false;
+    io.emit('connected', connected);
+  });
+  serviceSocket.on('file_count', function(msg) {
+    fileCount = msg;
+    io.emit('file_count', msg);
+  });
+  serviceSocket.on('sample_count', function(msg) {
+    sampleCount = msg;
+    io.emit('sample_count', msg);
+  });
+}
