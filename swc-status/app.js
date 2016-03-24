@@ -96,7 +96,7 @@ var server = http.listen(app.get('port'), function() {
 function connectToServiceIO() {
   serviceHost = 'localhost';
 
-  if (env === 'production') {
+  if (process.env.NODE_ENV === 'production') {
     serviceHost = 'swcservice';
   }
   

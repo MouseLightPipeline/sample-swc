@@ -3,7 +3,6 @@
 var SwaggerExpress = require('swagger-express-mw');
 var cors = require('cors');
 var SwaggerUi = require('swagger-tools/middleware/swagger-ui');
-var multer  = require('multer');
 var db = require('./api/models/index');
 var bodyParser = require('body-parser');
 var express = require('express');
