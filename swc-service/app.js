@@ -27,20 +27,12 @@ io.on('connection', function(socket) {
 });
 
 module.exports.app = app; // for testing
-module.exports.io = io;
 
 var config = {
-  appRoot: __dirname // required config
+  appRoot: __dirname      // required config
 };
 
-app.use('/', express.static(__dirname + '/static'));
-
-app.use('/style/bootstrap', express.static(__dirname + '/bower_components/bootstrap/dist/css'));
-app.use('/script/bootstrap', express.static(__dirname + '/bower_components/bootstrap/dist/js'));
-app.use('/script/jquery', express.static(__dirname + '/bower_components/jquery/dist'));
 app.use('/script/socket.io', express.static(__dirname + '/node_modules/socket.io-client'));
-
-//app.use(multer({dest:'./uploads/', includeEmptyFields: true}).single('contents'));
 
 app.use(require('skipper')());
 
@@ -53,11 +45,8 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
   swaggerExpress.register(app);
   
   var port = process.env.PORT || 9651;
+  
   http.listen(port);
-
-  if (swaggerExpress.runner.swagger.paths['/files']) {
-    console.log('try this:\ncurl http://127.0.0.1:' + port + '/files');
-  }
 });
 
 db.sequelize.sync();

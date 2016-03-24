@@ -5,14 +5,13 @@ block content
     div(class="row centered")
       h1 SWC File Service
       hr(class="partial")
-      p(class="partial") A service to manage raw SWC file input and output.  This service and page is the base of the NDB system and is generally not directly accessed by users.
+      p(class="partial") A service to manage raw SWC file input and output.  This service is the base of the NDB system and is generally not directly accessed by users.
       br
       p(class="lead")
-      a(href="/docs", class="btn btn-primary-outline btn-med") API
+      a(id="apilink" href="/foo", class="btn btn-primary-outline btn-med") API
       br
       br
-      p.
-        Service is #[span(id="service_status") down]
+      h4 Service is #[span(id="service_status") down]
       p.
         #[span(id="file_count") ?] files containing #[span(id="sample_count") ?] samples in the database
   div(id="description", class="container-fluid green")
@@ -20,15 +19,13 @@ block content
       h3(class="centered") Services Provided
     br
     div(class="row")
-      div(class="col-xs-4 centered")
+      div(class="col-xs-3 centered")
+      div(class="col-xs-3 centered")
         i(class="fa fa-cloud-upload fa-3x")
         p(class="lead") Upload files
-      div(class="col-xs-4 centered")
+      div(class="col-xs-3 centered")
         i(class="fa fa-search fa-3x")
-        p(class="lead") Search raw files and neuron samples
-      div(class="col-xs-4 centered")
-        i(class="fa fa-copy fa-3x")
-        p(class="lead") Replicate or transform database
+        p(class="lead") Query raw files and neuron samples
   div(id="footer", class="container-fluid dark")
     Copyright © 2016 Howard Hughes Medical Institute
     div(class="pull-xs-right").
@@ -55,3 +52,4 @@ block content
       $('#sample_count').text(msg);
     });
     $('#host').text(host);
+    $('#apilink').attr("href", host + '/docs');
