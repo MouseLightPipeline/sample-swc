@@ -11,9 +11,10 @@ COPY . /app
 
 # Remove development dependencies
 RUN rm -rf /app/node_modules
-RUN rm -rf /app/test
+RUN rm -rf /app/public/components
 
 # Install production app dependencies
 RUN cd /app; npm install --production
+RUN cd /app; bower install -production
 
-EXPOSE  9651
+EXPOSE  9652
