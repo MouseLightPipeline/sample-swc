@@ -16,8 +16,8 @@ services:
       PGDATA: /swcdbstore/pgdata
     ports:
       - "5432:5432"
-  swc-upload:
-    build: ./swc-upload
+  swc-service:
+    build: ./swc-service
     environment:
       NODE_ENV: production
     command: node /app/app.js
@@ -27,3 +27,15 @@ services:
       - swc-db-server:database
     depends_on:
       - swc-db-server
+  swc-status:
+    build: ./swc-status
+    environment:
+      NODE_ENV: production
+      SWC_SERVICE_PORT: 9651
+    command: node /app/app.js
+    ports:
+      - "9652:9652"
+    links:
+      - swc-service:swcservice
+    depends_on:
+      - swc-service
