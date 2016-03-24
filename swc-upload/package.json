@@ -15,7 +15,8 @@
     "multer": "^1.1.0",
     "pg": "^4.5.1",
     "sequelize": "^3.20.0",
-    "sequelize-cli": "^2.3.1",
+    "skipper": "^0.5.9",
+    "socket.io": "^1.4.5",
     "swagger-express-mw": "^0.1.0",
     "swagger-tools": "^0.10.1"
   },

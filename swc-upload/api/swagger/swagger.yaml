@@ -17,7 +17,7 @@ produces:
   - application/json
 paths:
   /files:
-    x-swagger-router-controller: swc-file
+    x-swagger-router-controller: file
     get:
       summary: Stored SWC files
       description: |
@@ -37,13 +37,13 @@ paths:
           schema:
             $ref: "#/definitions/Error"
   /samples:
-    x-swagger-router-controller: swc-sample
+    x-swagger-router-controller: sample
     get:
       summary: Stored SWC samples
       description: |
         The samples endpoint manages contents of the samples table.
       tags:
-        - Files
+        - Samples
       responses:
         200:
           description: An array of files
@@ -57,26 +57,34 @@ paths:
             $ref: "#/definitions/Error"
   /upload:
     # binds a127 app logic to a route
-    x-swagger-router-controller: swc-file
+    x-swagger-router-controller: upload
     post:
       description: Uploads a new SWC file to the database
       # used as the method name of the controller
-      operationId: upload
       tags:
         - Files
+        - Upload
       consumes:
         - multipart/form-data
       parameters:
+        - name: submitter
+          in: query
+          description: Submitter
+          type: string
+        - name: tag
+          in: query
+          description: Submitter
+          type: string
         - name: contents
           in: formData
           description: File to upload
           type: file
       responses:
-        "200":
+        200:
           description: Success
           schema:
             # a pointer to a definition
-            type: string
+            $ref: '#/definitions/SwcFile'
         # responses may fall through to errors
         default:
           description: Error

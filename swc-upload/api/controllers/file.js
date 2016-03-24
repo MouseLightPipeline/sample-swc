@@ -2,7 +2,7 @@
 
 var util = require('util');
 
-var models = require('../../models/index');
+var models = require('../models/index');
 /*
  For a controller you should export the functions referenced in your Swagger document by name.
 
@@ -11,7 +11,7 @@ var models = require('../../models/index');
  - Or the operationId associated with the operation in your Swagger document
  */
 module.exports = {
-    get: getfiles
+    get: get
 };
 
 /*
@@ -21,12 +21,11 @@ module.exports = {
  Param 2: a handle to the response object
  */
 
-function getfiles(req, res) {
+function get(req, res) {
     // models.SwcFile.findAll({}).then(function(files){
     // models.NeuronSample.findAll({include:[models.SwcFile, {model: models.NeuronSample, as: 'parent'}]}).then(function(files){
-    models.NeuronSample.findAll({}).then(function (samples) {
-        res.json(samples);
-        console.log(samples);
+    models.SwcFile.findAll({}).then(function (files) {
+        res.json(files);
     }).catch(function(){
         res.status(503).json({code: 503, message: 'Database service unavailable.'});
     });

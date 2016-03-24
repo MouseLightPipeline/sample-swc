@@ -12,8 +12,6 @@ module.exports = function(sequelize, DataTypes) {
     classMethods: {
       associate: function(models) {
         NeuronSample.belongsTo(models.SwcFile, {foreignKey: 'fileId'});
-        NeuronSample.belongsTo(models.NeuronSample, {foreignKey: 'parentId', as: 'parent'});
-        NeuronSample.hasMany(models.NeuronSample, {foreignKey: 'parentId', as: 'children'});
       }
     }
   });

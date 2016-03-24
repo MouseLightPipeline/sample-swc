@@ -5,8 +5,18 @@
   <link rel="stylesheet" type="text/css" href="style/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="style/bootstrap/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="style/site.css">
-  <script src="script/bootstrap/bootstrap.min.js"></script>
   <script src="script/jquery/jquery.min.js"></script>
+  <script src="script/bootstrap/bootstrap.min.js"></script>
+  <script src="script/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io();
+    socket.on('file_count', function(msg) {
+      $('#file_count').text(msg);
+    });
+    socket.on('sample_count', function(msg) {
+      $('#sample_count').text(msg);
+    });
+  </script>
 </head>
 <body>
   <div id="landing" class="container-fluid blue">
@@ -19,6 +29,9 @@
       <br/><br/>
       <p class="lead">
       <a href="/docs" class="btn btn-primary-outline btn-med">API</a>
+      <br/><br/>
+      <br/>
+      <span id="file_count"></span> files containing <span id="sample_count"></span> samples in the database
     </p>
     </div>
   </div>

@@ -36,3 +36,6 @@ bower_components
 
 # JetBrains IDE 
 .idea
+
+# From Skipper defaults (file upload), possibly others
+.tmp

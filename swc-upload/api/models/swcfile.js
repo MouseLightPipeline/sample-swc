@@ -3,7 +3,8 @@ module.exports = function(sequelize, DataTypes) {
   var SwcFile = sequelize.define('SwcFile', {
     filename: DataTypes.STRING,
     tag: DataTypes.STRING,
-    submitter: DataTypes.STRING
+    submitter: DataTypes.STRING,
+    comments: DataTypes.STRING
   }, {
     classMethods: {
       associate: function(models) {
