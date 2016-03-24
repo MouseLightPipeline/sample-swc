@@ -20,6 +20,6 @@ RUN rm -rf /app/public/components
 # Install production app dependencies
 RUN cd /app; npm install -g --production bower
 RUN cd /app; npm install --production
-RUN cd /app; bower install —allow-root
+RUN cd /app; bower install --allow-root
 
 EXPOSE  9652

@@ -22,14 +22,14 @@ var sampleCount = 0;
 connectToServiceIO();
 
 io.on('connection', function(socket) {
-  console.log('Status client connected.')
+  console.log('Web client connected to status service.')
   
   socket.emit('connected', connected);
   socket.emit('file_count', fileCount);
   socket.emit('sample_count', sampleCount);
   
   socket.on('disconnect', function(){
-    console.log('Status client disconnected.')
+    console.log('Web client disconnected from status service.')
   });
 });
 
@@ -104,29 +104,37 @@ function connectToServiceIO() {
   
   var client = require('socket.io-client');
  
-  var serviceSocket = client.connect('http://localhost:9651');
+  var serviceSocket = client.connect(host);
+  
+  console.log('Trying to establish socket connection to REST service at ' + host);
   
   serviceSocket.on('connect', function(msg) {
+    console.log('Connected to REST servivce');
     connected = true;
     io.emit('connected', connected);
   });
   serviceSocket.on('reconnect', function(msg) {
+    console.log('Reconnected to REST servivce');
     connected = true;
     io.emit('connected', connected);
   });
   serviceSocket.on('disconnect', function(msg) {
+    console.log('Disconnected from REST servivce');
     connected = false;
     io.emit('connected', connected);
   });
   serviceSocket.on('error', function(msg) {
+    console.log('Error for REST servivce');
     connected = false;
     io.emit('connected', connected);
   });
   serviceSocket.on('file_count', function(msg) {
+    console.log('Received file count update from REST servivce');
     fileCount = msg;
     io.emit('file_count', msg);
   });
   serviceSocket.on('sample_count', function(msg) {
+    console.log('Received sample count update from REST servivce');
     sampleCount = msg;
     io.emit('sample_count', msg);
   });
