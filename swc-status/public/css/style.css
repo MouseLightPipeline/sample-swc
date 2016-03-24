@@ -2,7 +2,7 @@
 @import "font-awesome.min.css";
 body {
 	font-family: "LatoWebLight";
-  background-color: #e3ae43;
+  background-color: #72b5cc;
 }
 
 h1 {
@@ -52,4 +52,13 @@ p.partial {
   bottom: 0;
   width: 100%;
   padding: 20px;
+}
+
+div.error {
+  padding: 30px;
+  color: white;
+}
+
+pre {
+  color: white;
 }
