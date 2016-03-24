@@ -11,8 +11,8 @@ var models = require('../../models/index');
  - Or the operationId associated with the operation in your Swagger document
  */
 module.exports = {
-    sfupload: acceptfile,
-    sfgetfiles: getfiles
+    upload: acceptfile,
+    get: getfiles
 };
 
 /*
@@ -25,7 +25,7 @@ module.exports = {
 function getfiles(req, res) {
     // models.SwcFile.findAll({}).then(function(files){
     // models.NeuronSample.findAll({include:[models.SwcFile, {model: models.NeuronSample, as: 'parent'}]}).then(function(files){
-        models.NeuronSample.findAll({}).then(function (files) {
+        models.SwcFile.findAll({}).then(function (files) {
             res.json(files);
             console.log(files);
         }).catch(function(){
@@ -33,6 +33,19 @@ function getfiles(req, res) {
         });
 }
 
-function acceptfile(req, res) {
-    console.log('This operation should not have been used.  It should be overridden for file upload.');
+function acceptfile(req, res) {  
+    var fs = require('fs'), byline = require('byline');
+
+    var stream = byline(fs.createReadStream(req.file.path, { encoding: 'utf8' }));
+  
+    var samples = [];
+   
+    //var swcFile = 
+  
+    stream.on('data', function(line) {
+      var res = line.trim().split(' ');
+      console.log(res);
+    });
+  
+    res.json({code: 202, message: ''});
 }

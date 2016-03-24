@@ -8,6 +8,8 @@
   "license": "",
   "main": "app.js",
   "dependencies": {
+    "body-parser": "^1.15.0",
+    "byline": "^4.2.1",
     "cors": "^2.7.1",
     "express": "^4.12.3",
     "multer": "^1.1.0",

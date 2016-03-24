@@ -4,7 +4,7 @@ info:
   description: "Manage SWC files in the SWC database"
   title: SWC File API
 # during dev, should point to your local machine
-host: localhost:3000
+host: localhost:9651
 # basePath prefixes all resource paths 
 basePath: /api/v1
 # 
@@ -21,9 +21,8 @@ paths:
     get:
       summary: Stored SWC files
       description: |
-        The files endpoint returns information about SWC files uploaded and stored in
+        The files endpoint manages contents of SWC files uploaded and stored in
         raw format on the server.
-      operationId: sfgetfiles
       tags:
         - Files
       responses:
@@ -37,13 +36,32 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+  /samples:
+    x-swagger-router-controller: swc-sample
+    get:
+      summary: Stored SWC samples
+      description: |
+        The samples endpoint manages contents of the samples table.
+      tags:
+        - Files
+      responses:
+        200:
+          description: An array of files
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Sample'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
   /upload:
     # binds a127 app logic to a route
     x-swagger-router-controller: swc-file
     post:
       description: Uploads a new SWC file to the database
       # used as the method name of the controller
-      operationId: sfupload
+      operationId: upload
       tags:
         - Files
       consumes:
@@ -53,14 +71,6 @@ paths:
           in: formData
           description: File to upload
           type: file
-        - name: submitter
-          in: formData
-          description: Mame of the person submitting the file
-          type: string
-        - name: tag
-          in: formData
-          description: Optional tag associated with file
-          type: string
       responses:
         "200":
           description: Success
@@ -71,7 +81,7 @@ paths:
         default:
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"
+            $ref: "#/definitions/Error"
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
@@ -97,12 +107,18 @@ definitions:
       updatedAt:
         type: string
         description: Update time.
-  ErrorResponse:
-    required:
-      - message
+  Sample:
+    type: object
     properties:
-      message:
+      id:
+        type: integer
+        description: Internal id.
+      createdAt:
         type: string
+        description: Creation time.
+      updatedAt:
+        type: string
+        description: Update time.
   Error: 
     type: object
     required:

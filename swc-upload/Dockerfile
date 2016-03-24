@@ -11,8 +11,10 @@ COPY . /app
 
 # Remove development dependencies
 RUN rm -rf /app/node_modules
+RUN rm -rf /app/bower_components
 
-# Install app dependencies
+# Install production app dependencies
 RUN cd /app; npm install --production
+RUN cd /app; bower install -production
 
 EXPOSE  3000

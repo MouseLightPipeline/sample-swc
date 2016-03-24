@@ -7,6 +7,8 @@ services:
     entrypoint: /bin/bash
   swc-db-server:
     image: postgres:latest
+    volumes:
+      - ./swc-datastore:/docker-entrypoint-initdb.d
     volumes_from:
       - swc-datastore
     environment:
@@ -16,9 +18,11 @@ services:
       - "5432:5432"
   swc-upload:
     build: ./swc-upload
+    environment:
+      NODE_ENV: production
     command: node /app/app.js
     ports:
-      - "8080:3000"
+      - "9651:9651"
     links:
       - swc-db-server:database
     depends_on:
