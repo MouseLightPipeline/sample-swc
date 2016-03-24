@@ -3,8 +3,6 @@ info:
   version: "0.0.1"
   description: "Manage SWC files in the SWC database"
   title: SWC File API
-# during dev, should point to your local machine
-host: localhost:9651
 # basePath prefixes all resource paths 
 basePath: /api/v1
 # 
