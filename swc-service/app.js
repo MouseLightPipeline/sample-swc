@@ -12,6 +12,8 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+app.locals.dbready = false;
+
 io.on('connection', function(socket) {
   console.log('a user connected');
   db.SwcFile.count().then(function(val){
@@ -49,4 +51,15 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
   http.listen(port);
 });
 
-db.sequelize.sync();
+sync();
+
+function sync()
+{
+  db.sequelize.sync().then(function() {
+    app.locals.dbready = true;
+    console.log('Successful database sync.');
+  }).catch(function(err){
+    console.log('Failed database sync.');
+    setTimeout(sync, 5000);
+  });
+}

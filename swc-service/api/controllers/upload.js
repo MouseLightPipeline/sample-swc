@@ -20,10 +20,14 @@ module.exports = {
 };
 
 function post(req, res) {
+  if (!req.app.locals.dbready) {
+    return res.status(503).send({code: 503, message: 'Database service unavailable'});
+  }
+  
   req.file('contents').upload(function (err, uploadedFiles) {
     if (err) {
       console.log(err);
-      return res.send(500, {code: 500, message: 'File upload error', details: err});
+      return res.status(503).send({code: 500, message: 'File upload error', details: err});
     }
     var tmpFile = uploadedFiles[0];
     
