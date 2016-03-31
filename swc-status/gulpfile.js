@@ -21,7 +21,6 @@ gulp.task('nodemon', ['build'], function () {
   }).on('readable', function () {
     this.stdout.on('data', function (chunk) {
       if(/^Express server listening on port/.test(chunk)){
-          console.log('triggered');
         livereload.changed(__dirname);
       }
     });
@@ -30,8 +29,8 @@ gulp.task('nodemon', ['build'], function () {
   });
 });
 
-gulp.task('watch', ['build'], function() {
-    gulp.watch(['server/**/*.*', 'client/**/*.*'], ['build']);
+gulp.task('watch', function() {
+    return gulp.watch(['server/**/*.*', 'client/**/*.*'], ['build']);
 });
 
 /*
