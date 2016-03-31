@@ -49,3 +49,6 @@ dist
 
 # Temporary directories
 tmp
+
+.editorconfig
+
