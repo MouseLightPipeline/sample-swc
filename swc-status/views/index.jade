@@ -1,0 +1,30 @@
+extends layout
+
+block content
+  div(id="landing", class="blue")
+    div(class="row centered")
+      h1 SWC File Service Status
+      hr(class="partial")
+      p(class="partial") The SWC file service manages raw SWC file input and output.  This service is the base of the NDB system and is generally not directly accessed by users. 
+      p(class="partial") Use this site to quickly view the status of the service.
+      br
+      p(class="lead")
+      h4 Service is #[span(id="service_status") down]
+      h4 Database is #[span(id="db_status") unavailable]
+      p.
+        #[span(id="file_count") ?] files containing #[span(id="sample_count") ?] samples in the database
+  div(id="description", class="green")
+    div(class="row")
+      h3(class="centered") Services Provided
+    br
+    div(class="row")
+      div(class="col-md-2 col-xs-1 centered")
+      div(class="col-md-4 col-xs-5 centered")
+        a(href="http://swcweb/#upload" class="iconlink")
+          ri(class="fa fa-cloud-upload fa-3x")
+          p(class="lead") Upload raw SWC files
+      div(class="col-md-4 col-xs-5 centered")
+        a(href="http://swcweb/#search" class="iconlink")
+          i(class="fa fa-search fa-3x")
+          p(class="lead") Query raw files and neuron samples
+  script(src='js/io.js')

@@ -1,0 +1,26 @@
+{
+  "development": {
+    "username": "postgres",
+    "password": "pgsecret",
+    "database": "swc_development",
+    "host": "192.168.6.134",
+    "port": "5432",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "postgres",
+    "password": "pgsecret",
+    "database": "swc_test",
+    "host": "192.168.6.134",
+    "port": "5432",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "postgres",
+    "password": "pgsecret",
+    "database": "swc_production",
+    "host": "database",
+    "port": "5432",
+    "dialect": "postgres"
+  }
+}

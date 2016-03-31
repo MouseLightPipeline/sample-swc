@@ -1,0 +1,16 @@
+{
+  "name": "swc-status",
+  "version": "0.0.1",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "v4.0.0-alpha.2",
+    "socket.io.client": "^1.3.5"
+  }
+}
