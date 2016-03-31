@@ -121,7 +121,7 @@ definitions:
     type: object
     properties:
       id:
-        type: integer
+        type: string
         description: Internal id.
       filename:
         type: string
@@ -142,7 +142,7 @@ definitions:
     type: object
     properties:
       id:
-        type: integer
+        type: string
         description: Internal id.
       createdAt:
         type: string
