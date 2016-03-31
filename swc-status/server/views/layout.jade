@@ -5,12 +5,14 @@ html(lang='en')
     meta(name='viewport', content='width=device-width')
     title=title
     block css
-      link(rel='stylesheet', href='/components/bootstrap/dist/css/bootstrap.min.css')
+      link(rel='stylesheet', href='/css/tether.min.css')
+      link(rel='stylesheet', href='/css/bootstrap.min.css')
       link(rel='stylesheet', href='/css/style.css')
     block js
-      script(src='/components/jquery/dist/jquery.min.js')
-      script(src='/components/bootstrap/dist/js/bootstrap.min.js')
-      script(src='components/socket.io.client/dist/socket.io-1.3.5.js')
+      script(src='/lib/jquery.min.js')
+      script(src='/lib/tether.min.js')
+      script(src='/lib/bootstrap.min.js')
+      script(src='/lib/socket.io-1.3.5.js')
       if ENV_DEVELOPMENT
         script(src='http://localhost:35729/livereload.js')
   body

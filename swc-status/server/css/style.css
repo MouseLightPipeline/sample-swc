@@ -1,11 +1,13 @@
-@import "latofonts.css";
+@import "lato.min.css";
 @import "font-awesome.min.css";
 body {
-	font-family: "LatoWebLight", "Lucida Grande", Helvetica, Arial, sans-serif;;
+  font-family: "Lato", "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-weight: 300;
   background-color: #72b5cc;
 }
 
-h1 {
+h1, h2, h3, h4 {
+  font-weight: 300;
 }
 
 .blue {

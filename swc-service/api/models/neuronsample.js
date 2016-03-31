@@ -1,4 +1,5 @@
 'use strict';
+
 module.exports = function(sequelize, DataTypes) {
   var NeuronSample = sequelize.define('NeuronSample', {
     sampleNumber: DataTypes.INTEGER,

@@ -33,7 +33,6 @@ module.exports = function(app, config) {
   }));
   app.use(cookieParser());
   app.use(compress());
-  console.log(path.normalize(config.root + '/../public'))
   app.use('/public', express.static(path.normalize(config.root + '/../public')));
   app.use(methodOverride());
 

@@ -48,7 +48,8 @@ app.set('view engine', 'jade');
 app.use(logger('dev'));
 
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+console.log(path.normalize(__dirname + '/../public'))
+app.use('/', express.static(path.normalize(__dirname + '/../public')));
 
 app.use('/', routes);
 

@@ -19,7 +19,7 @@
     "username": "postgres",
     "password": "pgsecret",
     "database": "swc_production",
-    "host": "database",
+    "host": "swcdatabase",
     "port": "5432",
     "dialect": "postgres"
   }
