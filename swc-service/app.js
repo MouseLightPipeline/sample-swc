@@ -16,19 +16,24 @@ app.locals.dbready = false;
 
 io.on('connection', function(socket) {
   console.log('a user connected');
-  db.SwcFile.count().then(function(val){
-     socket.emit('file_count', val);
-  })
-  db.NeuronSample.count().then(function(val){
-     socket.emit('sample_count', val);
-  })
+  socket.emit('db_status', app.locals.dbready);
+  
+  if  (app.locals.dbready) {
+    db.SwcFile.count().then(function(val){
+      socket.emit('file_count', val);
+    });
+    db.NeuronSample.count().then(function(val){
+      socket.emit('sample_count', val);
+    });
+  }
+  
   socket.on('disconnect', function(){
     console.log('user disconnected');
   });
 });
 
 module.exports.app = app; // for testing
-module.exports.io = io; // for testing
+module.exports.io = io;
 
 var config = {
   appRoot: __dirname      // required config
@@ -57,6 +62,14 @@ function sync()
 {
   db.sequelize.sync().then(function() {
     app.locals.dbready = true;
+    io.emit('db_status', app.locals.dbready);
+
+    db.SwcFile.count().then(function(val){
+       io.emit('file_count', val);
+    });
+    db.NeuronSample.count().then(function(val){
+       io.emit('sample_count', val);
+    });
     console.log('Successful database sync.');
   }).catch(function(err){
     console.log('Failed database sync.');

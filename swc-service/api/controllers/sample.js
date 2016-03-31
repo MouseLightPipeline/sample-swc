@@ -11,7 +11,8 @@ var models = require('../models/index');
  - Or the operationId associated with the operation in your Swagger document
  */
 module.exports = {
-    get: getfiles
+    get: getfiles,
+    findByStructure: findByStructure
 };
 
 /*
@@ -29,4 +30,23 @@ function getfiles(req, res) {
     }).catch(function(){
         res.status(503).json({code: 503, message: 'Database service unavailable.'});
     });
+}
+
+function findByStructure(req, res) {
+    var id = parseInt(req.swagger.params.structure.value);
+    
+    console.log(id);
+    
+    if (!isNaN(id)) {
+        models.NeuronSample.findAll({where: {structure: id}, include:[{model:models.SwcFile, attributes:['filename']}], order: [[models.SwcFile, 'filename', 'ASC'], ['sampleNumber', 'ASC']]}).then(function (samples) {
+            res.json(samples);
+        }).catch(function(e){
+            console.log(e);
+            res.status(400);
+            //res.status(503).json({code: 503, message: 'Database service unavailable.'});
+        });
+        //res.status(200).json([]);
+    } else {
+        res.status(400);
+    }
 }

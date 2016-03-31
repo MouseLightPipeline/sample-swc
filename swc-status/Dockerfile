@@ -18,7 +18,7 @@ RUN rm -rf /app/node_modules
 RUN rm -rf /app/public/components
 
 # Install production app dependencies
-RUN cd /app; npm install -g --production bower
+RUN cd /app; npm install -g bower
 RUN cd /app; npm install --production
 RUN cd /app; bower install --allow-root
 

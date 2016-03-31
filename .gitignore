@@ -43,3 +43,9 @@ bower_components
 typings
 
 *.js.map
+
+# Build directories
+dist
+
+# Temporary directories
+tmp

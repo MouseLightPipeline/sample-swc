@@ -37,5 +37,18 @@ services:
       - "9652:9652"
     links:
       - swc-service:swcservice
+      - swc-web:swcweb
+    depends_on:
+      - swc-service
+  swc-web:
+    build: ./swc-web
+    environment:
+      NODE_ENV: production
+      SWC_SERVICE_PORT: 9651
+    command: node /app/dist/server/app.js
+    ports:
+      - "9653:9653"
+    links:
+      - swc-service:swcservice
     depends_on:
       - swc-service

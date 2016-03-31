@@ -53,6 +53,31 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+  /samples/findByStructure/{structure}:
+    x-swagger-router-controller: sample
+    get:
+      tags:
+        - Samples
+      summary: Finds Pets by tags
+      operationId: findByStructure
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: structure
+          description: structure id to filter by
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Sample'
+        "400":
+          description: Invalid structure id value
   /upload:
     # binds a127 app logic to a route
     x-swagger-router-controller: upload

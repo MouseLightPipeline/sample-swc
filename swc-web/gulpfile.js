@@ -1,41 +1,110 @@
-const gulp = require('gulp');
-const del = require('del');
-const ts = require('gulp-typescript');
-
-var tsProject = ts.createProject('tsconfig.json');
-
-// TypeScript compile
-gulp.task('compile', function () {
-  var tsResult = tsProject.src().pipe(ts(tsProject));	
-	return tsResult.js.pipe(gulp.dest('dist'));
+var gulp = require('gulp'),
+  del = require('del'),
+  rename = require('gulp-rename'),
+  nodemon = require('gulp-nodemon'),
+  plumber = require('gulp-plumber'),
+  livereload = require('gulp-livereload'),
+  typescript = require("gulp-typescript");
+  gulpTypings = require("gulp-typings");
+ 
+gulp.task('develop', function () {
+  livereload.listen();
+  nodemon({
+    script: 'dist/server/app.js',
+    ext: 'js ts jade css',
+    stdout: false
+  }).on('readable', function () {
+    this.stdout.on('data', function (chunk) {
+      if(/^Express server listening on port/.test(chunk)){
+        livereload.changed(__dirname);
+      }
+    });
+    this.stdout.pipe(process.stdout);
+    this.stderr.pipe(process.stderr);
+  });
 });
 
-gulp.task('dependencies', ['lib', 'html', 'css']);
+gulp.task('watch', ['build'], function () {
+  var stream = nodemon({
+    script: 'dist/server/app.js',
+    ext: 'js ts jade css',
+    ignore: 'dist',
+    tasks: ['build']
+  });
 
-gulp.task('lib', function () {
+  return stream;
+})
+
+gulp.task('default', ['watch']);
+
+gulp.task('server:dep', ['js', 'jade']);
+
+gulp.task('client:dep', ['html', 'css', 'lib', 'fonts']);
+
+gulp.task('client:src', ['ts']);
+
+gulp.task('build', ['server:dep', 'client:dep', 'client:src']);
+
+gulp.task('clean', function () {
+  return del('dist/**/*');
+});
+
+// install typings
+gulp.task("typings",function() {
+  return gulp.src("./typings.json").pipe(gulpTypings());
+});
+
+gulp.task('lib', ['clean'], function() {
   return gulp.src([
-    'node_modules/es6-shim/es6-shim.min.js',
-    'node_modules/es6-shim/es6-shim.map',
-    'node_modules/systemjs/dist/system-polyfills.js',
-    'node_modules/angular2/es6/dev/src/testing/shims_for_IE.js',
-    'node_modules/angular2/bundles/angular2-polyfills.js',
-    'node_modules/systemjs/dist/system.src.js',
-    'node_modules/rxjs/bundles/Rx.js',
-    'node_modules/angular2/bundles/angular2.dev.js',
-  ])
-    .pipe(gulp.dest('dist' + '/lib'));
+      'bower_components/jquery/dist/jquery.min.js',
+      'bower_components/angular/angular.min.js',
+      'bower_components/angular/angular.min.js.map',
+      'bower_components/angular-resource/angular-resource.min.js',
+      'bower_components/angular-resource/angular-resource.min.js.map',
+      'bower_components/bootstrap/dist/js/bootstrap.min.js',
+      'bower_components/bootstrap/dist/css/bootstrap.min.css',
+      'bower_components/bootstrap/dist/css/bootstrap.min.css.map',
+      'bower_components/tether/dist/js/tether.min.js',
+      'bower_components/tether/dist/css/tether.min.css'
+    ])
+    .pipe(gulp.dest('dist/public/lib'))
+});
+
+// compile typescript
+gulp.task('ts', ['clean'], function () {
+  var tsconfig = './tsconfig.json';
+  return gulp
+    .src('client/**/*.ts')
+    .pipe(typescript(tsconfig.compilerOptions))
+    .pipe(gulp.dest('dist/public'));
+});
+
+// move js
+gulp.task('js', ['clean'], function () {
+  return gulp.src('server/**/*.js')
+    .pipe(gulp.dest('dist/server'));
+});
+
+// move jade
+gulp.task('jade', ['clean'], function () {
+  return gulp.src('server/**/*.jade')
+    .pipe(gulp.dest('dist/server'))
 });
 
 // move html
-gulp.task('html', function () {
-  return gulp.src('app/**/*.html')
-    .pipe(gulp.dest('dist'))
+gulp.task('html', ['clean'], function () {
+  return gulp.src('server/**/*.html')
+    .pipe(gulp.dest('dist/public'))
 });
 
-gulp.task('css', function () {
-  return gulp.src('app/**/*.css')
-    .pipe(gulp.dest('dist'))
+// move css
+gulp.task('css', ['clean'], function () {
+  return gulp.src('server/**/*.css')
+    .pipe(gulp.dest('dist/public'))
 });
 
-gulp.task('build', ['dependencies', 'compile']);
-gulp.task('default', ['build']);
+// move fonts
+gulp.task('fonts', ['clean'], function () {
+  return gulp.src('server/fonts/**/*')
+    .pipe(gulp.dest('dist/public/fonts'))
+});

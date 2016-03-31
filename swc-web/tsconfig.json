@@ -1,17 +1,17 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "system",
+    "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true,
+    "declaration": false,
+    "removeComments": true,
+    "noEmitHelpers": false,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "removeComments": false,
-    "noImplicitAny": false
+    "experimentalDecorators": true
   },
-  "exclude": [
+  "exlude": [
     "node_modules",
-    "typings/main",
-    "typings/main.d.ts"
+    "bower_components"
   ]
 }

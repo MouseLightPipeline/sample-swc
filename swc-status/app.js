@@ -19,6 +19,8 @@ var fileCount = 0;
 
 var sampleCount = 0;
 
+var db_status = false;
+
 connectToServiceIO();
 
 io.on('connection', function(socket) {
@@ -27,6 +29,7 @@ io.on('connection', function(socket) {
   socket.emit('connected', connected);
   socket.emit('file_count', fileCount);
   socket.emit('sample_count', sampleCount);
+  socket.emit('db_status', db_status);
   
   socket.on('disconnect', function(){
     console.log('Web client disconnected from status service.')
@@ -121,12 +124,23 @@ function connectToServiceIO() {
   serviceSocket.on('disconnect', function(msg) {
     console.log('Disconnected from REST servivce');
     connected = false;
+    sample_count = 0;
+    file_count = 0;
+    db_status = false;
     io.emit('connected', connected);
+    io.emit('db_status', db_status);
+    io.emit('file_count', file_count);
+    io.emit('sample_count', sample_count);
   });
   serviceSocket.on('error', function(msg) {
     console.log('Error for REST servivce');
     connected = false;
     io.emit('connected', connected);
+  });
+  serviceSocket.on('db_status', function(msg) {
+    console.log('Received file count update from REST servivce');
+    db_status = msg;
+    io.emit('db_status', msg);
   });
   serviceSocket.on('file_count', function(msg) {
     console.log('Received file count update from REST servivce');

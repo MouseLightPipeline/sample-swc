@@ -20,6 +20,8 @@ module.exports = {
 };
 
 function post(req, res) {
+  console.log('post');
+  
   if (!req.app.locals.dbready) {
     return res.status(503).send({code: 503, message: 'Database service unavailable'});
   }
@@ -29,6 +31,9 @@ function post(req, res) {
       console.log(err);
       return res.status(503).send({code: 500, message: 'File upload error', details: err});
     }
+    
+    console.log('Upload: ' + uploadedFiles[0]);
+    
     var tmpFile = uploadedFiles[0];
     
     var stream = byline(fs.createReadStream(tmpFile.fd, { encoding: 'utf8' }));
@@ -55,7 +60,7 @@ function onData(line, samples, comments) {
 
   if (data.length > 0 ) {
     if (data[0] == '#') {
-      comments += res + '\n';
+      comments += data + '\n';
     } else {
       data = data.split(' ');
       if (data.length == 7) {
