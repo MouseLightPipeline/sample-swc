@@ -24,7 +24,7 @@ services:
     ports:
       - "9651:9651"
     links:
-      - swc-db-server:database
+      - swc-db-server:swcdatabase
     depends_on:
       - swc-db-server
   swc-status:
@@ -32,7 +32,7 @@ services:
     environment:
       NODE_ENV: production
       SWC_SERVICE_PORT: 9651
-    command: node /app/app.js
+    command: node /app/dist/server/app.js
     ports:
       - "9652:9652"
     links:

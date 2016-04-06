@@ -26,4 +26,4 @@ RUN cd /app; bower install --allow-root
 
 RUN cd /app; gulp build
 
-EXPOSE  9652
+EXPOSE  9653

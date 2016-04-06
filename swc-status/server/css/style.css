@@ -3,12 +3,10 @@
 body {
   font-family: "Lato", "Lucida Grande", Helvetica, Arial, sans-serif;
   font-weight: 300;
-  color: white;
   background-color: #72b5cc;
-  margin-bottom: 60px;
 }
 
-h1, h2, h3, h4, h5 {
+h1, h2, h3, h4 {
   font-weight: 300;
 }
 
@@ -17,7 +15,7 @@ h1, h2, h3, h4, h5 {
   color: white;
 }
 
-.orange {
+.green {
   background-color: #e3ae43;
   color: white;
 }
@@ -42,20 +40,12 @@ p.partial {
 }
 
 #landing {
-  min-height: 300px;
-  padding: 40px 20px 20px 20px;
+  min-height: 400px;
+  padding: 100px 20px 50px 20px;
 }
 
-#upload {
-  padding: 40px 40px 40px 40px;
-}
-
-#search {
-  padding: 40px 40px 40px 40px;
-}
-
-#status {
-  padding: 40px 40px 40px 40px;
+#description {
+  padding: 50px 0px 50px 0px;
 }
 
 #footer {
@@ -75,32 +65,10 @@ pre {
   color: white;
 }
 
-.dropzone {
-  background-color: #72b5cc;
-}
-
-.inset {
-  padding: 50px;
-}
-
-form.dropzone {
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
-  max-width: 200px;
-  border-radius: 5px;
-  border-style: dashed;
-  border-width: 2px;
-}
-
 a.iconlink {
   color: white;
 }
 
 a.iconlink:hover {
   text-decoration: none;
-}
-
-.left {
-  margin-left: 10px;
 }

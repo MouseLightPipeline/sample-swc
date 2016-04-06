@@ -35,8 +35,6 @@ function getfiles(req, res) {
 function findByStructure(req, res) {
     var id = parseInt(req.swagger.params.structure.value);
     
-    console.log(id);
-    
     if (!isNaN(id)) {
         models.NeuronSample.findAll({where: {structure: id}, include:[{model:models.SwcFile, attributes:['filename']}], order: [[models.SwcFile, 'filename', 'ASC'], ['sampleNumber', 'ASC']]}).then(function (samples) {
             res.json(samples);
