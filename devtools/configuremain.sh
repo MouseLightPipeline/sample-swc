@@ -10,4 +10,5 @@ fi
 
 echo $SRCDIR
 
-docker run --name some-arangodb -e ARANGO_ROOT_PASSWORD=arsecret --rm -p 8529:8529 -v $SRCDIR/main-datastore/foxx:/var/lib/arangodb-apps/ arangodb/arangodb
+docker run --name some-node --rm -v $SRCDIR/main-datastore/initializer:/app -w /app node:4 node app.js
+
