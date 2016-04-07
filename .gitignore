@@ -26,8 +26,29 @@ build/Release
 # Dependency directory
 node_modules
 
+bower_components
+
 # Optional npm cache directory
 .npm
 
 # Optional REPL history
 .node_repl_history
+
+# JetBrains IDE 
+.idea
+
+# From Skipper defaults (file upload), possibly others
+.tmp
+
+typings
+
+*.js.map
+
+# Build directories
+dist
+
+# Temporary directories
+tmp
+
+.editorconfig
+

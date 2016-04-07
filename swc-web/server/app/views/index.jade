@@ -1,0 +1,96 @@
+doctype html
+html(lang='en', ng-app="swcFileManager")
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width')
+    title SWC File Manager
+    link(rel='stylesheet', href='/css/tether.min.css')
+    link(rel='stylesheet', href='/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/css/style.css')
+    script(src='/lib/jquery.min.js')
+    script(src='/lib/angular.min.js')
+    script(src='/lib/angular-resource.min.js')
+    script(src='/lib/tether.min.js')
+    script(src='/lib/bootstrap.min.js')
+    script(src='/app/app.js')
+    script(src='/app/directives/fileinput.js')
+    script(src='/app/services/serviceApiService.js')
+    script(src='/app/controllers/serviceController.js')
+    script(src='/app/controllers/dropzoneController.js')
+    script(src='/app/controllers/queryController.js')
+    if ENV_DEVELOPMENT
+      script(src='http://localhost:34729/livereload.js')
+
+  body(ng-controller="serviceController")
+    div(class="blue", id="landing")
+      div(class="row centered")
+        h1 SWC File Manager
+        hr(class="partial")
+        p(class="partial").
+          An interactive server to upload and query stored SWC files.
+      div(class="row")
+        h3(class="centered") Services Provided
+      br
+      div(class="row")
+        div(class="col-md-2 col-xs-1 centered")
+        div(class="col-md-4 col-xs-5 centered")
+          a(href="#upload" class="iconlink")
+            i(class="fa fa-cloud-upload fa-3x")
+            p(class="lead") Upload raw SWC files
+        div(class="col-md-4 col-xs-5 centered")
+          a(href="#search" class="iconlink")
+            i(class="fa fa-search fa-3x")
+            p(class="lead") Query raw files and neuron samples
+    div(class="orange", id="upload")
+      div(class="row centered")
+      h2(class="centered") CONTRIBUTE
+      div(class="row", ng-controller="dropzoneController")
+        form(class="inset")
+          fieldset(class="form-group")
+            input(type="file", class="form-control-file small", name="contents", file-model="theFile")
+          fieldset(class="form-group")
+            label(for="submitter") Submitted by
+            input(type="text", class="form-control", id="submitter", placeholder="e.g., name or email", ng-model="submitter")
+            small(class="text-muted") (optional)
+          fieldset(class="form-group")
+            label(for="tag") Tag
+            input(type="text", class="form-control", id="tag", placeholder="e.g., file information, keywords", ng-model="tag")
+            small(class="text-muted") (optional)
+          button(type="submit" class="btn btn-primary", ng-click="send()") Upload
+    div(class="blue", id="search", ng-controller="queryController")
+      div(class="row")
+        h2(class="centered") SEARCH
+        form(class="inset")
+          fieldset(class="form-group")
+            label(for="structure") Structure Id
+            br
+            select(class="c-select", id="structure", ng-model="structureId")
+              option(value="0") Undefined
+              option(value="1" selected) soma             
+              option(value="2") axon
+              option(value="3") (basal) dendrite
+              option(value="4") apical dendrite
+              option(value="5") custom
+            button(type="submit" class="btn btn-primary left", ng-click="query()")
+              i(class="fa fa-search")
+              span  Search
+        table(class="table table-sm")
+          thead
+            tr
+              th File
+              th Sample Number
+              th X
+              th Y
+              th Z
+              th Radius
+              th Parent Sample Number
+          tbody
+            tr(ng-repeat="s in samples")
+              td {{s.SwcFile.filename}}
+              td {{s.sampleNumber}}
+              td {{s.x}}
+              td {{s.y}}
+              td {{s.z}}
+              td {{s.radius}}
+              td {{s.parentNumber}}
+    div(id="footer", class="container-fluid dark") Copyright © 2016 Howard Hughes Medical Institute 

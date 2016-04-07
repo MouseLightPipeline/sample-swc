@@ -1,0 +1,80 @@
+version: '2'
+services:
+  swc-datastore:
+    image: postgres:latest
+    volumes:
+      - /swcdbstore
+    entrypoint: /bin/bash
+  swc-db-server:
+    image: postgres:latest
+    volumes:
+      - ./swc-datastore:/docker-entrypoint-initdb.d
+    volumes_from:
+      - swc-datastore
+    environment:
+      POSTGRES_PASSWORD: pgsecret
+      PGDATA: /swcdbstore/pgdata
+    ports:
+      - "5432:5432"
+  swc-service:
+    build: ./swc-service
+    environment:
+      NODE_ENV: production
+    command: node /app/app.js
+    ports:
+      - "9651:9651"
+    links:
+      - swc-db-server:swcdatabase
+    depends_on:
+      - swc-db-server
+  swc-status:
+    build: ./swc-status
+    environment:
+      NODE_ENV: production
+      SWC_SERVICE_PORT: 9651
+    command: node /app/dist/server/app.js
+    ports:
+      - "9652:9652"
+    links:
+      - swc-service:swcservice
+      - swc-web:swcweb
+    depends_on:
+      - swc-service
+  swc-web:
+    build: ./swc-web
+    environment:
+      NODE_ENV: production
+      SWC_SERVICE_PORT: 9651
+    command: node /app/dist/server/app.js
+    ports:
+      - "9653:9653"
+    links:
+      - swc-service:swcservice
+    depends_on:
+      - swc-service
+  main-datastore:
+    image: arangodb/arangodb:latest
+    entrypoint: /bin/bash
+  main-db-server:
+    image: arangodb/arangodb:latest
+    volumes_from:
+      - main-datastore
+    volumes:
+      - ./main-datastore/foxx:/var/lib/arangodb-apps/
+    environment:
+      ARANGO_ROOT_PASSWORD: arsecret
+    links:
+    - swc-service:swcservice
+    ports:
+      - "8529:8529"
+  main-db-initializer:
+    image: node:4
+    environment:
+      ARANGO_ROOT_PASSWORD: arsecret
+      NODE_ENV: production
+      MAIN_DB_PORT: 8529
+    volumes:
+      - ./main-datastore/initializer:/app
+    links:
+      - main-db-server:database
+    command: node /app/app.js

@@ -1,0 +1,17 @@
+{
+  "name": "swc-web",
+  "version": "0.0.1",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ],
+  "dependencies": {
+    "angular": "^1.5.3",
+    "bootstrap": "v4.0.0-alpha.2",
+    "tether": "^1.2.0",
+    "angular-resource": "^1.5.3",
+    "lato": "^0.3.0",
+    "font-awesome": "^4.5.0"
+  }
+}

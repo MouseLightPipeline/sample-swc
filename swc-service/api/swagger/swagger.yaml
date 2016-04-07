@@ -1,0 +1,188 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  description: "Manage SWC files in the SWC database"
+  title: SWC File API
+# basePath prefixes all resource paths 
+basePath: /api/v1
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /files:
+    x-swagger-router-controller: file
+    get:
+      summary: Stored SWC files
+      description: |
+        The files endpoint manages contents of SWC files uploaded and stored in
+        raw format on the server.
+      tags:
+        - Files
+      responses:
+        200:
+          description: An array of files
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/SwcFile'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /samples:
+    x-swagger-router-controller: sample
+    get:
+      summary: Stored SWC samples
+      description: |
+        The samples endpoint manages contents of the samples table.
+      tags:
+        - Samples
+      responses:
+        200:
+          description: An array of files
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Sample'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /samples/findByStructure/{structure}:
+    x-swagger-router-controller: sample
+    get:
+      tags:
+        - Samples
+      summary: Finds samples by structure type
+      operationId: findByStructure
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: structure
+          description: structure id to filter by
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Sample'
+        "400":
+          description: Invalid structure id value
+  /samples/forFile/{fileId}:
+    x-swagger-router-controller: sample
+    get:
+      tags:
+        - Samples
+      summary: Finds samples by file
+      operationId: forFile
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: fileId
+          description: structure id to filter by
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Sample'
+        "400":
+          description: Invalid structure id value
+  /upload:
+    # binds a127 app logic to a route
+    x-swagger-router-controller: upload
+    post:
+      summary: Upload file to the database
+      # used as the method name of the controller
+      tags:
+        - Files
+        - Upload
+      consumes:
+        - multipart/form-data
+      parameters:
+        - name: submitter
+          in: query
+          description: Submitter
+          type: string
+        - name: tag
+          in: query
+          description: Submitter
+          type: string
+        - name: contents
+          in: formData
+          description: File to upload
+          type: file
+      responses:
+        200:
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: '#/definitions/SwcFile'
+        # responses may fall through to errors
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  SwcFile:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id.
+      filename:
+        type: string
+        description: Original filename.
+      tag:
+        type: string
+        description: Optional tag.
+      submitter:
+        type: string
+        description: Submitter identification.
+      createdAt:
+        type: string
+        description: Creation time.
+      updatedAt:
+        type: string
+        description: Update time.
+  Sample:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id.
+      createdAt:
+        type: string
+        description: Creation time.
+      updatedAt:
+        type: string
+        description: Update time.
+  Error: 
+    type: object
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
