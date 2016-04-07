@@ -5,7 +5,8 @@
     "database": "swc_development",
     "host": "192.168.6.134",
     "port": "5432",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "logging": null
   },
   "test": {
     "username": "postgres",
@@ -13,14 +14,16 @@
     "database": "swc_test",
     "host": "192.168.6.134",
     "port": "5432",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "logging": null
   },
   "production": {
     "username": "postgres",
     "password": "pgsecret",
     "database": "swc_production",
-    "host": "database",
+    "host": "swcdatabase",
     "port": "5432",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "logging": null
   }
 }
