@@ -1,0 +1,21 @@
+{
+  "name": "default",
+  "version": "0.0.1",
+  "description": "Default REST API",
+  "engines": {
+    "arangodb": "^2.8.0"
+  },
+  "author": "Patrick Edson",
+  "license": "Apache 2",
+  "controllers": {
+    "/samples": "controllers/samples.js",
+    "/neurons": "controllers/neurons.js",
+    "/brain_regions": "controllers/brain_regions.js",
+    "/tracings": "controllers/tracings.js"
+  },
+  "scripts": {
+    "setup": "scripts/setup.js",
+    "teardown": "scripts/teardown.js"
+  },
+  "tests": "test/**/*.js"
+}

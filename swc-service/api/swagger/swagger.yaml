@@ -58,7 +58,7 @@ paths:
     get:
       tags:
         - Samples
-      summary: Finds Pets by tags
+      summary: Finds samples by structure type
       operationId: findByStructure
       produces:
         - application/json
@@ -78,11 +78,36 @@ paths:
               $ref: '#/definitions/Sample'
         "400":
           description: Invalid structure id value
+  /samples/forFile/{fileId}:
+    x-swagger-router-controller: sample
+    get:
+      tags:
+        - Samples
+      summary: Finds samples by file
+      operationId: forFile
+      produces:
+        - application/json
+        - application/xml
+      parameters:
+        - in: path
+          name: fileId
+          description: structure id to filter by
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Successful operation
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Sample'
+        "400":
+          description: Invalid structure id value
   /upload:
     # binds a127 app logic to a route
     x-swagger-router-controller: upload
     post:
-      description: Uploads a new SWC file to the database
+      summary: Upload file to the database
       # used as the method name of the controller
       tags:
         - Files

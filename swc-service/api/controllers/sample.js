@@ -12,7 +12,8 @@ var models = require('../models/index');
  */
 module.exports = {
     get: getfiles,
-    findByStructure: findByStructure
+    findByStructure: findByStructure,
+    forFile: forFile
 };
 
 /*
@@ -47,4 +48,16 @@ function findByStructure(req, res) {
     } else {
         res.status(400);
     }
+}
+
+function forFile(req, res) {
+    var id = req.swagger.params.fileId.value;
+    
+    models.NeuronSample.findAll({where: {fileId: id}, order: [['sampleNumber', 'ASC']]}).then(function (samples) {
+        res.json(samples);
+    }).catch(function(e){
+        console.log(e);
+        res.status(400);
+        //res.status(503).json({code: 503, message: 'Database service unavailable.'});
+    });
 }
