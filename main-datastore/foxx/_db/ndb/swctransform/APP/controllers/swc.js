@@ -18,16 +18,15 @@ if (env === 'development') {
 * This function starts a new transform from the SWC database
 */
 controller.post('/', function (req, res) {
-    //console.debug('http://' + host + ':9651' + '/');
-    
     var queue = Foxx.queues.create('swc');
+
     queue.push(
         {
             mount :"/swctransform",
             name: "transform"
         },
         {
-            url: 'http://' + host + ':9651' + '/api/v1/files'
+            url: 'http://' + host + ':9651' + '/api/v1/'
         }
     );
     

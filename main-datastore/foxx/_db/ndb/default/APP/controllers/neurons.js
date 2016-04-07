@@ -1,5 +1,6 @@
 'use strict';
 var _ = require('underscore');
+var db = require("org/arangodb").db;
 var joi = require('joi');
 var Foxx = require('org/arangodb/foxx');
 var ArangoError = require('org/arangodb').ArangoError;
@@ -12,8 +13,9 @@ var neuronIdSchema = joi.string().required()
 .meta({allowMultiple: false});
 
 var neurons = new Neurons(
-  applicationContext.collection('neurons'),
-  {model: Neuron}
+    //  applicationContext.collection('neurons'),
+    db._collection('neurons'),
+    {model: Neuron}
 );
 
 /** Lists of all neurons.

@@ -63,7 +63,7 @@ services:
       - ./main-datastore/foxx:/var/lib/arangodb-apps/
     environment:
       ARANGO_ROOT_PASSWORD: arsecret
-    links
+    links:
     - swc-service:swcservice
     ports:
       - "8529:8529"
@@ -78,16 +78,3 @@ services:
     links:
       - main-db-server:database
     command: node /app/app.js
-  main-transform-swc:
-    build: ./main-transform-swc
-    environment:
-      NODE_ENV: production
-    command: node /app/app.js
-    ports:
-      - "9661:9661"
-    links:
-      - swc-db-server:swcdatabase
-      - main-db-server:maindatabase
-    depends_on:
-      - swc-db-server
-      - main-db-server

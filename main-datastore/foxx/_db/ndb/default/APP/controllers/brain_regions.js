@@ -1,5 +1,6 @@
 'use strict';
 var _ = require('underscore');
+var db = require("org/arangodb").db;
 var joi = require('joi');
 var Foxx = require('org/arangodb/foxx');
 var ArangoError = require('org/arangodb').ArangoError;
@@ -12,8 +13,9 @@ var brain_regionIdSchema = joi.string().required()
 .meta({allowMultiple: false});
 
 var brain_regions = new Brain_regions(
-  applicationContext.collection('brain_regions'),
-  {model: Brain_region}
+    //  applicationContext.collection('brain_regions'),
+    db._collection('brain_regions'),
+    {model: Brain_region}
 );
 
 /** Lists of all brain_regions.

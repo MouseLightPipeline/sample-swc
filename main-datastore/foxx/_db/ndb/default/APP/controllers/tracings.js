@@ -1,5 +1,6 @@
 'use strict';
 var _ = require('underscore');
+var db = require("org/arangodb").db;
 var joi = require('joi');
 var Foxx = require('org/arangodb/foxx');
 var ArangoError = require('org/arangodb').ArangoError;
@@ -12,8 +13,9 @@ var tracingIdSchema = joi.string().required()
 .meta({allowMultiple: false});
 
 var tracings = new Tracings(
-  applicationContext.collection('tracings'),
-  {model: Tracing}
+    //applicationContext.collection('tracings'),
+    db._collection('tracings'),
+    {model: Tracing}
 );
 
 /** Lists of all tracings.
