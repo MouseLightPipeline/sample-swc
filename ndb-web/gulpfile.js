@@ -23,7 +23,6 @@ gulp.task('nodemon', ['build'], function () {
   }).on('readable', function () {
     this.stdout.on('data', function (chunk) {
       if(/^Express server listening on port/.test(chunk)){
-          console.log('triggered')
         livereload.changed(__dirname);
       }
     });

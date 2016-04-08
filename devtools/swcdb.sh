@@ -10,4 +10,4 @@ fi
 
 echo $SRCDIR
 
-docker run --name some-postgres -e POSTGRES_PASSWORD=pgsecret -v $SRCDIR/swc-datastore:/docker-entrypoint-initdb.d --rm -p 5432:5432 postgres
+docker run --name swc-db -e POSTGRES_PASSWORD=pgsecret -v $SRCDIR/swc-datastore:/docker-entrypoint-initdb.d --rm -p 5432:5432 postgres
