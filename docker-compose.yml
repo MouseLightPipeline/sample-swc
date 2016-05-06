@@ -54,6 +54,8 @@ services:
       - swc-service
   ndb-datastore:
     image: arangodb/arangodb:latest
+    volumes:
+      - /ndbdatastore
     entrypoint: /bin/bash
   ndb-db:
     image: arangodb/arangodb:latest
@@ -77,7 +79,6 @@ services:
       - ndb-datastore
     volumes:
       - ./ndb-datastore/foxx:/var/lib/arangodb-apps/
-      - ./ndb-datastore/initializer:/app
     links:
       - ndb-db:database
     command: node /app/app.js
