@@ -83,7 +83,7 @@ services:
       - ndb-db:database
     command: node /app/app.js
   ndb-web:
-    image: ./ndb-web
+    build: ./ndb-web
     environment:
       ARANGO_ROOT_PASSWORD: arsecret
       NODE_ENV: production
