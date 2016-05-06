@@ -68,12 +68,15 @@ services:
     ports:
       - "8529:8529"
   ndb-db-initializer:
-    image: node:4
+    build: ./ndb-datastore
     environment:
       ARANGO_ROOT_PASSWORD: arsecret
       NODE_ENV: production
       MAIN_DB_PORT: 8529
+    volumes_from:
+      - ndb-datastore
     volumes:
+      - ./ndb-datastore/foxx:/var/lib/arangodb-apps/
       - ./ndb-datastore/initializer:/app
     links:
       - ndb-db:database
