@@ -10,4 +10,4 @@ fi
 
 echo $SRCDIR
 
-docker run --name some-arangodb -e ARANGO_ROOT_PASSWORD=arsecret --rm -p 8529:8529 -v $SRCDIR/main-datastore/foxx:/var/lib/arangodb-apps/ arangodb/arangodb
+docker run --name ndb-db -e ARANGO_ROOT_PASSWORD=arsecret --rm -p 8529:8529 -v $SRCDIR/ndb-datastore/foxx:/var/lib/arangodb-apps/ arangodb/arangodb

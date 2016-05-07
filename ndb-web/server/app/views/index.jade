@@ -1,0 +1,36 @@
+doctype html
+html(lang='en', ng-app="swcFileManager")
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width')
+    title Neuron Database Browser
+    link(rel='stylesheet', href='/css/tether.min.css')
+    link(rel='stylesheet', href='/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/css/style.css')
+    script(src='/lib/jquery.min.js')
+    script(src='/lib/angular.min.js')
+    script(src='/lib/angular-resource.min.js')
+    script(src='/lib/tether.min.js')
+    script(src='/lib/bootstrap.min.js')
+    script(src='/app/app.js')
+    script(src='/app/services/serviceApiService.js')
+    script(src='/app/controllers/serviceController.js')
+    script(src='/app/controllers/queryController.js')
+    if ENV_DEVELOPMENT
+      script(src='http://localhost:34729/livereload.js')
+
+  body(ng-controller="serviceController")
+    nav(class="navbar navbar-dark navbar-fixed-top bg-inverse")
+      a(class="navbar-brand", href="#") Neuron Data Browser
+    div(class="blue", id="landing")
+      div(class="row centered")
+        h1 Neuron Data Browser
+    div(class="orange", id="upload")
+      div(class="row centered")
+        h2(class="centered") Search
+    div(class="blue", id="search", ng-controller="queryController")
+      div(class="row")
+        h2(class="centered")
+    nav(class="navbar navbar-dark navbar-fixed-bottom bg-inverse")
+      ul(class="nav navbar-nav")
+        li(class="nav-item text-muted") Copyright © 2016 Howard Hughes Medical Institute

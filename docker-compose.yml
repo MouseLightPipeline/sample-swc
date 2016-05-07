@@ -52,29 +52,42 @@ services:
       - swc-service:swcservice
     depends_on:
       - swc-service
-  main-datastore:
+  ndb-datastore:
     image: arangodb/arangodb:latest
+    volumes:
+      - /ndbdatastore
     entrypoint: /bin/bash
-  main-db-server:
+  ndb-db:
     image: arangodb/arangodb:latest
     volumes_from:
-      - main-datastore
+      - ndb-datastore
     volumes:
-      - ./main-datastore/foxx:/var/lib/arangodb-apps/
+      - ./ndb-datastore/foxx:/var/lib/arangodb-apps/
     environment:
       ARANGO_ROOT_PASSWORD: arsecret
     links:
     - swc-service:swcservice
     ports:
       - "8529:8529"
-  main-db-initializer:
-    image: node:4
+  ndb-db-initializer:
+    build: ./ndb-datastore
     environment:
       ARANGO_ROOT_PASSWORD: arsecret
       NODE_ENV: production
       MAIN_DB_PORT: 8529
+    volumes_from:
+      - ndb-datastore
     volumes:
-      - ./main-datastore/initializer:/app
+      - ./ndb-datastore/foxx:/var/lib/arangodb-apps/
     links:
-      - main-db-server:database
+      - ndb-db:database
     command: node /app/app.js
+  ndb-web:
+    build: ./ndb-web
+    environment:
+      ARANGO_ROOT_PASSWORD: arsecret
+      NODE_ENV: production
+      MAIN_DB_PORT: 8529
+    links:
+      - ndb-db:database
+    command: node /app/dist/server/app.js
