@@ -90,4 +90,6 @@ services:
       MAIN_DB_PORT: 8529
     links:
       - ndb-db:database
+    ports:
+      - "9663:9663"
     command: node /app/dist/server/app.js

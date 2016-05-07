@@ -7,7 +7,9 @@ var at = '@';
 
 
 setTimeout(() => {
-    db = new arango.Database('http://' + config.user + ':' + config.password + at + config.service);
+    var connection = 'http://' + config.user + ':' + config.password + at + config.service;
+    console.log('Attempting connection to ' + connection);
+    db = new arango.Database(connection);
     connect();
 }, config.sleep);
 
