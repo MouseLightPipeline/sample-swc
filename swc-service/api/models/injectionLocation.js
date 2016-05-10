@@ -1,22 +1,19 @@
 'use strict';
 
 module.exports = function(sequelize, DataTypes) {
-    var SwcFile = sequelize.define('SwcFile', {
+    var InjectionLocation = sequelize.define('InjectionLocation', {
         id: {
             primaryKey: true,
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4
         },
-        filename: DataTypes.STRING,
-        tag: DataTypes.STRING,
-        submitter: DataTypes.STRING,
-        comments: DataTypes.STRING
+        name: DataTypes.STRING
     }, {
         classMethods: {
             associate: function(models) {
-                SwcFile.hasMany(models.NeuronSample, {foreignKey: 'fileId', as: 'samples'});
+                InjectionLocation.hasMany(models.Sample, {foreignKey: 'injectionLocationId', as: 'samples'});
             }
         }
     });
-    return SwcFile;
+    return InjectionLocation;
 };

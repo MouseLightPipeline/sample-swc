@@ -19,10 +19,10 @@ io.on('connection', function(socket) {
   socket.emit('db_status', app.locals.dbready);
   
   if  (app.locals.dbready) {
-    db.SwcFile.count().then(function(val){
+    db.Tracing.count().then(function(val){
       socket.emit('file_count', val);
     });
-    db.NeuronSample.count().then(function(val){
+    db.TracingNode.count().then(function(val){
       socket.emit('sample_count', val);
     });
   }
@@ -64,15 +64,16 @@ function sync()
     app.locals.dbready = true;
     io.emit('db_status', app.locals.dbready);
 
-    db.SwcFile.count().then(function(val){
+    db.Tracing.count().then(function(val){
        io.emit('file_count', val);
     });
-    db.NeuronSample.count().then(function(val){
+    db.TracingNode.count().then(function(val){
        io.emit('sample_count', val);
     });
     console.log('Successful database sync.');
   }).catch(function(err){
     console.log('Failed database sync.');
+    console.log(err);
     setTimeout(sync, 5000);
   });
 }

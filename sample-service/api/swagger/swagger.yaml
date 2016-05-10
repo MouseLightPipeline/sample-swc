@@ -1,0 +1,308 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  description: "Manage static ndb data"
+  title: Static Data
+# basePath prefixes all resource paths 
+basePath: /api/v1
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /samples:
+    x-swagger-router-controller: sample
+    get:
+      summary: Sample definitions
+      tags:
+        - Samples
+      responses:
+        200:
+          description: An array of files
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Sample'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+        - Samples
+      summary: Add a new sample
+      description: ""
+      operationId: post
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Sample object that needs to be added
+          required: false
+          schema:
+            $ref: "#/definitions/Sample"
+      responses:
+        "405":
+          description: Invalid input
+  /neurons:
+    x-swagger-router-controller: neuron
+    get:
+      summary: Neuron definitions
+      tags:
+        - Neurons
+      responses:
+        200:
+          description: An array of files
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Neuron'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /structures:
+    x-swagger-router-controller: structure
+    get:
+      summary: Structure identifier definitions
+      tags:
+        - Structure Identifiers
+      responses:
+        200:
+          description: An array of files
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/StructureIdentifier'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /injections:
+    x-swagger-router-controller: injection
+    get:
+      summary: Injection location definitions
+      tags:
+        - Injection Locations
+      responses:
+        200:
+          description: An array of files
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/InjectionLocation'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /transforms:
+    x-swagger-router-controller: registrations
+    get:
+      summary: Registration transform definitions
+      tags:
+        - Registration Transforms
+      responses:
+        200:
+          description: An array of files
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/RegistrationTransform'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /viruses:
+    x-swagger-router-controller: virus
+    get:
+      summary: Virus definitions
+      tags:
+        - Virus
+      responses:
+        200:
+          description: An array of files
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Virus'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /strains:
+    x-swagger-router-controller: strain
+    get:
+      summary: Strain definitions
+      tags:
+        - Virus
+      responses:
+        200:
+          description: An array of files
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Strain'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  Sample:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id
+      datestamp:
+        type: string
+        description: Datestamp
+      comment:
+        type: string
+        description: Comments
+      tag:
+        type: string
+        description: Tag/keywords
+      injectionLocationId:
+        type: string
+        description: Injection location reference id
+      registrationTransformId:
+        type: string
+        description: Registration tranform reference id
+      createdAt:
+        type: string
+        description: Creation time
+      updatedAt:
+        type: string
+        description: Update time
+  Neuron:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id
+      sampleId:
+        type: string
+        description: Sample reference id
+      createdAt:
+        type: string
+        description: Creation time
+      updatedAt:
+        type: string
+        description: Update time
+  InjectionLocation:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id
+      name:
+        type: string
+        description: Name
+      mutable:
+        type: boolean
+        description: Mutability
+      createdAt:
+        type: string
+        description: Creation time
+      updatedAt:
+        type: string
+        description: Update time
+  RegistrationTransform:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id
+      name:
+        type: string
+        description: Name
+      mutable:
+        type: boolean
+        description: Mutability
+      createdAt:
+        type: string
+        description: Creation time
+      updatedAt:
+        type: string
+        description: Update time
+  StructureIdentifier:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id
+      name:
+        type: string
+        description: Name
+      value:
+        type: integer
+        description: Enumeration value
+      mutable:
+        type: boolean
+        description: Mutability
+      createdAt:
+        type: string
+        description: Creation time
+      updatedAt:
+        type: string
+        description: Update time
+  Virus:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id
+      name:
+        type: string
+        description: Name
+      mutable:
+        type: boolean
+        description: Mutability
+      createdAt:
+        type: string
+        description: Creation time
+      updatedAt:
+        type: string
+        description: Update time
+  Strain:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id
+      virusId:
+        type: string
+        description: Virus reference id
+      name:
+        type: string
+        description: Name.
+      mutable:
+        type: boolean
+        description: Mutability
+      createdAt:
+        type: string
+        description: Creation time
+      updatedAt:
+        type: string
+        description: Update time
+  Error: 
+    type: object
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string

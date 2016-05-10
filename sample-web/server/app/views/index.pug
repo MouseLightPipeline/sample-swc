@@ -1,0 +1,61 @@
+doctype html
+html(lang='en', ng-app="sampleManager")
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width')
+    title Sample Definition Manager
+    link(rel='stylesheet', href='/css/tether.min.css')
+    link(rel='stylesheet', href='/css/bootstrap.min.css')
+    link(rel='stylesheet', href='/css/style.css')
+    script(src='/lib/jquery.min.js')
+    script(src='/lib/angular.min.js')
+    script(src='/lib/angular-resource.min.js')
+    script(src='/lib/tether.min.js')
+    script(src='/lib/bootstrap.min.js')
+    script(src='/app/app.js')
+    script(src='/app/services/serviceApiService.js')
+    script(src='/app/controllers/serviceController.js')
+    script(src='/app/controllers/sampleController.js')
+    if ENV_DEVELOPMENT
+      script(src='http://localhost:34729/livereload.js')
+
+  body(ng-controller="serviceController")
+    div(class="blue", id="landing")
+      div(class="row centered")
+        h1 Sample Definition Manager
+        hr(class="partial")
+        p(class="partial").
+          An interactive service to manage sample definitions and related information.
+      div(class="row")
+        h3(class="centered") Services Provided
+      br
+      div(class="row")
+        div(class="col-md-2 col-xs-1 centered")
+        div(class="col-md-4 col-xs-5 centered")
+          a(href="#upload" class="iconlink")
+            i(class="fa fa-plus-circle fa-3x")
+            p(class="lead") Create definitions
+        div(class="col-md-4 col-xs-5 centered")
+          a(href="#search" class="iconlink")
+            i(class="fa fa-search fa-3x")
+            p(class="lead") Query definitions
+    div(class="orange", id="upload")
+      div(class="row centered")
+      h2(class="centered") SAMPLES
+      div(class="row", ng-controller="sampleController")
+        p {{model.tag}}
+        form(class="inset")
+          fieldset(class="form-group")
+            label(for="injectionSelect") Injection Location
+            select(ng-model="model.injectionLocation" id="injectionSelect" class="form-control")
+              option(ng-repeat="option in fields.injectionLocations" value="{{option.id}}") {{option.name}}
+          fieldset(class="form-group")
+            label(for="transformSelect") Registration Transform
+            select(ng-model="model.registrationTransform" id="transformSelect" class="form-control")
+              option(ng-repeat="option in fields.registrationTransforms" value="{{option.id}}") {{option.name}}
+          fieldset(class="form-group")
+            label(for="comment") Comments
+            input(type="text", class="form-control", id="comment", placeholder="", ng-model="model.comments")
+            small(class="text-muted") (optional)
+          button(type="submit" class="btn btn-primary", ng-click="send()") Upload
+    div(id="footer", class="container-fluid dark") Copyright © 2016 Howard Hughes Medical Institute 

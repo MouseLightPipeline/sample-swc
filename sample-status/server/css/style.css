@@ -1,0 +1,79 @@
+@import "lato.min.css";
+@import "font-awesome.min.css";
+body {
+  font-family: "Lato", "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-weight: 300;
+  background-color: #72b5cc;
+}
+
+h1, h2, h3, h4 {
+  font-weight: 300;
+}
+
+.blue {
+  background-color: #72b5cc;
+  color: white;
+}
+
+.green {
+  background-color: #e3ae43;
+  color: white;
+}
+
+.dark {
+  background-color: #2b2b2b;
+  color: #858585;
+}
+
+.centered {
+  text-align: center;
+}
+
+hr.partial {
+  width: 50%;
+}
+
+p.partial {
+  padding-left: 15%;
+  width: 85%;
+  text-align: center;
+}
+
+#landing {
+  min-height: 400px;
+  padding: 100px 20px 50px 20px;
+}
+
+#description {
+  padding: 50px 0px 50px 0px;
+}
+
+#footer {
+  font-size: 14px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 20px;
+}
+
+div.error {
+  padding: 30px;
+  color: white;
+}
+
+pre {
+  color: white;
+}
+
+a.iconlink {
+  color: white;
+}
+
+a.iconlink:hover {
+  text-decoration: none;
+}
+
+.table-counts {
+  padding-left: 25%;
+  width: 75%;
+}

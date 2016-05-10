@@ -80,7 +80,7 @@ function onData(line, samples, comments) {
         fs.unlink(tmpFile.fd);
 
         models.sequelize.transaction(function(t) {
-            return models.SwcFile.create(swcFile, {transaction: t}).then(function(newFile) {
+            return models.Tracing.create(swcFile, {transaction: t}).then(function(newFile) {
                 file = newFile;
                 samples.forEach(function(sample) {
                     sample.fileId = newFile.id;
@@ -88,7 +88,7 @@ function onData(line, samples, comments) {
                 models.NeuronSample.bulkCreate(samples);
             })
         }).then(function(result) {
-            models.SwcFile.count().then(function(val) { io.emit('file_count', val)});
+            models.Tracing.count().then(function(val) { io.emit('file_count', val)});
             models.NeuronSample.count().then(function(val) { io.emit('sample_count', val)});
             return res.status(200).send(file);
         }).catch(function(err) {

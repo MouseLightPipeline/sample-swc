@@ -24,7 +24,7 @@ module.exports = {
 function get(req, res) {
     // models.SwcFile.findAll({}).then(function(files){
     // models.NeuronSample.findAll({include:[models.SwcFile, {model: models.NeuronSample, as: 'parent'}]}).then(function(files){
-    models.SwcFile.findAll({}).then(function (files) {
+    models.Tracing.findAll({}).then(function (files) {
         res.json(files);
     }).catch(function(){
         res.status(503).json({code: 503, message: 'Database service unavailable.'});

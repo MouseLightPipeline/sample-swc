@@ -14,32 +14,10 @@ schemes:
 produces:
   - application/json
 paths:
-  /files:
-    x-swagger-router-controller: file
-    get:
-      summary: Stored SWC files
-      description: |
-        The files endpoint manages contents of SWC files uploaded and stored in
-        raw format on the server.
-      tags:
-        - Files
-      responses:
-        200:
-          description: An array of files
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/SwcFile'
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/Error"
   /samples:
     x-swagger-router-controller: sample
     get:
-      summary: Stored SWC samples
-      description: |
-        The samples endpoint manages contents of the samples table.
+      summary: Sample definitions
       tags:
         - Samples
       responses:
@@ -53,12 +31,70 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
-  /samples/findByStructure/{structure}:
-    x-swagger-router-controller: sample
+  /neurons:
+    x-swagger-router-controller: neuron
+    get:
+      summary: Neuron definitions
+      tags:
+        - Neurons
+      responses:
+        200:
+          description: An array of files
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Neuron'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /tracings:
+    x-swagger-router-controller: tracing
+    get:
+      summary: Stored tracings from SWC files
+      description: |
+        The tracings endpoint manages contents of tracings stored in SWC files uploaded and stored in
+        raw format on the server.
+      tags:
+        - Tracings
+        - Files
+        - Neurons
+      responses:
+        200:
+          description: An array of files
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Tracing'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /nodes:
+    x-swagger-router-controller: tracingNode
+    get:
+      summary: Stored SWC nodes
+      description: |
+        The nodes endpoint manages contents of the nodes table.
+      tags:
+        - Nodes
+      responses:
+        200:
+          description: An array of files
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Node'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /nodes/findByStructure/{structure}:
+    x-swagger-router-controller: tracingNode
     get:
       tags:
-        - Samples
-      summary: Finds samples by structure type
+        - Nodes
+      summary: Finds nodes by structure type
       operationId: findByStructure
       produces:
         - application/json
@@ -75,23 +111,24 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Sample'
+              $ref: '#/definitions/Node'
         "400":
           description: Invalid structure id value
-  /samples/forFile/{fileId}:
-    x-swagger-router-controller: sample
+  /nodes/forTracing/{tracingId}:
+    x-swagger-router-controller: tracingNode
     get:
       tags:
-        - Samples
-      summary: Finds samples by file
-      operationId: forFile
+        - Nodes
+        - Tracings
+      summary: Finds nodes by tracing
+      operationId: forTracing
       produces:
         - application/json
         - application/xml
       parameters:
         - in: path
-          name: fileId
-          description: structure id to filter by
+          name: tracingId
+          description: tracing id to filter by
           required: true
           type: string
       responses:
@@ -100,7 +137,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Sample'
+              $ref: '#/definitions/Node'
         "400":
           description: Invalid structure id value
   /upload:
@@ -110,8 +147,9 @@ paths:
       summary: Upload file to the database
       # used as the method name of the controller
       tags:
-        - Files
         - Upload
+        - Files
+        - Tracings
       consumes:
         - multipart/form-data
       parameters:
@@ -132,7 +170,7 @@ paths:
           description: Success
           schema:
             # a pointer to a definition
-            $ref: '#/definitions/SwcFile'
+            $ref: '#/definitions/Tracing'
         # responses may fall through to errors
         default:
           description: Error
@@ -142,7 +180,31 @@ paths:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
 definitions:
-  SwcFile:
+  Sample:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id.
+      createdAt:
+        type: string
+        description: Creation time.
+      updatedAt:
+        type: string
+        description: Update time.
+  Neuron:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id.
+      createdAt:
+        type: string
+        description: Creation time.
+      updatedAt:
+        type: string
+        description: Update time.
+  Tracing:
     type: object
     properties:
       id:
@@ -163,7 +225,7 @@ definitions:
       updatedAt:
         type: string
         description: Update time.
-  Sample:
+  Node:
     type: object
     properties:
       id:
