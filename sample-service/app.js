@@ -48,11 +48,14 @@ function sync()
 {
     db.sequelize.sync().then(function() {
         app.locals.dbready = true;
-        db.StructureIdentifier.populateDefault().then(function(){
-        }).then(function() {
+        db.StructureIdentifier.populateDefault().then(function() {
             db.InjectionLocation.populateDefault()
         }).then(function() {
             db.RegistrationTransform.populateDefault()
+        }).then(function() {
+            db.Virus.populateDefault(db)
+        }).then(function() {
+            db.BrainArea.populateDefault(db)
         }).then(function() {
             broadcastAll();
             console.log('Successful database sync.');

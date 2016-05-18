@@ -23,7 +23,6 @@ gulp.task('nodemon', ['build'], function () {
   }).on('readable', function () {
     this.stdout.on('data', function (chunk) {
       if(/^Express server listening on port/.test(chunk)){
-          console.log('triggered')
         livereload.changed(__dirname);
       }
     });
@@ -59,7 +58,8 @@ gulp.task('lib:js', ['clean'], function() {
       'bower_components/angular-resource/angular-resource.min.js',
       'bower_components/angular-resource/angular-resource.min.js.map',
       'bower_components/bootstrap/dist/js/bootstrap.min.js',
-      'bower_components/tether/dist/js/tether.min.js'
+      'bower_components/tether/dist/js/tether.min.js',
+      'bower_components/socket.io-client/socket.io.js'
     ])
     .pipe(gulp.dest('dist/public/lib'))
 });

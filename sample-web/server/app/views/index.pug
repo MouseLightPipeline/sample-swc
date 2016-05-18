@@ -1,61 +1,73 @@
-doctype html
-html(lang='en', ng-app="sampleManager")
-  head
-    meta(charset='UTF-8')
-    meta(name='viewport', content='width=device-width')
-    title Sample Definition Manager
-    link(rel='stylesheet', href='/css/tether.min.css')
-    link(rel='stylesheet', href='/css/bootstrap.min.css')
-    link(rel='stylesheet', href='/css/style.css')
-    script(src='/lib/jquery.min.js')
-    script(src='/lib/angular.min.js')
-    script(src='/lib/angular-resource.min.js')
-    script(src='/lib/tether.min.js')
-    script(src='/lib/bootstrap.min.js')
-    script(src='/app/app.js')
-    script(src='/app/services/serviceApiService.js')
-    script(src='/app/controllers/serviceController.js')
-    script(src='/app/controllers/sampleController.js')
-    if ENV_DEVELOPMENT
-      script(src='http://localhost:34729/livereload.js')
+extends layout
+block js
+  script(src='/lib/jquery.min.js')
+  script(src='/lib/angular.min.js')
+  script(src='/lib/angular-resource.min.js')
+  script(src='/lib/tether.min.js')
+  script(src='/lib/socket.io.js')
+  script(src='/lib/bootstrap.min.js')
+  script(src='/app/app.js')
+  script(src='/app/services/injectionService.js')
+  script(src='/app/services/transformService.js')
+  script(src='/app/services/virusService.js')
+  script(src='/app/services/strainService.js')
+  script(src='/app/services/brainAreaService.js')
+  script(src='/app/services/sampleService.js')
+  script(src='/app/services/neuronService.js')
+  script(src='/app/services/apiAccessService.js')
+  script(src='/app/controllers/appController.js')
+  script(src='/app/controllers/statusController.js')
+  script(src='/app/controllers/sampleController.js')
+  script(src='/app/controllers/neuronController.js')
+  script(src='/app/controllers/createInjectionController.js')
 
-  body(ng-controller="serviceController")
-    div(class="blue", id="landing")
-      div(class="row centered")
-        h1 Sample Definition Manager
-        hr(class="partial")
-        p(class="partial").
-          An interactive service to manage sample definitions and related information.
-      div(class="row")
-        h3(class="centered") Services Provided
-      br
-      div(class="row")
-        div(class="col-md-2 col-xs-1 centered")
-        div(class="col-md-4 col-xs-5 centered")
-          a(href="#upload" class="iconlink")
-            i(class="fa fa-plus-circle fa-3x")
-            p(class="lead") Create definitions
-        div(class="col-md-4 col-xs-5 centered")
-          a(href="#search" class="iconlink")
-            i(class="fa fa-search fa-3x")
-            p(class="lead") Query definitions
-    div(class="orange", id="upload")
-      div(class="row centered")
-      h2(class="centered") SAMPLES
-      div(class="row", ng-controller="sampleController")
-        p {{model.tag}}
-        form(class="inset")
-          fieldset(class="form-group")
-            label(for="injectionSelect") Injection Location
-            select(ng-model="model.injectionLocation" id="injectionSelect" class="form-control")
-              option(ng-repeat="option in fields.injectionLocations" value="{{option.id}}") {{option.name}}
-          fieldset(class="form-group")
-            label(for="transformSelect") Registration Transform
-            select(ng-model="model.registrationTransform" id="transformSelect" class="form-control")
-              option(ng-repeat="option in fields.registrationTransforms" value="{{option.id}}") {{option.name}}
-          fieldset(class="form-group")
-            label(for="comment") Comments
-            input(type="text", class="form-control", id="comment", placeholder="", ng-model="model.comments")
-            small(class="text-muted") (optional)
-          button(type="submit" class="btn btn-primary", ng-click="send()") Upload
-    div(id="footer", class="container-fluid dark") Copyright © 2016 Howard Hughes Medical Institute 
+block content
+  div(class="blue section")
+    div(class="row centered")
+      h1 Sample and Neuron Manager
+      hr(class="partial")
+      p An interactive service to manage sample definitions and related information.
+    div(class="row")
+      h3(class="centered") Services Provided
+    br
+    div(class="row")
+      div(class="col-md-2 col-xs-1 centered")
+      div(class="col-md-4 col-xs-5 centered")
+        a(href="#upload" class="iconlink")
+          i(class="fa fa-plus-circle fa-3x")
+          p(class="lead") Create definitions
+      div(class="col-md-4 col-xs-5 centered")
+        a(href="#search" class="iconlink")
+          i(class="fa fa-search fa-3x")
+          p(class="lead") Query definitions
+  div(class="orange section")
+    div(class="row")
+      div(class="col-sm-12")
+        h2(class="centered") SUMMARY
+    include ./partials/_summary
+  div(class="blue section" id="query-tables")
+    div(class="row")
+      div(class="col-sm-12")
+        h2(class="centered") QUERY
+    div(class="row")
+      div(class="col-sm-6")
+        h4(class="centered") SAMPLES
+        include ./partials/_sampleTable
+      div(class="col-sm-6")
+        h4(class="centered") NEURONS
+        include ./partials/_neuronTable
+  div(class="orange section", id="create")
+    div(class="row")
+      div(class="col-sm-12")
+        h2(class="centered") CREATE
+    div(class="row")
+      div(class="col-sm-6")
+        include ./partials/_createSample
+      div(class="col-sm-6")
+        include ./partials/_createNeuron
+  div(class="blue section")
+    div(class="row")
+      div(class="col-sm-12")
+        h2(class="centered") DIAGNOSTICS
+    include ./partials/_diagnostics
+  div(id="footer", class="container-fluid dark") Copyright © 2016 Howard Hughes Medical Institute 

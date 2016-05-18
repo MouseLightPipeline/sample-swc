@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   version: "0.0.1"
-  description: "Manage static ndb data"
+  description: "Manage static/mostly static ndb data"
   title: Static Data
 # basePath prefixes all resource paths 
 basePath: /api/v1
@@ -26,7 +26,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Sample'
+              $ref: "#/definitions/Sample"
         default:
           description: Error
           schema:
@@ -47,14 +47,37 @@ paths:
           description: Sample object that needs to be added
           required: false
           schema:
-            $ref: "#/definitions/Sample"
+            $ref: "#/definitions/SamplePost"
       responses:
         "405":
           description: Invalid input
+  /samples/{sampleId}:
+    x-swagger-router-controller: sample
+    get:
+      summary: Sample definitions
+      tags:
+        - Samples
+      operationId: getSampleById
+      parameters:
+        - name: sampleId
+          in: path
+          description: Sample object to find
+          required: true
+          type: string
+      responses:
+        200:
+          description: The sample
+          schema:
+            $ref: "#/definitions/Sample"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
   /neurons:
     x-swagger-router-controller: neuron
     get:
       summary: Neuron definitions
+      operationId: get
       tags:
         - Neurons
       responses:
@@ -64,6 +87,47 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Neuron'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      summary: Add a new neuron
+      description: ""
+      tags:
+        - Neurons
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Neuron object that needs to be added
+          required: false
+          schema:
+            $ref: "#/definitions/NeuronPost"
+      responses:
+        "405":
+          description: Invalid input
+  /neurons/{neuronId}:
+    x-swagger-router-controller: neuron
+    get:
+      summary: Get neuron definition
+      tags:
+        - Neurons
+      operationId: getNeuronById
+      parameters:
+        - name: neuronId
+          in: path
+          description: Neuron object to find
+          required: true
+          type: string
+      responses:
+        200:
+          description: The Neuron
+          schema:
+            $ref: "#/definitions/Neuron"
         default:
           description: Error
           schema:
@@ -102,6 +166,25 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+    post:
+      summary: Add a new injection location
+      description: ""
+      tags:
+        - Injection Locations
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Name of injection to add
+          required: true
+          schema:
+            $ref: "#/definitions/InjectionLocationPost"
+      responses:
+        "405":
+          description: Invalid input
   /transforms:
     x-swagger-router-controller: registrations
     get:
@@ -136,6 +219,30 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+  /viruses/{virusId}/strains:
+    x-swagger-router-controller: strain
+    get:
+      summary: Virus definitions
+      operationId: getStrainsForVirus
+      tags:
+        - Virus
+      parameters:
+        - name: virusId
+          in: path
+          description: Virus id for strain lookup
+          required: true
+          type: string
+      responses:
+        200:
+          description: An array of strains for the given virus
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Strain'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
   /strains:
     x-swagger-router-controller: strain
     get:
@@ -153,6 +260,23 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+  /brainareas:
+    x-swagger-router-controller: brainareas
+    get:
+      summary: Brain area definitions
+      tags:
+        - Neurons
+      responses:
+        200:
+          description: An array of brain area definitions
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/BrainArea'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
   /swagger:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
@@ -163,8 +287,36 @@ definitions:
       id:
         type: string
         description: Internal id
-      datestamp:
+      idNumber:
+        type: integer
+        description: Public id number
+      sampledate:
         type: string
+        format: date-time
+        description: Datestamp
+      comment:
+        type: string
+        description: Comments
+      tag:
+        type: string
+        description: Tag/keywords
+      createdAt:
+        type: string
+        format: date-time
+        description: Creation time
+      updatedAt:
+        type: string
+        format: date-time
+        description: Update time
+  SamplePost:
+    type: object
+    properties:
+      idNumber:
+        type: integer
+        description: Public id number
+      sampledate:
+        type: string
+        format: date-time
         description: Datestamp
       comment:
         type: string
@@ -178,12 +330,9 @@ definitions:
       registrationTransformId:
         type: string
         description: Registration tranform reference id
-      createdAt:
+      strainId:
         type: string
-        description: Creation time
-      updatedAt:
-        type: string
-        description: Update time
+        description: Strain
   Neuron:
     type: object
     properties:
@@ -195,10 +344,33 @@ definitions:
         description: Sample reference id
       createdAt:
         type: string
+        format: date-time
         description: Creation time
       updatedAt:
         type: string
+        format: date-time
         description: Update time
+  NeuronPost:
+    type: object
+    properties:
+      sampleId:
+        type: string
+        description: Sample reference id
+      brainAreaId:
+        type: string
+        description: Brain area reference id
+      x:
+        type: number
+        format: double
+        description: Soma X location
+      y:
+        type: number
+        format: double
+        description: Soma Y location
+      z:
+        type: number
+        format: double
+        description: Soma Z location
   InjectionLocation:
     type: object
     properties:
@@ -213,10 +385,18 @@ definitions:
         description: Mutability
       createdAt:
         type: string
+        format: date-time
         description: Creation time
       updatedAt:
         type: string
+        format: date-time
         description: Update time
+  InjectionLocationPost:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name
   RegistrationTransform:
     type: object
     properties:
@@ -231,9 +411,11 @@ definitions:
         description: Mutability
       createdAt:
         type: string
+        format: date-time
         description: Creation time
       updatedAt:
         type: string
+        format: date-time
         description: Update time
   StructureIdentifier:
     type: object
@@ -252,9 +434,11 @@ definitions:
         description: Mutability
       createdAt:
         type: string
+        format: date-time
         description: Creation time
       updatedAt:
         type: string
+        format: date-time
         description: Update time
   Virus:
     type: object
@@ -270,9 +454,11 @@ definitions:
         description: Mutability
       createdAt:
         type: string
+        format: date-time
         description: Creation time
       updatedAt:
         type: string
+        format: date-time
         description: Update time
   Strain:
     type: object
@@ -285,20 +471,40 @@ definitions:
         description: Virus reference id
       name:
         type: string
-        description: Name.
+        description: Name
       mutable:
         type: boolean
         description: Mutability
       createdAt:
         type: string
+        format: date-time
         description: Creation time
       updatedAt:
         type: string
+        format: date-time
+        description: Update time
+  BrainArea:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id
+      abiIdNumber:
+        type: integer
+      abiName:
+        type: string
+        description: Name
+      createdAt:
+        type: string
+        format: date-time
+        description: Creation time
+      updatedAt:
+        type: string
+        format: date-time
         description: Update time
   Error: 
     type: object
     required:
-      - code
       - message
     properties:
       code:

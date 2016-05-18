@@ -1,0 +1,19 @@
+table(class="table table-sm", ng-show="!sampleService.isLoading && sampleService.samples.length > 0")
+  thead
+    tr
+      th Id
+      th Date
+      th Injection
+      th Registration
+      th Strain
+  tbody
+    tr(ng-repeat="s in sampleService.samples")
+      td {{s.idNumber}}
+      td {{s.sampledate | date: 'yyyy-MM-dd'}}
+      td {{s.injectionLocation.name}}
+      td {{s.registrationTransform.name}}
+      td {{s.strain.name}}
+div(class="centered" ng-show="!sampleService.isLoading && sampleService.samples.length == 0")
+  h5 There are no samples in the database.  Define samples in the "Create" section.
+div(class="centered" ng-show="sampleService.isLoading")
+  i(class="fa fa-spinner fa-spin" style="font-size:48px")

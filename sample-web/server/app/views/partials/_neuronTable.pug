@@ -1,0 +1,17 @@
+table(class="table table-sm" ng-show="!neuronService.isLoading && neuronService.neurons.length > 0")
+  thead
+    tr
+      th Id
+      th Sample
+      th Brain Area
+      th Location
+  tbody
+    tr(ng-repeat="n in neuronService.neurons")
+      td {{n.idNumber}}
+      td {{n.sample.idNumber}}
+      td {{n.brainArea.abiName}}
+      td ({{n.x}}, {{n.y}}, {{n.z}})
+div(class="centered" ng-show="!neuronService.isLoading && neuronService.neurons.length == 0")
+  h5 There are no neurons in the database.  Define a neuron for an existing in sample in the "Create" section.
+div(class="centered" ng-show="neuronService.isLoading")
+  i(class="fa fa-spinner fa-spin" style="font-size:48px")

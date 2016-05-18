@@ -1,6 +1,6 @@
   var socket = io();
   
-  console.log('Running client socket.io script');
+  console.log('Running client socket.io script.');
   
   socket.on('db_status', function(msg) {
       $('#db_status').text(msg ? 'available' : 'unavailable');

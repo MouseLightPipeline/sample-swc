@@ -7,13 +7,15 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4
         },
+        idNumber: DataTypes.INTEGER,
         x: DataTypes.DOUBLE,
         y: DataTypes.DOUBLE,
         z: DataTypes.DOUBLE
     }, {
         classMethods: {
             associate: function(models) {
-                Neuron.belongsTo(models.Sample, {foreignKey: 'sampleId'});
+                Neuron.belongsTo(models.Sample, {foreignKey: 'sampleId', as: 'sample'});
+                Neuron.belongsTo(models.BrainArea, {foreignKey: 'brainAreaId', as: 'brainArea'});
             }
         }
     });

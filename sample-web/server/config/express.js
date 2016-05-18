@@ -14,14 +14,9 @@ module.exports = function(app, config) {
   
   app.locals.ENV = env;
   app.locals.ENV_DEVELOPMENT = env == 'development';
-  app.locals.apiHost = config.service;
-  
-  // Proxy to the REST service.
-  app.use('/api/v1', function(req, res) {
-    var url = 'http://' + app.locals.apiHost + '/api/v1' + req.url;
-    req.pipe(request(url)).pipe(res);
-  });
-  
+  app.locals.serviceHost = config.service;
+  app.locals.statusHost = config.status;
+   
   app.set('views', config.root + '/app/views');
   app.set('view engine', 'pug');
 

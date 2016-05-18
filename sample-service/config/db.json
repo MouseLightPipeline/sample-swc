@@ -13,7 +13,7 @@
     "password": "pgsecret",
     "database": "static_test",
     "host": "192.168.6.134",
-    "port": "5433",
+    "port": "5432",
     "dialect": "postgres",
     "logging": null
   },
@@ -21,8 +21,8 @@
     "username": "postgres",
     "password": "pgsecret",
     "database": "static_production",
-    "host": "staticdatabase",
-    "port": "5433",
+    "host": "sampledatabase",
+    "port": "5432",
     "dialect": "postgres",
     "logging": null
   }

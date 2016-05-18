@@ -1,7 +1,7 @@
 'use strict';
 
 var util = require('util');
-
+var errors = require('../helpers/errors');
 var models = require('../models/index');
 /*
  For a controller you should export the functions referenced in your Swagger document by name.
@@ -24,7 +24,7 @@ module.exports = {
 function get(req, res) {
     models.RegistrationTransform.findAll({}).then(function (transforms) {
         res.json(transforms);
-    }).catch(function(){
-        res.status(503).json({code: 503, message: 'Database service unavailable.'});
+    }).catch(function(err){
+        res.status(500).json(errors.sequelizeError(err));
     });
 }

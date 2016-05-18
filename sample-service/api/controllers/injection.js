@@ -1,7 +1,8 @@
 'use strict';
 
 var util = require('util');
-
+var app = require('../../app');
+var errors = require('../helpers/errors');
 var models = require('../models/index');
 /*
  For a controller you should export the functions referenced in your Swagger document by name.
@@ -12,6 +13,7 @@ var models = require('../models/index');
  */
 module.exports = {
     get: get,
+    post: post
 };
 
 /*
@@ -24,7 +26,36 @@ module.exports = {
 function get(req, res) {
     models.InjectionLocation.findAll({}).then(function (locations) {
         res.json(locations);
-    }).catch(function(){
-        res.status(503).json({code: 503, message: 'Database service unavailable.'});
+    }).catch(function(err){
+        res.status(500).json(errors.sequelizeError(err));
+    });
+}
+
+function post(req, res, next) {
+    if (req.body.name === undefined || req.body.name === null) {
+        res.status(500).json(errors.invalidName());
+        return;
+    }
+    
+    models.InjectionLocation.findAll({where:{name: req.body.name}}).then(function (injection) {
+        if (injection != null && injection.length > 0) {
+            res.status(500).json(errors.duplicateInjection());
+        } else {
+            create(req.body, res);
+        }
+    }).catch(function(err){
+        res.status(500).json(errors.sequelizeError(err));
+    });    
+}
+
+function create(body, res) {
+    models.InjectionLocation.create({
+            name: body.name,
+            mutable: true
+    }).then(function (injection) {
+        res.json(injection);
+        app.broadcast();
+    }).catch(function(err){
+        res.status(500).json(errors.sequelizeError(err));
     });
 }

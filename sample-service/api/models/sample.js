@@ -7,9 +7,8 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4
         },
-        date: DataTypes.DATE,
-        virus: DataTypes.TEXT,
-        strain: DataTypes.TEXT,
+        idNumber: DataTypes.INTEGER,
+        sampledate: DataTypes.DATE,
         comment: DataTypes.TEXT,
         tag: DataTypes.TEXT
     }, {
@@ -17,6 +16,7 @@ module.exports = function(sequelize, DataTypes) {
             associate: function(models) {
                 Sample.belongsTo(models.InjectionLocation, {foreignKey: 'injectionLocationId', as: 'injectionLocation'});
                 Sample.belongsTo(models.RegistrationTransform, {foreignKey: 'registrationTransformId', as: 'registrationTransform'});
+                Sample.belongsTo(models.Strain, {foreignKey: 'strainId', as: 'strain'});
                 Sample.hasMany(models.Neuron, {foreignKey: 'sampleId', as: 'neurons'});
             }
         }

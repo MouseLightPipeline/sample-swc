@@ -1,5 +1,5 @@
 {
-  "name": "swc-service",
+  "name": "sample-service",
   "version": "0.0.1",
   "private": true,
   "main": "app.js",
@@ -7,6 +7,7 @@
     "body-parser": "^1.13.3",
     "byline": "^4.2.1",
     "cors": "^2.7.1",
+    "csv": "^0.4.6",
     "del": "^2.2.0",
     "express": "^4.12.3",
     "gulp": "^3.9.1",

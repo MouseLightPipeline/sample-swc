@@ -1,7 +1,8 @@
 'use strict';
 
 var util = require('util');
-
+var app = require('../../app');
+var errors = require('../helpers/errors');
 var models = require('../models/index');
 /*
  For a controller you should export the functions referenced in your Swagger document by name.
@@ -12,6 +13,8 @@ var models = require('../models/index');
  */
 module.exports = {
     get: get,
+    getSampleById: getSampleById,
+    post: post
 };
 
 /*
@@ -22,9 +25,81 @@ module.exports = {
  */
 
 function get(req, res) {
-    models.Sample.findAll({}).then(function (samples) {
+    models.Sample.findAll({include:GET_SAMPLE_INCLUDE}).then(function (samples) {
         res.json(samples);
-    }).catch(function(){
-        res.status(503).json({code: 503, message: 'Database service unavailable.'});
+    }).catch(function(err){
+        res.status(500).json(errors.sequelizeError(err));
     });
 }
+
+function getSampleById(req, res) {
+    models.Sample.findAll({include:GET_SAMPLE_INCLUDE, where: {id: req.swagger.params.sampleId.value}, limit: 1}).then(function (samples) {
+        if (samples.length > 0)
+            res.json(samples[0]);
+        else
+            res.status(500).json({message: 'bad id'});
+    }).catch(function(err){
+        res.status(500).json(errors.sequelizeError(err));
+    });
+}
+
+function post(req, res, next) {
+    if (req.body.idNumber === undefined || req.body.idNumber === null) {
+        res.status(500).json(errors.invalidIdNumber());
+        return;
+    }
+    
+    models.Sample.findAll({where:{idNumber: req.body.idNumber}}).then(function (sample) {
+        if (sample != null && sample.length > 0) {
+            res.status(500).json(errors.duplicateSample());
+        } else {
+            create(req.body, res);
+        }
+    }).catch(function(err){
+        res.status(500).json(errors.sequelizeError(err));
+    });    
+}
+
+function create(body, res) {
+    var date = (body.sampledate && body.sampledate.length > 0) ? new Date(body.sampledate) : new Date();
+    var tag = body.tag || '';
+    var comment = body.comment || '';
+    var injectionLocationId = body.injectionLocationId || null;
+    var registrationId = body.registrationTransformId || null;
+    var strainId = body.strainId || null;
+    
+    models.Sample.create({
+            idNumber: body.idNumber,
+            sampledate: date,
+            tag: tag,
+            comment: comment,
+            injectionLocationId: injectionLocationId,
+            registrationTransformId: registrationId,
+            strainId: strainId
+    }).then(function (sample) {
+        res.json(sample);
+        app.broadcast();
+    }).catch(function(err){
+        res.status(500).json(errors.sequelizeError(err));
+    });
+}
+
+function replaceWithEmptyObject(prop) {
+    return (prop ? prop.dataValues : null) || {};
+}
+
+var GET_SAMPLE_INCLUDE =
+[
+    {
+        model: models.InjectionLocation,
+        as: 'injectionLocation'
+    },
+    {
+        model: models.RegistrationTransform,
+        as: 'registrationTransform'
+    },
+    {
+        model: models.Strain,
+        as: 'strain'
+    }
+]

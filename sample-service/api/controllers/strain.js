@@ -1,7 +1,7 @@
 'use strict';
 
 var util = require('util');
-
+var errors = require('../helpers/errors');
 var models = require('../models/index');
 /*
  For a controller you should export the functions referenced in your Swagger document by name.
@@ -12,6 +12,7 @@ var models = require('../models/index');
  */
 module.exports = {
     get: get,
+    getStrainsForVirus: getStrainsForVirus
 };
 
 /*
@@ -24,7 +25,16 @@ module.exports = {
 function get(req, res) {
     models.Strain.findAll({}).then(function (strains) {
         res.json(strains);
-    }).catch(function(){
-        res.status(503).json({code: 503, message: 'Database service unavailable.'});
+    }).catch(function(err){
+        res.status(500).json(errors.sequelizeError(err));
+    });
+}
+
+
+function getStrainsForVirus(req, res) {
+    models.Strain.findAll({where: {virusId: req.swagger.params.virusId.originalValue}}).then(function (strains) {
+        res.json(strains);
+    }).catch((err) => {
+        res.status(500).json(errors.sequelizeError(err));
     });
 }
