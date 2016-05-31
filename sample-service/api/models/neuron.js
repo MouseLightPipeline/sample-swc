@@ -10,7 +10,10 @@ module.exports = function(sequelize, DataTypes) {
         idNumber: DataTypes.INTEGER,
         x: DataTypes.DOUBLE,
         y: DataTypes.DOUBLE,
-        z: DataTypes.DOUBLE
+        z: DataTypes.DOUBLE,
+        atlasX: DataTypes.DOUBLE,
+        atlasY: DataTypes.DOUBLE,
+        atlasZ: DataTypes.DOUBLE
     }, {
         classMethods: {
             associate: function(models) {

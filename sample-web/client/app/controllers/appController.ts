@@ -19,9 +19,9 @@ module SampleManager {
         ];        
         
         constructor(private $scope: any, private $resource: any, private serviceApi: ApiAccessService, 
-            private injectionService: InjectionService, private transformService: RegistrationTransformService,
-            private virusService: VirusService, private strainService: StrainService, private brainAreaService: BrainAreaService,
-            private sampleService: SampleService, private neuronService: NeuronService) {
+            private injectionService: ndbservices.InjectionService, private transformService: ndbservices.RegistrationTransformService,
+            private virusService: ndbservices.VirusService, private strainService: ndbservices.StrainService, private brainAreaService: ndbservices.BrainAreaService,
+            private sampleService: ndbservices.SampleService, private neuronService: ndbservices.NeuronService) {
             
             $scope.service = serviceApi;
             $scope.injectionService = injectionService;

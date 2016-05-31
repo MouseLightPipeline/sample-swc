@@ -14,7 +14,8 @@ var models = require('../models/index');
 module.exports = {
     get: get,
     post: post,
-    getNeuronById: getNeuronById
+    getNeuronById: getNeuronById,
+    getNeuronsForSample: getNeuronsForSample
 };
 
 /*
@@ -43,6 +44,14 @@ function getNeuronById(req, res) {
     });
 }
 
+function getNeuronsForSample(req, res) {
+    models.Neuron.findAll({where: {sampleId: req.swagger.params.sampleId.originalValue}}).then(function (neurons) {
+        res.json(neurons);
+    }).catch((err) => {
+        res.status(500).json(errors.sequelizeError(err));
+    });
+}
+
 function post(req, res, next) {
     if (req.body.idNumber === undefined || req.body.idNumber === null) {
         res.status(500).json(errors.invalidIdNumber());
@@ -65,14 +74,20 @@ function create(body, res) {
     var x = body.x || 0;
     var y = body.y || 0;
     var z = body.z || 0;
+    var aX = body.atlasX || 0;
+    var aY = body.atlasY || 0;
+    var aZ = body.atlasZ || 0;
     
     models.Neuron.create({
             idNumber: body.idNumber,
             sampleId: sampleId,
             brainAreaId: brainAreaId,
             x: x,
-            z: y,
-            y: z
+            y: y,
+            z: z,
+            atlasX: aX,
+            atlasY: aY,
+            atlasZ: aZ
         }).then(function (neuron) {
         res.json(neuron);
         app.broadcast();

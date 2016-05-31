@@ -2,62 +2,41 @@
 
 var util = require('util');
 
+var errors = require('../helpers/errors');
 var models = require('../models/index');
 /*
- For a controller you should export the functions referenced in your Swagger document by name.
+For a controller you should export the functions referenced in your Swagger document by name.
 
- Either:
- - The HTTP Verb of the corresponding operation (get, put, post, delete, etc)
- - Or the operationId associated with the operation in your Swagger document
- */
+Either:
+- The HTTP Verb of the corresponding operation (get, put, post, delete, etc)
+- Or the operationId associated with the operation in your Swagger document
+*/
 module.exports = {
-    get: getfiles,
-    findByStructure: findByStructure,
-    forTracing: forTracing
+    get: get,
+    findByStructure: findByStructure
 };
 
 /*
- Functions in controllers used for operations should take two parameters:
+Functions in controllers used for operations should take two parameters:
 
- Param 1: a handle to the request object
- Param 2: a handle to the response object
- */
+Param 1: a handle to the request object
+Param 2: a handle to the response object
+*/
 
-function getfiles(req, res) {
-    // models.SwcFile.findAll({}).then(function(files){
-    // models.NeuronSample.findAll({include:[models.SwcFile, {model: models.NeuronSample, as: 'parent'}]}).then(function(files){
+function get(req, res) {
     models.TracingNode.findAll({}).then(function (samples) {
         res.json(samples);
     }).catch(function(){
-        res.status(503).json({code: 503, message: 'Database service unavailable.'});
+        res.status(500).json(errors.sequelizeError(err));
     });
 }
 
 function findByStructure(req, res) {
-    var id = parseInt(req.swagger.params.structure.value);
+    var id = req.swagger.params.structureIdentifierId.value;
     
-    if (!isNaN(id)) {
-        models.TracingNode.findAll({where: {structure: id}, include:[{model:models.Tracing, attributes:['filename']}], order: [[models.Tracing, 'filename', 'ASC'], ['sampleNumber', 'ASC']]}).then(function (samples) {
-            res.json(samples);
-        }).catch(function(e){
-            console.log(e);
-            res.status(400);
-            //res.status(503).json({code: 503, message: 'Database service unavailable.'});
-        });
-        //res.status(200).json([]);
-    } else {
-        res.status(400);
-    }
-}
-
-function forTracing(req, res) {
-    var id = req.swagger.params.tracingId.value;
-    
-    models.TracingNode.findAll({where: {fileId: id}, order: [['sampleNumber', 'ASC']]}).then(function (samples) {
+    models.TracingNode.findAll({where: {structureIdentifierId: id}, include:[{model:models.Tracing, attributes:['filename']}], order: [[models.Tracing, 'filename', 'ASC'], ['sampleNumber', 'ASC']]}).then(function (samples) {
         res.json(samples);
     }).catch(function(e){
-        console.log(e);
-        res.status(400);
-        //res.status(503).json({code: 503, message: 'Database service unavailable.'});
+        res.status(500).json(errors.sequelizeError(err));
     });
 }

@@ -9,5 +9,5 @@ module.exports = function (app) {
 };
 
 router.get('/', function (req, res, next) {
-    res.json([{service: 'http://' + req.app.locals.apiHost + '/api/v1/'}]);
+    res.json({service: req.app.locals.serviceHost, status: req.app.locals.statusHost, sampleService: req.app.locals.sampleHost});
 });

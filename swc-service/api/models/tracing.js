@@ -8,16 +8,17 @@ module.exports = function(sequelize, DataTypes) {
             defaultValue: DataTypes.UUIDV4
         },
         filename: DataTypes.STRING,
-        tag: DataTypes.STRING,
         annotator: DataTypes.STRING,
-        comments: DataTypes.STRING
+        lengthMicrometers: DataTypes.DOUBLE,
+        neuronId:  DataTypes.UUID // reference to external database entry
     }, {
         classMethods: {
             associate: function(models) {
-                Tracing.belongsTo(models.Neuron, {foreignKey: 'neuronId'});
+                Tracing.hasMany(models.MarkerLocation, {foreignKey: 'tracingId', as: 'markers'});
                 Tracing.hasMany(models.TracingNode, {foreignKey: 'tracingId', as: 'nodes'});
             }
         }
     });
+    
     return Tracing;
 };

@@ -40,10 +40,60 @@ services:
     environment:
       NODE_ENV: production
       SAMPLE_SERVICE_PORT: 9641
+      SAMPLE_STATUS_PORT: 9642
     command: node /app/dist/server/app.js
     ports:
       - 9643:9643
     links:
       - "sample-service:sampleservice"
       - "sample-status:samplestatus"
+###
+  tracing-datastore:
+    image: postgres:latest
+    volumes:
+      - /tracingdbstore
+    entrypoint: /bin/bash
+  tracing-db-server:
+    image: postgres:latest
+    volumes:
+      - ./swc-datastore:/docker-entrypoint-initdb.d
+    volumes_from:
+      - tracing-datastore
+    environment:
+      POSTGRES_PASSWORD: pgsecret
+      PGDATA: /tracingdbstore/pgdata
+    ports:
+      - 5432:5432
+  tracing-service:
+    build: ./swc-service
+    environment:
+      NODE_ENV: production
+    command: node /app/app.js
+    ports:
+      - 9651:9651
+    links:
+      - "tracing-db-server:swcdatabase"
+  tracing-status:
+    build: ./swc-status
+    environment:
+      NODE_ENV: production
+      SWC_SERVICE_PORT: 9652
+    command: node /app/dist/server/app.js
+    ports:
+      - 9652:9652
+    links:
+      - "tracing-service:tracingervice"
+  tracing-web:
+    build: ./swc-web
+    environment:
+      NODE_ENV: production
+      SWC_SERVICE_PORT: 9651
+      SWC_STATUS_PORT: 9652
+      SAMPLE_SERVICE_PORT: 9641
+    command: node /app/dist/server/app.js
+    ports:
+      - 9653:9653
+    links:
+      - "tracing-service:tracingservice"
+      - "tracing-status:tracingstatus"
 

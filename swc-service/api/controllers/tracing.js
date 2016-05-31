@@ -1,7 +1,7 @@
 'use strict';
 
 var util = require('util');
-
+var errors = require('../helpers/errors');
 var models = require('../models/index');
 /*
  For a controller you should export the functions referenced in your Swagger document by name.
@@ -11,7 +11,8 @@ var models = require('../models/index');
  - Or the operationId associated with the operation in your Swagger document
  */
 module.exports = {
-    get: get
+    get: get,
+    forTracing: forTracing
 };
 
 /*
@@ -22,11 +23,19 @@ module.exports = {
  */
 
 function get(req, res) {
-    // models.SwcFile.findAll({}).then(function(files){
-    // models.NeuronSample.findAll({include:[models.SwcFile, {model: models.NeuronSample, as: 'parent'}]}).then(function(files){
-    models.Tracing.findAll({}).then(function (files) {
-        res.json(files);
-    }).catch(function(){
-        res.status(503).json({code: 503, message: 'Database service unavailable.'});
+    models.Tracing.findAll({}).then(function (samples) {
+        res.json(samples);
+    }).catch(function(err){
+        res.status(500).json(errors.sequelizeError(err));
+    });
+}
+
+function forTracing(req, res) {
+    var id = req.swagger.params.tracingId.value;
+    
+    models.TracingNode.findAll({where: {tracingId: id}, order: [['sampleNumber', 'ASC']]}).then(function (samples) {
+        res.json(samples);
+    }).catch(function(err){
+        res.status(500).json(errors.sequelizeError(err));
     });
 }

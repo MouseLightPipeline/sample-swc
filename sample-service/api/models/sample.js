@@ -9,8 +9,7 @@ module.exports = function(sequelize, DataTypes) {
         },
         idNumber: DataTypes.INTEGER,
         sampledate: DataTypes.DATE,
-        comment: DataTypes.TEXT,
-        tag: DataTypes.TEXT
+        comment: DataTypes.TEXT
     }, {
         classMethods: {
             associate: function(models) {

@@ -24,9 +24,9 @@ module SampleManager {
         
         private apiLocation: any;
 
-        constructor(private $resource: any, private $location: any, private injectionService: InjectionService, private transformService: RegistrationTransformService,
-            private virusService: VirusService, private strainService: StrainService, private brainAreaService: BrainAreaService,
-            private sampleService: SampleService, private neuronService: NeuronService) {
+        constructor(private $resource: any, private $location: any, private injectionService: ndbservices.InjectionService, private transformService: ndbservices.RegistrationTransformService,
+            private virusService: ndbservices.VirusService, private strainService: ndbservices.StrainService, private brainAreaService: ndbservices.BrainAreaService,
+            private sampleService: ndbservices.SampleService, private neuronService: ndbservices.NeuronService) {
             this.haveService = false;
             this.serviceUrl = '';
             this.serviceDocUrl = '';

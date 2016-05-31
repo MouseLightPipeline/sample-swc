@@ -8,13 +8,11 @@ module.exports = function(sequelize, DataTypes) {
             defaultValue: DataTypes.UUIDV4
         },
         sampleNumber: DataTypes.INTEGER,
-        structure: DataTypes.INTEGER,
         x: DataTypes.DOUBLE,
         y: DataTypes.DOUBLE,
         z: DataTypes.DOUBLE,
         radius: DataTypes.DOUBLE,
-        parentNumber: DataTypes.INTEGER,
-        comment: DataTypes.TEXT
+        parentNumber: DataTypes.INTEGER
     }, {
         classMethods: {
             associate: function(models) {
@@ -23,5 +21,6 @@ module.exports = function(sequelize, DataTypes) {
             }
         }
     });
-    return TracingNode
+    
+    return TracingNode;
 };

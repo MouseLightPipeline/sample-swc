@@ -1,7 +1,7 @@
-/// <reference path="../../typings/browser/ambient/angular/index.d.ts"/>
+/// <reference path="../../typings/globals/angular/index.d.ts"/>
 
 ((): void => {
     'use strict';
 
-    var app = angular.module('swcFileManager', ['ngResource']);
+    var app = angular.module('tracingManager', ['ngResource', 'ndbservices']);
 })();

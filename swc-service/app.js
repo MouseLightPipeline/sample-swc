@@ -15,28 +15,14 @@ var io = require('socket.io')(http);
 app.locals.dbready = false;
 
 io.on('connection', function(socket) {
-  console.log('a user connected');
-  socket.emit('db_status', app.locals.dbready);
-  
-  if  (app.locals.dbready) {
-    db.Tracing.count().then(function(val){
-      socket.emit('file_count', val);
-    });
-    db.TracingNode.count().then(function(val){
-      socket.emit('sample_count', val);
-    });
-  }
-  
-  socket.on('disconnect', function(){
-    console.log('user disconnected');
-  });
+    broadcastAll();
 });
 
 module.exports.app = app; // for testing
-module.exports.io = io;
+module.exports.broadcast = broadcastAll;
 
 var config = {
-  appRoot: __dirname      // required config
+    appRoot: __dirname      // required config
 };
 
 app.use('/script/socket.io', express.static(__dirname + '/node_modules/socket.io-client'));
@@ -44,36 +30,55 @@ app.use('/script/socket.io', express.static(__dirname + '/node_modules/socket.io
 app.use(require('skipper')());
 
 SwaggerExpress.create(config, function(err, swaggerExpress) {
-  if (err) { throw err; }
+    if (err) { throw err; }
 
-  app.use(SwaggerUi(swaggerExpress.runner.swagger));
+    app.use(SwaggerUi(swaggerExpress.runner.swagger));
 
-  // install middleware
-  swaggerExpress.register(app);
+    // install middleware
+    swaggerExpress.register(app);
   
-  var port = process.env.PORT || 9651;
+    var port = process.env.PORT || 9651;
   
-  http.listen(port);
+    http.listen(port);
 });
 
 sync();
 
-function sync()
-{
-  db.sequelize.sync().then(function() {
-    app.locals.dbready = true;
+function sync() {
+    db.sequelize.sync().then(function() {      
+        app.locals.dbready = true;
+    
+        db.StructureIdentifier.populateDefault().then(function() {
+            broadcastAll();
+            console.log('Successful database sync.');
+        });
+    }).catch(function(err){
+        console.log('Failed database sync.');
+        console.log(err);
+        setTimeout(sync, 5000);
+    });
+}
+
+function broadcastAll() {
     io.emit('db_status', app.locals.dbready);
 
-    db.Tracing.count().then(function(val){
-       io.emit('file_count', val);
-    });
-    db.TracingNode.count().then(function(val){
-       io.emit('sample_count', val);
-    });
-    console.log('Successful database sync.');
-  }).catch(function(err){
-    console.log('Failed database sync.');
-    console.log(err);
-    setTimeout(sync, 5000);
-  });
-}
+    if  (app.locals.dbready) {
+        db.Tracing.count().then(function(val){
+            io.emit('tracingCount', val);
+        });
+        db.TracingNode.count().then(function(val){
+            io.emit('tracingNodeCount', val);
+        });
+        db.MarkerLocation.count().then(function(val){
+            io.emit('markerLocationCount', val);
+        });
+        db.StructureIdentifier.count().then(function(val){
+            io.emit('structureIdentifierCount', val);
+        });
+    } else {
+        io.emit('tracingCount', -1);
+        io.emit('tracingNodeCount', -1);
+        io.emit('markerLocationCount', -1);
+        io.emit('structureIdentifierCount', -1);
+    }
+};

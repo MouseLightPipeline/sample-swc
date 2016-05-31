@@ -23,8 +23,6 @@ var injectionCount = 0;
 
 var registrationCount = 0;
 
-var structureCount = 0;
-
 var virusCount = 0;
 
 var strainCount = 0;
@@ -192,7 +190,6 @@ function relayAllStatus() {
     io.emit('neuron_count', neuronCount);
     io.emit('injection_count', injectionCount);
     io.emit('registration_count', registrationCount);
-    io.emit('structure_count', structureCount);
     io.emit('virus_count', virusCount);
     io.emit('strain_count', strainCount);
 }

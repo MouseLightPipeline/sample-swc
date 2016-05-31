@@ -3,5 +3,5 @@
 ((): void => {
     'use strict';
 
-    var app = angular.module('sampleManager', ['ngResource']);
+    var app = angular.module('sampleManager', ['ngResource', 'ndbservices']);
 })();

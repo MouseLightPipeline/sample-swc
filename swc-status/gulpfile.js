@@ -7,15 +7,15 @@ var del = require('del');
 
 gulp.task('default', ['develop']);
 
-gulp.task('build', ['lib:js', 'lib:css', 'lib:fonts:1', 'lib:fonts:2', 'client:js', 'js', 'jade', 'css']);
+gulp.task('build', ['lib:js', 'lib:css', 'lib:fonts:1', 'lib:fonts:2', 'client:js', 'js', 'pug', 'css']);
 
 gulp.task('develop', ['nodemon', 'watch']);
 
 gulp.task('nodemon', ['build'], function () {
-  livereload.listen();
+  livereload.listen({port: 34730});
   nodemon({
     script: 'dist/server/app.js',
-    ext: 'js jade html css',
+    ext: 'js pug html css',
     ignore: ['client/**/*.*', 'server/**/*.*'],
     stdout: false
   }).on('readable', function () {
@@ -33,24 +33,6 @@ gulp.task('watch', function() {
     return gulp.watch(['server/**/*.*', 'client/**/*.*'], ['build']);
 });
 
-/*
-gulp.task('develop', ['build'], function () {
-  livereload.listen();
-  nodemon({
-    script: 'dist/server/app.js',
-    ext: 'js jade html css',
-    stdout: false
-  }).on('readable', function () {
-    this.stdout.on('data', function (chunk) {
-      if(/^Express server listening on port/.test(chunk)){
-        livereload.changed(__dirname);
-      }
-    });
-    this.stdout.pipe(process.stdout);
-    this.stderr.pipe(process.stderr);
-  });
-});
-*/
 gulp.task('clean', function () {
   return del('dist/**/*');
 });
@@ -110,8 +92,8 @@ gulp.task('js', ['clean'], function () {
     .pipe(gulp.dest('dist/server'));
 });
 
-// move jade
-gulp.task('jade', ['clean'], function () {
-  return gulp.src('server/**/*.jade')
+// move pug
+gulp.task('pug', ['clean'], function () {
+  return gulp.src('server/**/*.pug')
     .pipe(gulp.dest('dist/server'))
 });

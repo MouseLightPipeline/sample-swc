@@ -1,0 +1,38 @@
+div(class="row", ng-controller="createTracingController")
+  include ./_createSampleModal
+  form
+    div
+      div(class="col-sm-12 form-group")
+        label(class="file")
+          input(type="file", class="form-control-file small", name="contents", file-model="theFile")
+          span(class="file-custom")
+      div(class="col-sm-12 form-group")
+        label(class="label label-primary") {{theFile.name}}
+    div
+      div(class="col-sm-10 form-group")
+        label(for="annotator") Annotator
+        input(type="text", class="form-control", id="annotator", placeholder="e.g., name or email", ng-model="annotator")
+      div(class="col-sm-2 form-group")
+        label(for="length") Length
+        div(class="input-group")
+          input(type="text", class="form-control", id="length", placeholder="", ng-model="lengthMicrometers")
+          div(class="input-group-addon form-control-sm") µm
+    div
+      div(class="col-sm-6 form-group")
+        label(for="sampleSelect") Add to sample
+        div(class="input-group input-group-sm")
+          select(ng-model="sampleId" id="sampleSelect" class="form-control form-control-sm c-select" ng-disabled="sampleService.samples.length == 0" )
+            option(ng-repeat="option in sampleService.samples" value="{{option.id}}") {{option.idNumber}} ({{option.sampledate | date: 'yyyy-MM-dd'}})
+          span(class="input-group-btn input-group-btn-sm")
+            button(class="btn btn-success btm-sm]', " type="button" ng-disabled="sampleService.samples.length == 0" data-toggle="modal" data-target="#createSampleModal")
+              i(ng-class="['fa', {'fa-spinner': !sampleService.resourcesAreAvailable, 'fa-spin': !sampleService.resourcesAreAvailable, 'fa-plus': sampleService.resourcesAreAvailable}]")
+      div(class="col-sm-6 form-group")
+        label(for="neuronSelect") Neurons for {{sampleId}}
+        div(class="input-group input-group-sm")
+          select(ng-model="neuronId" id="neuronSelect" class="form-control form-control-sm c-select" ng-disabled="neuronsForSample.length == 0" )
+            option(ng-repeat="option in neuronsForSample" value="{{option.id}}") {{option.idNumber}} ({{option.brainAreaId}})
+          span(class="input-group-btn input-group-btn-sm")
+            button(class="btn btn-success btm-sm]', " type="button" data-toggle="modal" data-target="#createNeuronModal")
+              i(ng-class="['fa', {'fa-spinner': !neuronService.resourcesAreAvailable, 'fa-spin': !neuronService.resourcesAreAvailable, 'fa-plus': neuronService.resourcesAreAvailable}]")
+    div(class="col-sm-12")
+      button(type="submit" class="btn btn-primary", ng-click="send()" ng-disabled="!canCreateTracing()") Upload

@@ -24,7 +24,7 @@ module SampleManager {
                 name: this.$scope.newInjection.name
             };
 
-            this.$scope.injectionService.createInjectionLocation(injectionLocation).then((injection) => {
+            this.$scope.injectionService.createItem(injectionLocation).then((injection) => {
                 this.$scope.$apply(() => {
                     this.$scope.$emit('injectionCreatedEvent', injection.id);
                     var element = $('#createInjectionModal') as any;

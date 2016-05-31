@@ -7,5 +7,5 @@ module.exports = function (app) {
 };
 
 router.get('/', function (req, res, next) {
-    res.render('index', {appName: 'sampleManager', appController: 'appController'});
+    res.render('index', {appName: 'sampleManager', appController: 'appController', title: 'Mouse Light Sample Manager'});
 });

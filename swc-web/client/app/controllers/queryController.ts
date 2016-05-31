@@ -1,7 +1,7 @@
-/// <reference path="../../../typings/browser/ambient/jquery/index.d.ts"/>
-/// <reference path="../../../typings/browser/ambient/angular/index.d.ts"/>
+/// <reference path="../../../typings/globals/jquery/index.d.ts"/>
+/// <reference path="../../../typings/globals/angular/index.d.ts"/>
 
-module SwcFile {
+module TracingManager {
     'use strict';
 
     export class QueryController {
@@ -28,6 +28,6 @@ module SwcFile {
         }
     }
 
-    angular.module('swcFileManager').controller('queryController', QueryController);
+    angular.module('tracingManager').controller('queryController', QueryController);
 }
  

@@ -77,6 +77,7 @@ function create(body, res) {
             registrationTransformId: registrationId,
             strainId: strainId
     }).then(function (sample) {
+        console.log(sample);
         res.json(sample);
         app.broadcast();
     }).catch(function(err){

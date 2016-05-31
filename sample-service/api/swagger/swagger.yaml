@@ -132,19 +132,27 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
-  /structures:
-    x-swagger-router-controller: structure
+  /samples/{sampleId}/neurons:
+    x-swagger-router-controller: neuron
     get:
-      summary: Structure identifier definitions
+      summary: Neurons for a sample
+      operationId: getNeuronsForSample
       tags:
-        - Structure Identifiers
+        - Samples
+        - Neurons
+      parameters:
+        - name: sampleId
+          in: path
+          description: Sample id for neuron lookup
+          required: true
+          type: string
       responses:
         200:
-          description: An array of files
+          description: An array of neurons for the given sample
           schema:
             type: array
             items:
-              $ref: '#/definitions/StructureIdentifier'
+              $ref: '#/definitions/Neuron'
         default:
           description: Error
           schema:
@@ -297,9 +305,6 @@ definitions:
       comment:
         type: string
         description: Comments
-      tag:
-        type: string
-        description: Tag/keywords
       createdAt:
         type: string
         format: date-time
@@ -321,9 +326,6 @@ definitions:
       comment:
         type: string
         description: Comments
-      tag:
-        type: string
-        description: Tag/keywords
       injectionLocationId:
         type: string
         description: Injection location reference id
@@ -371,6 +373,18 @@ definitions:
         type: number
         format: double
         description: Soma Z location
+      atlasX:
+        type: number
+        format: double
+        description: Soma atlas X location
+      atlasY:
+        type: number
+        format: double
+        description: Soma atlas Y location
+      atlasZ:
+        type: number
+        format: double
+        description: Soma atlas Z location
   InjectionLocation:
     type: object
     properties:
@@ -406,29 +420,6 @@ definitions:
       name:
         type: string
         description: Name
-      mutable:
-        type: boolean
-        description: Mutability
-      createdAt:
-        type: string
-        format: date-time
-        description: Creation time
-      updatedAt:
-        type: string
-        format: date-time
-        description: Update time
-  StructureIdentifier:
-    type: object
-    properties:
-      id:
-        type: string
-        description: Internal id
-      name:
-        type: string
-        description: Name
-      value:
-        type: integer
-        description: Enumeration value
       mutable:
         type: boolean
         description: Mutability

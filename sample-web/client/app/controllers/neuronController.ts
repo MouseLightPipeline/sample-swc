@@ -21,6 +21,9 @@ module SampleManager {
             this.$scope.model.x = 0;
             this.$scope.model.y = 0;
             this.$scope.model.z = 0;
+            this.$scope.model.atlasX = 0;
+            this.$scope.model.atlasY = 0;
+            this.$scope.model.atlasZ = 0;
             
             this.$scope.strainsForVirus = [];
             
@@ -59,10 +62,13 @@ module SampleManager {
                 brainAreaId: this.$scope.model.brainAreaId,
                 x: parseFloat(this.$scope.model.x),
                 y: parseFloat(this.$scope.model.y),
-                z: parseFloat(this.$scope.model.z)
+                z: parseFloat(this.$scope.model.z),
+                atlasX: parseFloat(this.$scope.model.atlasX),
+                atlasY: parseFloat(this.$scope.model.atlasY),
+                atlasZ: parseFloat(this.$scope.model.atlasZ)
             };
 
-            this.$scope.neuronService.createNeuron(neuron);
+            this.$scope.neuronService.createItem(neuron);
         }
     }
 

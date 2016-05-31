@@ -44,18 +44,17 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
 
 sync();
 
-function sync()
-{
+function sync() {
     db.sequelize.sync().then(function() {
         app.locals.dbready = true;
-        db.StructureIdentifier.populateDefault().then(function() {
-            db.InjectionLocation.populateDefault()
+        
+        db.InjectionLocation.populateDefault()
+        .then(function() {
+            return db.RegistrationTransform.populateDefault();
         }).then(function() {
-            db.RegistrationTransform.populateDefault()
+            return db.Virus.populateDefault(db);
         }).then(function() {
-            db.Virus.populateDefault(db)
-        }).then(function() {
-            db.BrainArea.populateDefault(db)
+            return db.BrainArea.populateDefault(db);
         }).then(function() {
             broadcastAll();
             console.log('Successful database sync.');
@@ -83,9 +82,6 @@ function broadcastAll() {
         db.RegistrationTransform.count().then(function(val){
             io.emit('registration_count', val);
         });
-        db.StructureIdentifier.count().then(function(val){
-            io.emit('structure_count', val);
-        });
         db.Virus.count().then(function(val){
             io.emit('virus_count', val);
         });
@@ -97,7 +93,6 @@ function broadcastAll() {
         io.emit('neuron_count', -1);
         io.emit('injection_count', -1);
         io.emit('registration_count', -1);
-        io.emit('structure_count', -1);
         io.emit('virus_count', -1);
         io.emit('strain_count', -1);
     }
