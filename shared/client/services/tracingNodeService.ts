@@ -5,21 +5,17 @@
 
 'use strict';
 
-interface ITracing extends ng.resource.IResource<ITracing>, IApiItem {
+interface ITracingNode extends ng.resource.IResource<ITracingNode>, IApiItem {
     id: string;
-    filename: string,
-    annotator: string,
-    lengthMicrometers: number,
-    neuronId: string,
     createdAt: Date;
     updatedAt: Date;
 }
 
-interface ITracingResource extends IDataServiceResource<ITracing> {
-    nodes(obj): ITracing;
+interface ITracingNodeResource extends IDataServiceResource<ITracingNode> {
+    nodesForStructure(obj): ITracingNode;
 }
 
-class TracingService extends DataService<ITracing> {
+class TracingNodeService extends DataService<ITracingNode> {
     public static $inject = [
         '$resource'
     ];
@@ -28,11 +24,11 @@ class TracingService extends DataService<ITracing> {
         super($resource);
     }
 
-    private get service(): ITracingResource {
-        return <ITracingResource>this.dataSource;
+    private get service(): ITracingNodeResource {
+        return <ITracingNodeResource>this.dataSource;
     }
 
-    protected mapQueriedItem(obj: any): ITracing {
+    protected mapQueriedItem(obj: any): ITracingNode {
         obj.sampledate = new Date(obj.sampledate);
         obj.createdAt = new Date(obj.createdAt);
         obj.updatedAt = new Date(obj.updatedAt);
@@ -40,22 +36,22 @@ class TracingService extends DataService<ITracing> {
         return obj;
     }
 
-    public createResource(location: string): ITracingResource {
-        return <ITracingResource>this.$resource(location + 'tracings/:id', { id: '@id' }, {
-            nodes: {
+    public createResource(location: string): ITracingNodeResource {
+        return <ITracingNodeResource>this.$resource(location + 'nodes/:id', { id: '@id' }, {
+            nodesForStructure: {
                 method: 'GET',
-                url: location + 'tracings/:id/nodes/',
+                url: location + 'nodes/findByStructure/:id/',
                 params: { id: '@id' },
                 isArray: true
             }
         });
     }
 
-    public get tracings(): any {
+    public get nodes(): any {
         return this.items;
     }
 
-    public nodesForTracing(id: string) {
-        return this.service.nodes({ id: id }).$promise;
+    public nodesForStructure(structureId: string) {
+        return this.service.nodesForStructure({ id: structureId }).$promise;
     }
 }

@@ -1,5 +1,4 @@
-/// <reference path="../../../typings/browser/ambient/jquery/index.d.ts"/>
-/// <reference path="../../../typings/browser/ambient/angular/index.d.ts"/>
+/// <reference path="../../../../shared/client/services/sampleService.ts"/>
 /// <reference path="../polyfill.ts"/>
 
 module SampleManager {

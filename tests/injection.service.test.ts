@@ -12,14 +12,14 @@ describe('Injection Location Service', () => {
     })
 
     it ('Service should not be null.', () => {
-        var injectionService = new ndbservices.InjectionService($resource);
+        var injectionService = new InjectionService($resource);
         
         expect(injectionService).toBeDefined();
     });    
 
     it ('Should return default injection locations.', (done) => {
         
-        var injectionService = new ndbservices.InjectionService($resource);
+        var injectionService = new InjectionService($resource);
         
         injectionService.setLocation('http://localhost:9641/api/v1/').then((success) => {
             expect(injectionService.resourcesAreAvailable).toBeTruthy();

@@ -1,5 +1,13 @@
-/// <reference path="../../../typings/globals/jquery/index.d.ts"/>
-/// <reference path="../../../typings/globals/angular/index.d.ts"/>
+/// <reference path="../../../../shared/client/services/brainAreaService.ts"/>
+/// <reference path="../../../../shared/client/services/injectionService.ts"/>
+/// <reference path="../../../../shared/client/services/neuronService.ts"/>
+/// <reference path="../../../../shared/client/services/sampleService.ts"/>
+/// <reference path="../../../../shared/client/services/strainService.ts"/>
+/// <reference path="../../../../shared/client/services/structureIdentifierService.ts"/>
+/// <reference path="../../../../shared/client/services/tracingNodeService.ts"/>
+/// <reference path="../../../../shared/client/services/tracingService.ts"/>
+/// <reference path="../../../../shared/client/services/transformService.ts"/>
+/// <reference path="../../../../shared/client/services/virusService.ts"/>
 
 module TracingManager {
     'use strict';
@@ -10,7 +18,9 @@ module TracingManager {
             '$location',
             'sampleService',
             'neuronService',
-            'tracingService'
+            'tracingService',
+            'tracingNodeService',
+            'structureIdentifierService'
         ];        
         
         public haveService: boolean;
@@ -21,8 +31,9 @@ module TracingManager {
  
         private apiLocation: any;
 
-        constructor(private $resource: any, private $location: any, private sampleService: ndbservices.SampleService,
-            private neuronService: ndbservices.NeuronService, private tracingService: ndbservices.TracingService) {
+        constructor(private $resource: any, private $location: any, private sampleService: SampleService,
+            private neuronService: NeuronService, private tracingService: TracingService,
+            private tracingNodeService: TracingNodeService, private structureIdentifierService: StructureIdentifierService) {
             this.haveService = false;
             this.serviceUrl = '';
             this.serviceDocUrl = '';
@@ -45,6 +56,8 @@ module TracingManager {
             this.sampleService.setLocation(this.sampleServiceUrl);
             this.neuronService.setLocation(this.sampleServiceUrl);
             this.tracingService.setLocation(this.serviceUrl);
+            this.tracingNodeService.setLocation(this.serviceUrl);
+            this.structureIdentifierService.setLocation(this.serviceUrl);
         }
     }
 

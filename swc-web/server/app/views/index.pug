@@ -3,15 +3,22 @@ block js
   script(src='/lib/jquery.min.js')
   script(src='/lib/angular.min.js')
   script(src='/lib/angular-resource.min.js')
+  script(src='/lib/dirPagination.js')
   script(src='/lib/tether.min.js')
   script(src='/lib/bootstrap.min.js')
+  script(src='/lib/dataService.js')
+  script(src='/lib/brainAreaService.js')
+  script(src='/lib/injectionService.js')
+  script(src='/lib/neuronService.js')
+  script(src='/lib/sampleService.js')
+  script(src='/lib/strainService.js')
+  script(src='/lib/structureIdentifierService.js')
+  script(src='/lib/tracingNodeService.js')
+  script(src='/lib/tracingService.js')
+  script(src='/lib/transformService.js')
+  script(src='/lib/virusService.js')
   script(src='/app/app.js')
   script(src='/app/directives/fileinput.js')
-  script(src='/app/services/ndbservices.js')
-  script(src='/app/services/dataService.js')
-  script(src='/app/services/sampleService.js')
-  script(src='/app/services/neuronService.js')
-  script(src='/app/services/tracingService.js')
   script(src='/app/services/apiAccessService.js')
   script(src='/app/controllers/appController.js')
   script(src='/app/controllers/createTracingController.js')
@@ -54,15 +61,14 @@ block content
           label(for="structure") Structure Id
           br
           select(class="c-select", id="structure", ng-model="structureId")
-            option(value="0") Undefined
-            option(value="1" selected) soma             
-            option(value="2") axon
-            option(value="3") (basal) dendrite
-            option(value="4") apical dendrite
-            option(value="5") custom
-          button(type="submit" class="btn btn-primary left", ng-click="query()")
-            i(class="fa fa-search")
-            span  Search
+            option(ng-repeat="option in structureIdentifierService.structures" value="{{option.id}}") {{option.name}}
+          button(type="submit" class="btn btn-primary left", ng-click="query()" ng-disabled="isInQuery || structureId.length == 0")
+            i(class="fa fa-search" ng-show="!isInQuery")
+            i(class="fa fa-spinner fa-spin" ng-show="isInQuery")
+            span(class="left")   Search
+          span(class="left" ng-show="!isInQuery") {{queryResults}}
+      div
+        dir-pagination-controls(template-url="/lib/dirPagination.tpl.html", boundary-links="true", pagination-id="query_nodes")
       table(class="table table-sm")
         thead
           tr
@@ -74,12 +80,12 @@ block content
             th Radius
             th Parent Sample Number
         tbody
-          tr(ng-repeat="s in samples")
-            td {{s.SwcFile.filename}}
+          tr(dir-paginate="s in samples | itemsPerPage: 20" pagination-id="query_nodes")
+            td {{s.Tracing.filename}}
             td {{s.sampleNumber}}
             td {{s.x}}
             td {{s.y}}
             td {{s.z}}
             td {{s.radius}}
             td {{s.parentNumber}}
-  div(id="footer", class="container-fluid dark") Copyright © 2016 Howard Hughes Medical Institute 
+  div(id="footer", class="container-fluid dark") Mouse Light Neuron Data Browser Copyright © 2016 Howard Hughes Medical Institute 

@@ -1,5 +1,13 @@
-/// <reference path="../../../typings/browser/ambient/jquery/index.d.ts"/>
-/// <reference path="../../../typings/browser/ambient/angular/index.d.ts"/>
+/// <reference path="../../../../shared/client/services/brainAreaService.ts"/>
+/// <reference path="../../../../shared/client/services/injectionService.ts"/>
+/// <reference path="../../../../shared/client/services/neuronService.ts"/>
+/// <reference path="../../../../shared/client/services/sampleService.ts"/>
+/// <reference path="../../../../shared/client/services/strainService.ts"/>
+/// <reference path="../../../../shared/client/services/structureIdentifierService.ts"/>
+/// <reference path="../../../../shared/client/services/tracingNodeService.ts"/>
+/// <reference path="../../../../shared/client/services/tracingService.ts"/>
+/// <reference path="../../../../shared/client/services/transformService.ts"/>
+/// <reference path="../../../../shared/client/services/virusService.ts"/>
 
 module SampleManager {
     'use strict';
@@ -24,9 +32,10 @@ module SampleManager {
         
         private apiLocation: any;
 
-        constructor(private $resource: any, private $location: any, private injectionService: ndbservices.InjectionService, private transformService: ndbservices.RegistrationTransformService,
-            private virusService: ndbservices.VirusService, private strainService: ndbservices.StrainService, private brainAreaService: ndbservices.BrainAreaService,
-            private sampleService: ndbservices.SampleService, private neuronService: ndbservices.NeuronService) {
+        constructor(private $resource: any, private $location: any, private injectionService: InjectionService,
+            private transformService: RegistrationTransformService, private virusService: VirusService,
+            private strainService: StrainService, private brainAreaService: BrainAreaService,
+            private sampleService: SampleService, private neuronService: NeuronService) {
             this.haveService = false;
             this.serviceUrl = '';
             this.serviceDocUrl = '';

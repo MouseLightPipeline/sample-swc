@@ -51,11 +51,12 @@ div.main-section {
 }
 
 #footer {
-  font-size: 14px;
+  font-size: 12px;
   position: fixed;
   bottom: 0;
   width: 100%;
-  padding: 20px;
+  padding: 10px;
+  z-index: 1000;
 }
 
 div.error {

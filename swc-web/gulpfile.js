@@ -57,6 +57,7 @@ gulp.task('lib:js', ['clean'], function() {
       'bower_components/angular/angular.min.js.map',
       'bower_components/angular-resource/angular-resource.min.js',
       'bower_components/angular-resource/angular-resource.min.js.map',
+      'bower_components/angularUtils-pagination/dirPagination.js',
       'bower_components/bootstrap/dist/js/bootstrap.min.js',
       'bower_components/tether/dist/js/tether.min.js',
       'bower_components/socket.io-client/socket.io.js'
@@ -77,10 +78,9 @@ gulp.task('lib:css', ['clean'], function() {
 
 // compile typescript
 gulp.task('ts', ['typings'], function () {
-    var tsProject = ts.createProject('tsconfig.json');
-    var tsResult = tsProject.src('client/**/*.ts').pipe(ts(tsProject));
-
-    return tsResult.js.pipe(gulp.dest('dist/public/app'));
+  var tsconfig = require('./tsconfig.json');
+  
+  return gulp.src('client/**/*.ts').pipe(ts(tsconfig.compilerOptions)).pipe(gulp.dest('dist/public'));
 });
 
 gulp.task('lib:fonts:1', ['clean'], function() {
@@ -109,10 +109,10 @@ gulp.task('pug', ['clean'], function () {
     .pipe(gulp.dest('dist/server'))
 });
 
-// move html
+// move template html
 gulp.task('html', ['clean'], function () {
-  return gulp.src('server/**/*.html')
-    .pipe(gulp.dest('dist/public'))
+  return gulp.src('server/template/**/*.html')
+    .pipe(gulp.dest('dist/public/lib'))
 });
 
 // move css
@@ -123,6 +123,5 @@ gulp.task('css', ['clean'], function () {
 
 // move shared
 gulp.task('client:shared', ['clean'], function () {
-  return gulp.src('../shared/dist/client/**/*.js')
-    .pipe(gulp.dest('dist/public/app'))
+  return gulp.src('../shared/dist/client/services/*.js').pipe(gulp.dest('dist/public/lib'))
 });

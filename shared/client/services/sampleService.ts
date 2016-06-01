@@ -1,63 +1,63 @@
 /// <reference path="../../typings/globals/jquery/index.d.ts"/>
 /// <reference path="../../typings/globals/angular/index.d.ts"/>
 /// <reference path="../../typings/globals/angular-resource/index.d.ts" />
+/// <reference path="dataService.ts" />
 
-module ndbservices {
-    'use strict';
+'use strict';
 
-    export interface ISample extends ng.resource.IResource<ISample>, IApiItem {
-        id: string;
-        idNumber: number,
-        sampledate: Date,
-        comment: string,
-        createdAt: Date;
-        updatedAt: Date;
+interface ISample extends ng.resource.IResource<ISample>, IApiItem {
+    id: string;
+    idNumber: number;
+    sampledate: Date;
+    comment: string;
+    injectionLocationId: string;
+    registrationTransformId: string;
+    strainId: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+interface ISampleResource extends IDataServiceResource<ISample> {
+    neurons(obj): ISample;
+}
+
+class SampleService extends DataService<ISample> {
+    public static $inject = [
+        '$resource'
+    ];
+
+    constructor($resource: ng.resource.IResourceService) {
+        super($resource);
     }
 
-    export interface ISampleResource extends IDataServiceResource<ISample> {
-        neurons(obj): ISample;
+    private get service(): ISampleResource {
+        return <ISampleResource>this.dataSource;
     }
 
-    export class SampleService extends DataService<ISample> {
-        public static $inject = [
-            '$resource'
-        ];
+    protected mapQueriedItem(obj: any): ISample {
+        obj.sampledate = new Date(obj.sampledate);
+        obj.createdAt = new Date(obj.createdAt);
+        obj.updatedAt = new Date(obj.updatedAt);
 
-        constructor($resource: ng.resource.IResourceService) {
-            super($resource);
-        }
-
-        private get service(): ISampleResource {
-            return <ISampleResource>this.dataSource;
-        }
-
-        protected mapQueriedItem(obj: any): ISample {
-            obj.sampledate = new Date(obj.sampledate);
-            obj.createdAt = new Date(obj.createdAt);
-            obj.updatedAt = new Date(obj.updatedAt);
-
-            return obj;
-        }
-
-        public createResource(location: string): ISampleResource {
-            return <ISampleResource>this.$resource(location + 'samples/:id', { id: '@id' }, {
-                neurons: {
-                    method: 'GET',
-                    url: location + 'samples/:id/neurons/',
-                    params: { id: '@id' },
-                    isArray: true
-                }
-            });
-        }
-
-        public get samples(): any {
-            return this.items;
-        }
-
-        public neuronsForSample(id: string) {
-            return this.service.neurons({ id: id }).$promise;
-        }
+        return obj;
     }
 
-    angular.module('ndbservices').service('sampleService', SampleService);
+    public createResource(location: string): ISampleResource {
+        return <ISampleResource>this.$resource(location + 'samples/:id', { id: '@id' }, {
+            neurons: {
+                method: 'GET',
+                url: location + 'samples/:id/neurons/',
+                params: { id: '@id' },
+                isArray: true
+            }
+        });
+    }
+
+    public get samples(): any {
+        return this.items;
+    }
+
+    public neuronsForSample(id: string) {
+        return this.service.neurons({ id: id }).$promise;
+    }
 }

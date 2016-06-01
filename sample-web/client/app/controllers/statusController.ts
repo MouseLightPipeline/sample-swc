@@ -1,5 +1,3 @@
-/// <reference path="../../../typings/browser/ambient/jquery/index.d.ts"/>
-/// <reference path="../../../typings/browser/ambient/angular/index.d.ts"/>
 
 module SampleManager {
     'use strict';

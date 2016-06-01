@@ -77,11 +77,9 @@ gulp.task('lib:css', ['clean'], function() {
 
 // compile typescript
 gulp.task('ts', ['typings'], function () {
-  var tsconfig = './tsconfig.json';
-  return gulp
-    .src('client/**/*.ts')
-    .pipe(typescript(tsconfig.compilerOptions))
-    .pipe(gulp.dest('dist/public'));
+  var tsconfig = require('./tsconfig.json');
+  
+  return gulp.src('client/**/*.ts').pipe(typescript(tsconfig.compilerOptions)).pipe(gulp.dest('dist/public'));
 });
 
 gulp.task('lib:fonts:1', ['clean'], function() {
@@ -124,6 +122,5 @@ gulp.task('css', ['clean'], function () {
 
 // move shared
 gulp.task('client:shared', ['clean'], function () {
-  return gulp.src('../shared/dist/client/**/*.js')
-    .pipe(gulp.dest('dist/public/app'))
+  return gulp.src('../shared/dist/client/services/*.js').pipe(gulp.dest('dist/public/lib'))
 });

@@ -8,7 +8,7 @@ var gulp = require('gulp'),
  
 gulp.task('default', ['watch']);
 
-gulp.task('build', ['client:src', 'tests:ts']);
+gulp.task('build', ['client:src']);
 
 gulp.task('watch', ['build'], function() {
     livereload.listen({port: 33729});
@@ -27,22 +27,12 @@ gulp.task('clean', function () {
 gulp.task('client:src', ['ts']);
 
 // install typings
-gulp.task("typings", ['clean'], function() {
+gulp.task("typings", [], function() {
   return gulp.src("./typings.json").pipe(gulpTypings());
 });
 
 // compile typescript
 gulp.task('ts', ['typings'], function () {
-    var tsProject = ts.createProject('tsconfig.json');
-    var tsResult = tsProject.src('client/**/*.ts').pipe(ts(tsProject));
-
-    return tsResult.js.pipe(gulp.dest('dist'));
+    var tsconfig = require('./tsconfig.json');
+    return gulp.src('client/**/*.ts').pipe(ts(tsconfig.compilerOptions)).pipe(gulp.dest('dist/client'));
 });
-
-gulp.task('tests:ts', [], function () {
-    var tsProject = ts.createProject('tsconfig.json');
-    var tsResult = tsProject.src('tests/**/*.ts').pipe(ts(tsProject));
-
-    return tsResult.js.pipe(gulp.dest('tests'));
-});
-

@@ -5,18 +5,19 @@
 
 'use strict';
 
-interface IInjection extends ng.resource.IResource<IInjection>, IApiItem {
+interface IStructureIdentifier extends ng.resource.IResource<IStructureIdentifier>, IApiItem {
     id: string;
     name: string;
+    value: number;
     mutable: boolean;
     createdAt: Date;
     updatedAt: Date;
 }
 
-interface IInjectionResource extends IDataServiceResource<IInjection> {
+interface IStructureIdentifierResource extends IDataServiceResource<IStructureIdentifier> {
 }
 
-class InjectionService extends DataService<IInjection> {
+class StructureIdentifierService extends DataService<IStructureIdentifier> {
 
     public static $inject = [
         '$resource'
@@ -26,22 +27,22 @@ class InjectionService extends DataService<IInjection> {
         super($resource);
     }
 
-    private get service(): IInjectionResource {
-        return <IInjectionResource>this.dataSource;
+    private get service(): IStructureIdentifierResource {
+        return <IStructureIdentifierResource>this.dataSource;
     }
 
-    protected mapQueriedItem(obj: any): IInjection {
+    protected mapQueriedItem(obj: any): IStructureIdentifier {
         obj.createdAt = new Date(obj.createdAt);
         obj.updatedAt = new Date(obj.updatedAt);
 
         return obj;
     }
 
-    protected createResource(location: string): IInjectionResource {
-        return <IInjectionResource>this.$resource(location + 'injections', {})
+    protected createResource(location: string): IStructureIdentifierResource {
+        return <IStructureIdentifierResource>this.$resource(location + 'structures', {})
     }
 
-    public get injectionLocations(): any {
+    public get structures(): any {
         return this.items;
     }
 }
