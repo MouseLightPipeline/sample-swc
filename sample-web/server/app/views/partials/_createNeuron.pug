@@ -33,24 +33,26 @@ div(class="row", ng-controller="neuronController")
         div(class="input-group")
           input(type="text", class="form-control form-control-sm", id="somaX", placeholder="", ng-model="model.z")
           div(class="input-group-addon form-control-sm") µm
-    div
-      div(class="col-sm-12 centered")
-        span Soma Atlas Location
-    div
-      div(class="col-sm-4")
-        label(for="atlasX") X
-        div(class="input-group")
-          input(type="text", class="form-control form-control-sm", id="atlasX", placeholder="", ng-model="model.atlasX")
-          div(class="input-group-addon form-control-sm") µm
-      div(class="col-sm-4")
-        label(for="atlasY") Y
-        div(class="input-group")
-          input(type="text", class="form-control form-control-sm", id="atlasY", placeholder="", ng-model="model.atlasY")
-          div(class="input-group-addon form-control-sm") µm
-      div(class="form-group col-sm-4")
-        label(for="atlasZ") Z
-        div(class="input-group")
-          input(type="text", class="form-control form-control-sm", id="atlasZ", placeholder="", ng-model="model.atlasZ")
-          div(class="input-group-addon form-control-sm") µm
+    // div
+    //
+    //  div(class="col-sm-12 centered")
+    //    span Soma Atlas Location
+    //
+    //- div
+    //-   div(class="col-sm-4")
+    //-     label(for="atlasX") X
+    //-     div(class="input-group")
+    //-       input(type="text", class="form-control form-control-sm", id="atlasX", placeholder="", ng-model="model.atlasX")
+    //-       div(class="input-group-addon form-control-sm") µm
+    //-   div(class="col-sm-4")
+    //-     label(for="atlasY") Y
+    //-     div(class="input-group")
+    //-       input(type="text", class="form-control form-control-sm", id="atlasY", placeholder="", ng-model="model.atlasY")
+    //-       div(class="input-group-addon form-control-sm") µm
+    //-   div(class="form-group col-sm-4")
+    //-     label(for="atlasZ") Z
+    //-     div(class="input-group")
+    //-       input(type="text", class="form-control form-control-sm", id="atlasZ", placeholder="", ng-model="model.atlasZ")
+    //-       div(class="input-group-addon form-control-sm") µm
     div(class="col-sm-12")
       button(type="submit" class="btn btn-primary btn-sm", ng-disabled='!canCreateNeuron()', ng-click="createNeuron()") Create

@@ -23,8 +23,8 @@ module.exports = {
  */
 
 function get(req, res) {
-    models.Tracing.findAll({}).then(function (samples) {
-        res.json(samples);
+    models.Tracing.findAll({}).then(function (tracings) {
+        res.json(tracings);
     }).catch(function(err){
         res.status(500).json(errors.sequelizeError(err));
     });

@@ -45,12 +45,17 @@ function post(req, res) {
         var annotator = req.swagger.params.annotator.value || '';
 
         var neuronId = req.swagger.params.neuronId.value || '';
-
-        var lengthMicrometers = req.swagger.params.lengthMicrometers.value || '';
-        
-        lengthMicrometers = parseFloat(lengthMicrometers);
     
-        var swcFile = {annotator: annotator, lengthMicrometers: lengthMicrometers, neuronId: neuronId, filename: uploadedFiles[0].filename, comments: comments};
+        var tracing = {
+            filename: uploadedFiles[0].filename,
+            annotator: annotator,
+            lengthMicrometers: 0,
+            neuronId: neuronId,
+            comments: comments,
+            offsetX: 0,
+            offsetY: 0,
+            offsetZ: 0
+        };
 
         currentStructureMap = {};
  
@@ -66,8 +71,8 @@ function post(req, res) {
             });
     
             stream.on('end', function() {
-                swcFile.comments = comments;
-                onComplete(res, swcFile, samples, tmpFile);
+                tracing.comments = comments;
+                onComplete(res, tracing, samples, tmpFile);
             });
         }).catch(function(err){
             res.status(500).json(errors.sequelizeError(err));
@@ -84,29 +89,48 @@ function onData(line, samples, comments) {
         } else {
             data = data.split(' ');
             if (data.length == 7) {
-                samples.push({sampleNumber: parseInt(data[0]), structureIdentifierId: currentStructureMap[parseInt(data[1])], x: parseFloat(data[2]),y: parseFloat(data[3]),
-                    z: parseFloat(data[4]), radius: parseFloat(data[5]), parentNumber: parseInt(data[6])});
+                var sample = {
+                    sampleNumber: parseInt(data[0]),
+                    structureIdentifierId: currentStructureMap[parseInt(data[1])],
+                    x: parseFloat(data[2]),
+                    y: parseFloat(data[3]),
+                    z: parseFloat(data[4]),
+                    radius: parseFloat(data[5]),
+                    parentNumber: parseInt(data[6])
+                };
+                if (isNaN(sample.sampleNumber) || isNaN(sample.parentNumber)) {
+                    console.log('Unexpected line in swc file - not a comment and sample and/or parent number is NaN');
+                } else {
+                    samples.push(sample);
+                }
             }
         }
     }
 }
 
-function onComplete(res, swcFile, samples, tmpFile) {
-    var file = null;
+function onComplete(res, tracingData, samples, tmpFile) {
   
+    // remove temporary upload
     fs.unlink(tmpFile.fd);
-
+    
+    if (samples.length == 0) {
+        res.status(500).json(errors.noSamplesInSwcFile(tmpFile.filename));
+        return;
+    }
+    
+    var tracing = null;
+    
     models.sequelize.transaction(function(t) {
-        return models.Tracing.create(swcFile, {transaction: t}).then(function(newFile) {
-            file = newFile;
+        return models.Tracing.create(tracingData, {transaction: t}).then(function(createdTracing) {
+            tracing = createdTracing;
             samples.forEach(function(sample) {
-                sample.tracingId = newFile.id;
+                sample.tracingId = tracing.id;
             });
             models.TracingNode.bulkCreate(samples);
         })
     }).then(function(result) {
         app.broadcast();
-        return res.status(200).send(file);
+        return res.status(200).send(tracing);
     }).catch(function(err) {
         res.status(500).json(errors.sequelizeError(err));
     });      

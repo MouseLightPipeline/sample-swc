@@ -11,10 +11,12 @@ module.exports = {
 }
 
 var Codes = {
+    // Database
     DATABASE_ERROR: {
         code: 1001,
         message: 'There was an error using the database.'
     },
+    // Creating objects - parameters
     INVALID_ID_NUMBER: {
         code: 2001,
         message: 'Id number can not be empty and must be an integer.'
@@ -34,7 +36,11 @@ var Codes = {
     DUPLICATE_INJECTION: {
         code: 2301,
         message: 'An injection location with that name number already exists.'
-    }
+    },
+    DUPLICATE_INJECTION: {
+        code: 2301,
+        message: 'An injection location with that name number already exists.'
+    },
 };
 
 function sequelizeError(err) {

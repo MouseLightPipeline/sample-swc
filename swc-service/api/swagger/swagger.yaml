@@ -136,10 +136,6 @@ paths:
           in: query
           description: Neuron Id
           type: string
-        - name: lengthMicrometers
-          in: query
-          description: Submitter
-          type: string
         - name: contents
           in: formData
           description: File to upload
@@ -171,13 +167,13 @@ definitions:
       annotator:
         type: string
         description: Annotator name
+      neuronId:
+        type: string
+        description: Id of neuron in sample database
       lengthMicrometers:
         type: number
         format: double
         description: Length
-      neuronId:
-        type: string
-        description: Id of neuron in sample database
       createdAt:
         type: string
         format: date-time
@@ -195,10 +191,6 @@ definitions:
       annotator:
         type: string
         description: Annotator name
-      lengthMicrometers:
-        type: number
-        format: double
-        description: Length
       neuronId:
         type: string
         description: Id of neuron in sample database

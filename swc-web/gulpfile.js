@@ -6,6 +6,7 @@ var gulp = require('gulp'),
   livereload = require('gulp-livereload'),
   ts = require("gulp-typescript");
   gulpTypings = require("gulp-typings");
+ var sourcemaps = require('gulp-sourcemaps');
  
 gulp.task('default', ['develop']);
 
@@ -19,7 +20,9 @@ gulp.task('nodemon', ['build'], function () {
     script: 'dist/server/app.js',
     ext: 'js pug html css',
     ignore: ['client/**/*.*', 'server/**/*.*', 'gulpfile.js', './*.json'],
-    stdout: false
+    stdout: false,
+    delay: 5,
+    debug: true
   }).on('readable', function () {
     this.stdout.on('data', function (chunk) {
       if(/^Express server listening on port/.test(chunk)){
@@ -80,7 +83,8 @@ gulp.task('lib:css', ['clean'], function() {
 gulp.task('ts', ['typings'], function () {
   var tsconfig = require('./tsconfig.json');
   
-  return gulp.src('client/**/*.ts').pipe(ts(tsconfig.compilerOptions)).pipe(gulp.dest('dist/public'));
+  var tsResult = gulp.src('client/**/*.ts').pipe(sourcemaps.init()).pipe(ts(tsconfig.compilerOptions));
+  return tsResult.js.pipe(sourcemaps.write('.')).pipe(gulp.dest('dist/public'));
 });
 
 gulp.task('lib:fonts:1', ['clean'], function() {

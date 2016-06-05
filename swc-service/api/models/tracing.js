@@ -10,7 +10,11 @@ module.exports = function(sequelize, DataTypes) {
         filename: DataTypes.STRING,
         annotator: DataTypes.STRING,
         lengthMicrometers: DataTypes.DOUBLE,
-        neuronId:  DataTypes.UUID // reference to external database entry
+        neuronId:  DataTypes.UUID, // reference to external database entry
+        comments: DataTypes.STRING, // comments found in file
+        offsetX:  DataTypes.DOUBLE, // Janelia offset defined in file comments
+        offsetY:  DataTypes.DOUBLE,
+        offsetZ:  DataTypes.DOUBLE
     }, {
         classMethods: {
             associate: function(models) {

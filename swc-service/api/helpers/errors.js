@@ -7,7 +7,8 @@ module.exports = {
     invalidName: invalidName,
     duplicateSample: duplicateSample,
     duplicateNeuron: duplicateNeuron,
-    duplicateInjection: duplicateInjection
+    duplicateInjection: duplicateInjection,
+    noSamplesInSwcFile: noSamplesInSwcFile
 }
 
 var Codes = {
@@ -34,6 +35,11 @@ var Codes = {
     DUPLICATE_INJECTION: {
         code: 2301,
         message: 'An injection location with that name number already exists.'
+    },
+    // Upload/file submission
+    NO_SAMPLES: {
+        code: 5001,
+        message: 'There are no valid samples defined in '
     }
 };
 
@@ -65,4 +71,10 @@ function duplicateNeuron() {
 
 function duplicateInjection() {
     return Codes.DUPLICATE_INJECTION;
+}
+
+function noSamplesInSwcFile(filename) {
+    var error = Codes.NO_SAMPLES;
+    error.message = error.message + filename;
+    return error;
 }
