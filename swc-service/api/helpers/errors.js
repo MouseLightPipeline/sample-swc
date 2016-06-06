@@ -39,7 +39,7 @@ var Codes = {
     // Upload/file submission
     NO_SAMPLES: {
         code: 5001,
-        message: 'There are no valid samples defined in '
+        message: 'There are no recognizable samples defined in '
     }
 };
 
@@ -74,7 +74,10 @@ function duplicateInjection() {
 }
 
 function noSamplesInSwcFile(filename) {
-    var error = Codes.NO_SAMPLES;
-    error.message = error.message + filename;
+    var error = {
+        code: Codes.NO_SAMPLES.code,
+        message: Codes.NO_SAMPLES.message + filename
+    };
+    
     return error;
 }

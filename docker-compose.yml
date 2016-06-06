@@ -1,5 +1,6 @@
 version: '2'
 services:
+### Janelia sample/neuron entries and constants
   sample-datastore:
     image: postgres:latest
     volumes:
@@ -47,7 +48,7 @@ services:
     links:
       - "sample-service:sampleservice"
       - "sample-status:samplestatus"
-###
+### SWC raw tracing entries
   tracing-datastore:
     image: postgres:latest
     volumes:
@@ -96,4 +97,5 @@ services:
     links:
       - "tracing-service:tracingservice"
       - "tracing-status:tracingstatus"
+### NDB Front End
 

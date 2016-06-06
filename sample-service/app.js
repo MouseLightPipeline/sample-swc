@@ -1,7 +1,6 @@
 'use strict';
 
 var SwaggerExpress = require('swagger-express-mw');
-var cors = require('cors');
 var SwaggerUi = require('swagger-tools/middleware/swagger-ui');
 var db = require('./api/models/index');
 var bodyParser = require('body-parser');
@@ -26,8 +25,6 @@ var config = {
 };
 
 app.use('/script/socket.io', express.static(__dirname + '/node_modules/socket.io-client'));
-
-app.use(require('skipper')());
 
 SwaggerExpress.create(config, function(err, swaggerExpress) {
     if (err) { throw err; }

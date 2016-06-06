@@ -22,10 +22,12 @@ module.exports = {
 var currentStructureMap = {};
 
 function post(req, res) {  
+    //console.log('start post');
+    //console.log(req.file);
     if (!req.app.locals.dbready) {
         return res.status(503).send({code: 503, message: 'Database service unavailable'});
     }
-  
+  /*
     req.file('contents').upload(function (err, uploadedFiles) {
         if (err) {
             console.log(err);
@@ -37,8 +39,12 @@ function post(req, res) {
         }
     
         var tmpFile = uploadedFiles[0];
+    */
+    var tmpFile = req.file.path;
+    var originalName = req.file.originalname;
     
-        var stream = byline(fs.createReadStream(tmpFile.fd, { encoding: 'utf8' }));
+    //console.log('rec ' + tmpFile)
+        var stream = byline(fs.createReadStream(tmpFile, { encoding: 'utf8' }));
 
         var comments = '';
     
@@ -47,15 +53,16 @@ function post(req, res) {
         var neuronId = req.swagger.params.neuronId.value || '';
     
         var tracing = {
-            filename: uploadedFiles[0].filename,
+            filename: originalName,
             annotator: annotator,
-            lengthMicrometers: 0,
             neuronId: neuronId,
             comments: comments,
             offsetX: 0,
             offsetY: 0,
             offsetZ: 0
         };
+        
+        //console.log(tracing);
 
         currentStructureMap = {};
  
@@ -77,10 +84,11 @@ function post(req, res) {
         }).catch(function(err){
             res.status(500).json(errors.sequelizeError(err));
         });        
-    });
+        //});
 }
 
 function onData(line, samples, comments) {
+    //console.log('data');
     var data = line.trim();
 
     if (data.length > 0 ) {
@@ -99,7 +107,7 @@ function onData(line, samples, comments) {
                     parentNumber: parseInt(data[6])
                 };
                 if (isNaN(sample.sampleNumber) || isNaN(sample.parentNumber)) {
-                    console.log('Unexpected line in swc file - not a comment and sample and/or parent number is NaN');
+                    // console.log('Unexpected line in swc file - not a comment and sample and/or parent number is NaN');
                 } else {
                     samples.push(sample);
                 }
@@ -110,11 +118,13 @@ function onData(line, samples, comments) {
 
 function onComplete(res, tracingData, samples, tmpFile) {
   
+    console.log('complete');
+    
     // remove temporary upload
-    fs.unlink(tmpFile.fd);
+    fs.unlink(tmpFile);
     
     if (samples.length == 0) {
-        res.status(500).json(errors.noSamplesInSwcFile(tmpFile.filename));
+        res.status(500).json(errors.noSamplesInSwcFile(tracingData.filename));
         return;
     }
     

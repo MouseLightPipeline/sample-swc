@@ -13,7 +13,7 @@ module.exports = function(sequelize, DataTypes) {
     }, {
         classMethods: {
             associate: function(models) {
-                MarkerLocation.belongsTo(models.Tracing, {foreignKey: 'tracingId'});
+                MarkerLocation.belongsTo(models.Tracing, {foreignKey: 'tracingId', as: 'tracing'});
             }
         }
     });

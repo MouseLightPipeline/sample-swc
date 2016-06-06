@@ -10,7 +10,7 @@ div(class="row", ng-controller="tracingTableController")
           th Length (µm)
           th Neuron
       tbody
-        tr(dir-paginate="s in tracingService.tracings | itemsPerPage: 5" pagination-id="traces")
+        tr(dir-paginate="s in tracingService.tracings | itemsPerPage: itemsPerPage" pagination-id="traces" current-page="currentPage")
           td {{s.filename}}
           td {{s.annotator}}
           td {{s.lengthMicrometers}}

@@ -4,8 +4,9 @@ var SwaggerExpress = require('swagger-express-mw');
 var cors = require('cors');
 var SwaggerUi = require('swagger-tools/middleware/swagger-ui');
 var db = require('./api/models/index');
-var bodyParser = require('body-parser');
+//var bodyParser = require('body-parser');
 var express = require('express');
+var multer = require('multer');
 
 var app = express();
 
@@ -27,10 +28,22 @@ var config = {
 
 app.use('/script/socket.io', express.static(__dirname + '/node_modules/socket.io-client'));
 
-app.use(require('skipper')());
+
+//app.use(require('skipper')());
+var upload = multer({ dest: 'uploads/' })
+app.use(upload.single('contents'));
+    
+//app.post('/api/v1/uploads', upload.single('contents'), function (req, res, next) {
+//    console.log(req.file)
+//    console.log(req.body);
+  // req.file is the `avatar` file 
+  // req.body will hold the text fields, if there were any 
+//})
 
 SwaggerExpress.create(config, function(err, swaggerExpress) {
     if (err) { throw err; }
+
+    //app.user
 
     app.use(SwaggerUi(swaggerExpress.runner.swagger));
 

@@ -25,7 +25,7 @@ abstract class DataService<T extends ApiResourceItem<T>> {
 
     public items: any = [];
 
-    private apiLocation: string;
+    private apiLocation: string = '';
 
     protected dataSource: IDataServiceResource<T>;
 
@@ -67,7 +67,7 @@ abstract class DataService<T extends ApiResourceItem<T>> {
             this.dataSource.save(data).$promise.then((item: T) => {
                 this.dataSource.get({id: item.id}, (fullItem) => {
                     this.items.push(fullItem); 
-                    resolve(item);
+                    resolve(fullItem);
                 });
             }).catch((response) => {
                 reject(response);
@@ -85,6 +85,10 @@ abstract class DataService<T extends ApiResourceItem<T>> {
         return this.items.find((obj) => {
             return obj.id === id;
         });
+    }
+    
+    protected get apiUrl() {
+        return this.apiLocation;
     }
     
     protected abstract mapQueriedItem(obj: any) : T;  

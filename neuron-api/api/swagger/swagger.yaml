@@ -1,0 +1,140 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Neuron data browser API
+# during dev, should point to your local machine
+host: localhost:9661
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /nodetypes:
+    x-swagger-router-controller: nodeType
+    get:
+      summary: Node type definitions
+      tags:
+        - Tracings
+      responses:
+        200:
+          description: An array of node types
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/NodeType"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /neurons:
+    x-swagger-router-controller: neuron
+    get:
+      summary: Get neurons
+      tags:
+        - Neurons
+      responses:
+        200:
+          description: An array of neurons
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Neuron"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /neurons/migrate/{sourceNeuronId}:
+    x-swagger-router-controller: neuron
+    post:
+      tags:
+        - Neurons
+      summary: Update an existing neuron
+      description: ""
+      operationId: migrateNeuron
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - name: sourceNeuronId
+          in: path
+          description: Source neuron object to migrate
+          required: true
+          type: string
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            $ref: "#/definitions/Neuron"
+        "405":
+          description: Validation exception
+          schema:
+            type: object
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  NodeType:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id
+      name:
+        type: string
+        description: Name
+      mutable:
+        type: boolean
+        description: Mutability
+      createdAt:
+        type: string
+        format: date-time
+        description: Creation time
+      updatedAt:
+        type: string
+        format: date-time
+        description: Update time
+  Neuron:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id
+      sourceNeuronId:
+        type: string
+        description: Source neuron id
+      atlasX:
+        type: number
+        format: double
+        description: Brain atlas soma X location (µm)
+      atlasY:
+        type: number
+        format: double
+        description: Brain atlas soma Y location (µm)
+      atlasZ:
+        type: number
+        format: double
+        description: Brain atlas soma Z location (µm)
+      createdAt:
+        type: string
+        format: date-time
+        description: Creation time
+      updatedAt:
+        type: string
+        format: date-time
+        description: Update time
+  Error:
+    required:
+      - message
+    properties:
+      message:
+        type: string

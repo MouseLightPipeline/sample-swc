@@ -42,7 +42,7 @@ class SampleService extends DataService<ISample> {
         return obj;
     }
 
-    public createResource(location: string): ISampleResource {
+    protected createResource(location: string): ISampleResource {
         return <ISampleResource>this.$resource(location + 'samples/:id', { id: '@id' }, {
             neurons: {
                 method: 'GET',

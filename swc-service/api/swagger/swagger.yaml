@@ -31,6 +31,28 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+  /tracings/{tracingId}:
+    x-swagger-router-controller: tracing
+    get:
+      summary: Tracing definitions
+      tags:
+        - Tracings
+      operationId: getTracingById
+      parameters:
+        - name: tracingId
+          in: path
+          description: Tracing object to find
+          required: true
+          type: string
+      responses:
+        200:
+          description: The tracing
+          schema:
+            $ref: "#/definitions/Tracing"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
   /nodes:
     x-swagger-router-controller: tracingNode
     get:

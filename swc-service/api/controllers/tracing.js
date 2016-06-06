@@ -12,6 +12,7 @@ var models = require('../models/index');
  */
 module.exports = {
     get: get,
+    getTracingById: getTracingById,
     forTracing: forTracing
 };
 
@@ -25,6 +26,17 @@ module.exports = {
 function get(req, res) {
     models.Tracing.findAll({}).then(function (tracings) {
         res.json(tracings);
+    }).catch(function(err){
+        res.status(500).json(errors.sequelizeError(err));
+    });
+}
+
+function getTracingById(req, res) {
+    models.Tracing.findAll({where: {id: req.swagger.params.tracingId.value}, limit: 1}).then(function (tracings) {
+        if (tracings.length > 0)
+            res.json(tracings[0]);
+        else
+            res.status(500).json({message: 'bad id'});
     }).catch(function(err){
         res.status(500).json(errors.sequelizeError(err));
     });

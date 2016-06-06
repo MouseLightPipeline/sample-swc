@@ -36,7 +36,7 @@ class TracingNodeService extends DataService<ITracingNode> {
         return obj;
     }
 
-    public createResource(location: string): ITracingNodeResource {
+    protected createResource(location: string): ITracingNodeResource {
         return <ITracingNodeResource>this.$resource(location + 'nodes/:id', { id: '@id' }, {
             nodesForStructure: {
                 method: 'GET',

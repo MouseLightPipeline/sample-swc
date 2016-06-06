@@ -38,6 +38,8 @@ module TracingManager {
             $scope.$watch('service.serviceUrl', (val) => this.updateService(val));
             $scope.$watch('service.serviceDocUrl', (val) => this.updateServiceDoc(val));
             $scope.$watch('service.statusUrl', (val) => this.updateStatus(val));
+            
+            $scope.$on('createdTracingIndex', (evt, val) => this.onCreatedTracingIndex(val))
 
             this.updateService(serviceApi.serviceUrl);
             this.updateServiceDoc(serviceApi.serviceDocUrl);
@@ -54,6 +56,10 @@ module TracingManager {
 
         private updateStatus(val) {
             this.$scope.statusUrl = val;
+        }
+        
+        private onCreatedTracingIndex(val) {
+             this.$scope.$broadcast('createdTracingIndex', val);
         }
     }
 

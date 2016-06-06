@@ -19,10 +19,10 @@ module.exports = function(app, config) {
   app.locals.sampleHost = config.sampleService;
   
   // Proxy to the REST service.
-  app.use('/api/v1', function(req, res) {
-    var url = 'http://' + req.app.locals.serviceHost.host + ':' + req.app.locals.serviceHost.port + '/' + req.app.locals.serviceHost.api + req.url;
-    req.pipe(request(url)).pipe(res);
-  });
+  //app.use('/api/v1', function(req, res) {
+  //  var url = 'http://' + req.app.locals.serviceHost.host + ':' + req.app.locals.serviceHost.port + '/' + req.app.locals.serviceHost.api + req.url;
+ //   req.pipe(request(url)).pipe(res);
+  //});
   
   app.set('views', config.root + '/app/views');
   app.set('view engine', 'pug');

@@ -84,7 +84,8 @@ gulp.task('ts', ['typings'], function () {
   var tsconfig = require('./tsconfig.json');
   
   var tsResult = gulp.src('client/**/*.ts').pipe(sourcemaps.init()).pipe(ts(tsconfig.compilerOptions));
-  return tsResult.js.pipe(sourcemaps.write('.')).pipe(gulp.dest('dist/public'));
+  // return tsResult.js.pipe(sourcemaps.write('.')).pipe(gulp.dest('dist/public'));
+  return tsResult.js.pipe(gulp.dest('dist/public'));
 });
 
 gulp.task('lib:fonts:1', ['clean'], function() {

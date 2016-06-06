@@ -5,21 +5,19 @@
   "main": "app.js",
   "dependencies": {
     "body-parser": "^1.13.3",
-    "byline": "^4.2.1",
     "cors": "^2.7.1",
     "csv": "^0.4.6",
-    "del": "^2.2.0",
     "express": "^4.12.3",
-    "gulp": "^3.9.1",
-    "gulp-plumber": "^1.1.0",
     "pg": "^4.5.1",
     "sequelize": "^3.20.0",
-    "skipper": "^0.5.9",
     "socket.io": "^1.4.5",
     "swagger-express-mw": "^0.1.0",
     "swagger-tools": "^0.10.1"
   },
   "devDependencies": {
+    "del": "^2.2.0",
+    "gulp": "^3.9.1",
+    "gulp-plumber": "^1.1.0",
     "should": "^7.1.0",
     "supertest": "^1.0.0"
   },

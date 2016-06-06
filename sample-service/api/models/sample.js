@@ -8,6 +8,7 @@ module.exports = function(sequelize, DataTypes) {
             defaultValue: DataTypes.UUIDV4
         },
         idNumber: DataTypes.INTEGER,
+        tag: DataTypes.TEXT,
         sampledate: DataTypes.DATE,
         comment: DataTypes.TEXT
     }, {

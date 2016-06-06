@@ -74,9 +74,6 @@ function create(body, res) {
     var x = body.x || 0;
     var y = body.y || 0;
     var z = body.z || 0;
-    var aX = body.atlasX || 0;
-    var aY = body.atlasY || 0;
-    var aZ = body.atlasZ || 0;
     
     models.Neuron.create({
             idNumber: body.idNumber,
@@ -84,10 +81,7 @@ function create(body, res) {
             brainAreaId: brainAreaId,
             x: x,
             y: y,
-            z: z,
-            atlasX: aX,
-            atlasY: aY,
-            atlasZ: aZ
+            z: z
         }).then(function (neuron) {
         res.json(neuron);
         app.broadcast();

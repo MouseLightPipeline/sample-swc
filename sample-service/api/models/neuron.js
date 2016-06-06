@@ -8,12 +8,10 @@ module.exports = function(sequelize, DataTypes) {
             defaultValue: DataTypes.UUIDV4
         },
         idNumber: DataTypes.INTEGER,
+        tag: DataTypes.TEXT,
         x: DataTypes.DOUBLE,
         y: DataTypes.DOUBLE,
-        z: DataTypes.DOUBLE,
-        atlasX: DataTypes.DOUBLE,
-        atlasY: DataTypes.DOUBLE,
-        atlasZ: DataTypes.DOUBLE
+        z: DataTypes.DOUBLE
     }, {
         classMethods: {
             associate: function(models) {

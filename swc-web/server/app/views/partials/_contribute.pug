@@ -38,5 +38,9 @@ div(class="row", ng-controller="createTracingController")
               i(ng-class="['fa', {'fa-spinner': !neuronService.resourcesAreAvailable, 'fa-spin': !neuronService.resourcesAreAvailable, 'fa-plus': neuronService.resourcesAreAvailable}]")
         small(class="text-muted") {{sampleId.length > 0 ? '': ('Select a sample to choose or create a neuron')}}
     div(class="row")
-      div(class="col-sm-12")
-        button(type="submit" class="btn btn-primary btn-sm", ng-click="send()" ng-disabled="!canCreateTracing()") Upload
+      div(class="col-sm-1")
+        button(type="submit" class="btn btn-primary btn-sm", ng-click="send()" ng-disabled="!canCreateTracing()") Upload 
+          i(class="fa fa-spinner fa-spin" ng-show="isInCreatePost")
+      div(class="col-sm-11")
+        span {{lastCreateMessage}}
+

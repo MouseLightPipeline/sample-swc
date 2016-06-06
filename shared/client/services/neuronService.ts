@@ -35,7 +35,7 @@ class NeuronService extends DataService<INeuron> {
         return obj;
     }
 
-    public createResource(location: string): INeuronResource {
+    protected createResource(location: string): INeuronResource {
         return <INeuronResource>this.$resource(location + 'neurons/:id', { id: '@id' });
     }
 

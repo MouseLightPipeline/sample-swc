@@ -7,6 +7,11 @@ module TracingManager {
         ];
 
         constructor(private $scope: any) {
+            this.$scope.itemsPerPage = 5;
+            this.$scope.currentPage = 1;
+            
+            this.$scope.$on('createdTracingIndex', (evt, val) => this.onCreatedTracingIndex(val))
+
             this.$scope.neuronDisplayForId = (id: string) : any => {
                 return this.neuronDisplayForId(id);
             };
@@ -20,6 +25,11 @@ module TracingManager {
             } else {
                 return obj.idNumber + ' (' + obj.id + ')';
             }
+        }        
+        
+        private onCreatedTracingIndex(val) {
+             var page: number = Math.floor(val/this.$scope.itemsPerPage) + 1;
+             this.$scope.currentPage = page;
         }
     }
 
