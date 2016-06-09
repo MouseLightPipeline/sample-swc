@@ -3,8 +3,6 @@
 /// <reference path="../../typings/globals/angular-resource/index.d.ts" />
 /// <reference path="dataService.ts" />
 
-'use strict';
-
 interface ITracingNode extends ng.resource.IResource<ITracingNode>, IApiItem {
     id: string;
     createdAt: Date;
@@ -17,7 +15,7 @@ interface ITracingNodeResource extends IDataServiceResource<ITracingNode> {
 
 class TracingNodeService extends DataService<ITracingNode> {
     public static $inject = [
-        '$resource'
+        "$resource"
     ];
 
     constructor($resource: ng.resource.IResourceService) {
@@ -36,11 +34,11 @@ class TracingNodeService extends DataService<ITracingNode> {
     }
 
     protected createResource(location: string): ITracingNodeResource {
-        return <ITracingNodeResource>this.$resource(location + 'nodes/:id', { id: '@id' }, {
+        return <ITracingNodeResource>this.$resource(location + "nodes/:id", { id: "@id" }, {
             nodesForStructure: {
-                method: 'GET',
-                url: location + 'nodes/findByStructure/:id/',
-                params: { id: '@id' },
+                method: "GET",
+                url: location + "nodes/findByStructure/:id/",
+                params: { id: "@id" },
                 isArray: true
             }
         });

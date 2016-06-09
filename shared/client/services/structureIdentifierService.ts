@@ -3,7 +3,6 @@
 /// <reference path="../../typings/globals/angular-resource/index.d.ts" />
 /// <reference path="dataService.ts" />
 
-'use strict';
 
 interface IStructureIdentifier extends ng.resource.IResource<IStructureIdentifier>, IApiItem {
     id: string;
@@ -20,7 +19,7 @@ interface IStructureIdentifierResource extends IDataServiceResource<IStructureId
 class StructureIdentifierService extends DataService<IStructureIdentifier> {
 
     public static $inject = [
-        '$resource'
+        "$resource"
     ];
 
     constructor($resource: ng.resource.IResourceService) {
@@ -35,7 +34,7 @@ class StructureIdentifierService extends DataService<IStructureIdentifier> {
     }
 
     protected createResource(location: string): IStructureIdentifierResource {
-        return <IStructureIdentifierResource>this.$resource(location + 'structures/:id', { id: '@id' }, {})
+        return <IStructureIdentifierResource>this.$resource(location + "structures/:id", { id: "@id" }, {});
     }
 
     public get structures(): any {

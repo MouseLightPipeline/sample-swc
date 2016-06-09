@@ -3,8 +3,6 @@
 /// <reference path="../../typings/globals/angular-resource/index.d.ts" />
 /// <reference path="dataService.ts" />
 
-'use strict';
-
 interface INeuron extends ng.resource.IResource<INeuron>, IApiItem {
     id: string;
     sampleId: string;
@@ -17,15 +15,11 @@ interface INeuronResource extends IDataServiceResource<INeuron> {
 
 class NeuronService extends DataService<INeuron> {
     public static $inject = [
-        '$resource'
+        "$resource"
     ];
 
     constructor($resource: ng.resource.IResourceService) {
         super($resource);
-    }
-
-    private get service(): INeuronResource {
-        return <INeuronResource>this.dataSource;
     }
 
     protected mapQueriedItem(obj: any): INeuron {
@@ -36,7 +30,7 @@ class NeuronService extends DataService<INeuron> {
     }
 
     protected createResource(location: string): INeuronResource {
-        return <INeuronResource>this.$resource(location + 'neurons/:id', { id: '@id' });
+        return <INeuronResource>this.$resource(location + "neurons/:id", { id: "@id" });
     }
 
     public get neurons(): any {

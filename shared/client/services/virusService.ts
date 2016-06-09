@@ -4,8 +4,6 @@
 /// <reference path="dataService.ts" />
 /// <reference path="strainService.ts" />
 
-'use strict';
-
 interface IVirus extends ng.resource.IResource<IVirus>, IApiItem {
     id: string;
     name: string;
@@ -20,7 +18,7 @@ interface IVirusResource extends IDataServiceResource<IVirus> {
 
 class VirusService extends DataService<IVirus> {
     public static $inject = [
-        '$resource'
+        "$resource"
     ];
 
     constructor($resource: ng.resource.IResourceService) {
@@ -39,11 +37,11 @@ class VirusService extends DataService<IVirus> {
     }
 
     protected createResource(location: string): IVirusResource {
-        return <IVirusResource>this.$resource(location + 'viruses/:id', { id: '@id' }, {
+        return <IVirusResource>this.$resource(location + "viruses/:id", { id: "@id" }, {
             strains: {
-                method: 'GET',
-                url: location + 'viruses/:id/strains/',
-                params: { virusId: '@id' },
+                method: "GET",
+                url: location + "viruses/:id/strains/",
+                params: { virusId: "@id" },
                 isArray: true
             }
         });

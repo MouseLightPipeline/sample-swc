@@ -3,8 +3,6 @@
 /// <reference path="../../typings/globals/angular-resource/index.d.ts" />
 /// <reference path="dataService.ts" />
 
-'use strict';
-
 interface IRegistrationTransform extends ng.resource.IResource<IRegistrationTransform>, IApiItem {
     id: string;
     name: string;
@@ -18,7 +16,7 @@ interface IRegistrationTransformResource extends IDataServiceResource<IRegistrat
 
 class RegistrationTransformService extends DataService<IRegistrationTransform> {
     public static $inject = [
-        '$resource'
+        "$resource"
     ];
 
     constructor($resource: ng.resource.IResourceService) {
@@ -33,7 +31,7 @@ class RegistrationTransformService extends DataService<IRegistrationTransform> {
     }
 
     protected createResource(location: string): IRegistrationTransformResource {
-        return <IRegistrationTransformResource>this.$resource(location + 'transforms/:id', { id: '@id' }, {})
+        return <IRegistrationTransformResource>this.$resource(location + "transforms/:id", { id: "@id" }, {});
     }
 
     public get transforms(): any {

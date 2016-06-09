@@ -3,8 +3,6 @@
 /// <reference path="../../typings/globals/angular-resource/index.d.ts" />
 /// <reference path="dataService.ts" />
 
-'use strict';
-
 interface IBrainArea extends ng.resource.IResource<IBrainArea>, IApiItem {
     id: string;
     abiIdNumber: string;
@@ -18,7 +16,7 @@ interface IBrainAreaResource extends IDataServiceResource<IBrainArea> {
 
 class BrainAreaService extends DataService<IBrainArea> {
     public static $inject = [
-        '$resource'
+        "$resource"
     ];
 
     constructor($resource: ng.resource.IResourceService) {
@@ -33,7 +31,7 @@ class BrainAreaService extends DataService<IBrainArea> {
     }
 
     protected createResource(location: string): IBrainAreaResource {
-        return <IBrainAreaResource>this.$resource(location + 'brainareas/:id', { id: '@id' }, {})
+        return <IBrainAreaResource>this.$resource(location + "brainareas/:id", { id: "@id" }, {});
     }
 
     public get brainAreas(): any {

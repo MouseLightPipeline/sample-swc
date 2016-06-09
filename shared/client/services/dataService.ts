@@ -3,10 +3,12 @@
 /// <reference path="../../typings/globals/angular-resource/index.d.ts" />
 /// <reference path="../../typings/globals/es6-promise/index.d.ts" />
 
-'use strict';
-
 interface IApiItem {
     id: string;
+}
+
+interface IApiIdNumberItem extends IApiItem {
+    idNumber: number;
 }
 
 interface IDataServiceResource<T extends ng.resource.IResource<T>> extends ng.resource.IResourceClass<T> {
@@ -17,45 +19,45 @@ interface IApiResourceItem<T> extends ng.resource.IResource<T>, IApiItem {
 
 abstract class DataService<T extends IApiResourceItem<T>> {
     public static $inject = [
-        '$resource'
+        "$resource"
     ];
 
     public resourcesAreAvailable: boolean = false;
 
     public items: any = [];
 
-    private apiLocation: string = '';
+    private apiLocation: string = "";
 
     protected dataSource: IDataServiceResource<T>;
 
     constructor(protected $resource: ng.resource.IResourceService) {
     }
 
-    public setLocation(reourceLocation: string) : Promise<boolean> {
+    public setLocation(reourceLocation: string): Promise<boolean> {
         this.resourcesAreAvailable = false;
 
         this.apiLocation = reourceLocation;
-        
+
         this.dataSource = this.createResource(this.apiLocation);
 
         return this.refreshData();
     }
 
-    public refreshData() : Promise<boolean> {
+    public refreshData(): Promise<boolean> {
         this.resourcesAreAvailable = false;
 
-        return new Promise<boolean>((resolve, reject) => {
+        return new Promise<boolean>((resolve) => {
             this.dataSource.query((data) => {
                 data = data.map((obj) => {
-                    var item : IApiItem = this.mapQueriedItem(obj);
-                    this[item.id]= item;
+                    let item: IApiItem = this.mapQueriedItem(obj);
+                    this[item.id] = item;
                     return item;
                 });
 
                 this.items = data;
 
                 this.resourcesAreAvailable = true;
-                
+
                 resolve(true);
             });
         });
@@ -65,7 +67,7 @@ abstract class DataService<T extends IApiResourceItem<T>> {
         return new Promise<T>((resolve, reject) => {
             this.dataSource.save(data).$promise.then((item: T) => {
                 this.dataSource.get({id: item.id}, (fullItem) => {
-                    var mappedItem = this.mapQueriedItem(fullItem);
+                    let mappedItem = this.mapQueriedItem(fullItem);
                     this.items.push(mappedItem);
                     resolve(mappedItem);
                 });
@@ -76,24 +78,24 @@ abstract class DataService<T extends IApiResourceItem<T>> {
     }
 
     public findIndex(id: string): number {
-        return this.items.findIndex((element, index, array) => {
+        return this.items.findIndex((element: IApiItem) => {
             return element.id === id;
         });
     }
 
     public find(id: string): T {
-        return this.items.find((obj) => {
+        return this.items.find((obj: IApiItem) => {
             return obj.id === id;
         });
     }
 
     public findWithIdNumber(id: number): T {
-        var item: T = this.items.find((obj) => {
+        let item: T = this.items.find((obj: IApiIdNumberItem) => {
             return obj.idNumber === id;
         });
 
-       if (typeof(item) === 'undefined')
-           item = null;
+        if (typeof(item) === "undefined")
+            item = null;
 
         return item;
     }
@@ -101,8 +103,8 @@ abstract class DataService<T extends IApiResourceItem<T>> {
     protected get apiUrl() {
         return this.apiLocation;
     }
-    
-    protected abstract mapQueriedItem(obj: any) : T;  
-    
-    protected abstract createResource(location: string) : IDataServiceResource<T>;
+
+    protected abstract mapQueriedItem(obj: any): T;
+
+    protected abstract createResource(location: string): IDataServiceResource<T>;
 }

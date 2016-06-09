@@ -4,6 +4,7 @@ var rename = require('gulp-rename');
 var plumber = require('gulp-plumber');
 var ts = require("gulp-typescript");
 var gulpTypings = require("gulp-typings");
+var tslint = require("gulp-tslint");
 
 gulp.task('default', ['watch']);
 
@@ -11,20 +12,30 @@ gulp.task('build', ['ts']);
 
 gulp.task('watch', ['build'], () => {
     return gulp.watch(['client/**/*.*', '*.js', '*.json'], ['build']);
-});
+})
 
 gulp.task('clean', function () {
     return del('dist/**/*');
-});
+})
 
-// install typings
 gulp.task("typings", ['clean'], () => {
-    return gulp.src("./typings.json").pipe(gulpTypings());
-});
+    return gulp.src("./typings.json")
+        .pipe(gulpTypings());
+})
 
-// compile typescript
-gulp.task('ts', ['typings'], () => {
+gulp.task("tslint", () => {
+        var tslintConfig = require('../tslint.json');
+
+        gulp.src('client/**/*.ts')
+            .pipe(tslint({configuration: tslintConfig}))
+            .pipe(tslint.report("verbose", {emitError: false}))
+    }
+)
+
+gulp.task('ts', ['typings', "tslint"], () => {
     var tsConfig = require('./tsconfig.json');
 
-    return gulp.src('client/**/*.ts').pipe(ts(tsConfig.compilerOptions)).pipe(gulp.dest('dist/client'));
-});
+    return gulp.src('client/**/*.ts')
+        .pipe(ts(tsConfig.compilerOptions))
+        .pipe(gulp.dest('dist/client'));
+})

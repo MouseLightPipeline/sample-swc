@@ -3,8 +3,6 @@
 /// <reference path="../../typings/globals/angular-resource/index.d.ts" />
 /// <reference path="dataService.ts" />
 
-'use strict';
-
 interface IInjection extends ng.resource.IResource<IInjection>, IApiItem {
     id: string;
     name: string;
@@ -19,15 +17,11 @@ interface IInjectionResource extends IDataServiceResource<IInjection> {
 class InjectionService extends DataService<IInjection> {
 
     public static $inject = [
-        '$resource'
+        "$resource"
     ];
 
     constructor($resource: ng.resource.IResourceService) {
         super($resource);
-    }
-
-    private get service(): IInjectionResource {
-        return <IInjectionResource>this.dataSource;
     }
 
     protected mapQueriedItem(obj: any): IInjection {
@@ -38,7 +32,7 @@ class InjectionService extends DataService<IInjection> {
     }
 
     protected createResource(location: string): IInjectionResource {
-        return <IInjectionResource>this.$resource(location + 'injections/:id', { id: '@id' }, {})
+        return <IInjectionResource>this.$resource(location + "injections/:id", { id: "@id" }, {});
     }
 
     public get injectionLocations(): any {

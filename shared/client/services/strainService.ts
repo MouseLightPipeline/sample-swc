@@ -3,8 +3,6 @@
 /// <reference path="../../typings/globals/angular-resource/index.d.ts" />
 /// <reference path="dataService.ts" />
 
-'use strict';
-
 interface IStrain extends ng.resource.IResource<IStrain> {
     id: string;
     name: string;
@@ -19,7 +17,7 @@ interface IStrainResource extends IDataServiceResource<IStrain>, IApiItem {
 
 class StrainService extends DataService<IStrain> {
     public static $inject = [
-        '$resource'
+        "$resource"
     ];
 
     constructor($resource: ng.resource.IResourceService) {
@@ -34,7 +32,7 @@ class StrainService extends DataService<IStrain> {
     }
 
     protected createResource(location: string): IStrainResource {
-        return <IStrainResource>this.$resource(location + 'strains/:id', { id: '@id' }, {})
+        return <IStrainResource>this.$resource(location + "strains/:id", { id: "@id" }, {});
     }
 
     public get strains(): any {

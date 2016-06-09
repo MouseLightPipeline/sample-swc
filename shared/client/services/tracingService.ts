@@ -4,14 +4,14 @@
 /// <reference path="../../typings/globals/es6-promise/index.d.ts" />
 /// <reference path="dataService.ts" />
 
-'use strict';
+"use strict";
 
 interface ITracing extends ng.resource.IResource<ITracing>, IApiItem {
     id: string;
-    filename: string,
-    annotator: string,
-    lengthMicrometers: number,
-    neuronId: string,
+    filename: string;
+    annotator: string;
+    lengthMicrometers: number;
+    neuronId: string;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -22,8 +22,8 @@ interface ITracingResource extends IDataServiceResource<ITracing> {
 
 class TracingService extends DataService<ITracing> {
     public static $inject = [
-        '$resource',
-        '$http'
+        "$resource",
+        "$http"
     ];
 
     constructor($resource: ng.resource.IResourceService, private $http: ng.IHttpService) {
@@ -42,11 +42,11 @@ class TracingService extends DataService<ITracing> {
     }
 
     protected createResource(location: string): ITracingResource {
-        return <ITracingResource>this.$resource(location + 'tracings/:id', { id: '@id' }, {
+        return <ITracingResource>this.$resource(location + "tracings/:id", { id: "@id" }, {
             nodes: {
-                method: 'GET',
-                url: location + 'tracings/:id/nodes/',
-                params: { id: '@id' },
+                method: "GET",
+                url: location + "tracings/:id/nodes/",
+                params: { id: "@id" },
                 isArray: true
             }
         });
@@ -58,16 +58,16 @@ class TracingService extends DataService<ITracing> {
 
     public uploadSwcFile(theFile: any, tracingInfo: any): Promise<any> {
         return new Promise<any>((resolve, reject) => {
-            let url = this.apiUrl + 'upload';
+            let url = this.apiUrl + "upload";
 
             let fd = new FormData();
 
-            fd.append('contents', theFile);
+            fd.append("contents", theFile);
 
             this.$http.post<ITracing>(url, fd, {
                 params: tracingInfo,
                 transformRequest: angular.identity,
-                headers: { 'Content-Type': undefined }
+                headers: { "Content-Type": undefined }
             }).then((result) => {
                 this.dataSource.get({ id: result.data.id }, (fullItem) => {
                     this.items.push(fullItem);

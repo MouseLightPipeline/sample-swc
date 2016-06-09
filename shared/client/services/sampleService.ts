@@ -3,8 +3,6 @@
 /// <reference path="../../typings/globals/angular-resource/index.d.ts" />
 /// <reference path="dataService.ts" />
 
-'use strict';
-
 interface ISample extends ng.resource.IResource<ISample>, IApiItem {
     id: string;
     idNumber: number;
@@ -24,10 +22,8 @@ interface ISampleResource extends IDataServiceResource<ISample> {
 
 class SampleService extends DataService<ISample> {
     public static $inject = [
-        '$resource'
+        "$resource"
     ];
-
-    private static directMappedProperties = ['id', 'idNumber', 'tag', 'comment', 'injectionLocationId'];
 
     constructor($resource: ng.resource.IResourceService) {
         super($resource);
@@ -46,11 +42,11 @@ class SampleService extends DataService<ISample> {
     }
 
     protected createResource(location: string): ISampleResource {
-        return <ISampleResource>this.$resource(location + 'samples/:id', { id: '@id' }, {
+        return <ISampleResource>this.$resource(location + "samples/:id", { id: "@id" }, {
             neurons: {
-                method: 'GET',
-                url: location + 'samples/:id/neurons/',
-                params: { id: '@id' },
+                method: "GET",
+                url: location + "samples/:id/neurons/",
+                params: { id: "@id" },
                 isArray: true
             }
         });
@@ -63,12 +59,12 @@ class SampleService extends DataService<ISample> {
     public neuronsForSample(id: string) {
         return this.service.neurons({ id: id }).$promise;
     }
-    
-    public display(sample: ISample): string {
+
+    public static display(sample: ISample): string {
         if (sample.tag.length > 0) {
-            return sample.idNumber.toString() + ' ' + sample.tag + ' (' + sample.sampleDate.toLocaleDateString() + ')';
+            return sample.idNumber.toString() + " " + sample.tag + " (" + sample.sampleDate.toLocaleDateString() + ")";
         } else {
-            return sample.idNumber.toString() + ' (' + sample.sampleDate.toLocaleDateString() + ')';
+            return sample.idNumber.toString() + " (" + sample.sampleDate.toLocaleDateString() + ")";
         }
     }
 }
