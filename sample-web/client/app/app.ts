@@ -10,19 +10,17 @@
 /// <reference path="../../../shared/client/services/virusService.ts"/>
 
 ((): void => {
-    'use strict';
+    angular.module("sampleManager", ["ngResource"]);
 
-    var app = angular.module('sampleManager', ['ngResource']);
-
-    angular.module('sampleManager').service('brainAreaService', BrainAreaService);
-    angular.module('sampleManager').service('injectionService', InjectionService);
-    angular.module('sampleManager').service('neuronService', NeuronService);
-    angular.module('sampleManager').service('sampleService', SampleService);
-    angular.module('sampleManager').service('strainService', StrainService);
-    angular.module('sampleManager').service('structureIdentifierService', StructureIdentifierService);
-    angular.module('sampleManager').service('tracingNodeService', TracingNodeService);
-    angular.module('sampleManager').service('tracingService', TracingService);
-    angular.module('sampleManager').service('registrationTransformService', RegistrationTransformService);
-    angular.module('sampleManager').service('virusService', VirusService);
+    angular.module("sampleManager").service("brainAreaService", BrainAreaService);
+    angular.module("sampleManager").service("injectionService", InjectionService);
+    angular.module("sampleManager").service("neuronService", NeuronService);
+    angular.module("sampleManager").service("sampleService", SampleService);
+    angular.module("sampleManager").service("strainService", StrainService);
+    angular.module("sampleManager").service("structureIdentifierService", StructureIdentifierService);
+    angular.module("sampleManager").service("tracingNodeService", TracingNodeService);
+    angular.module("sampleManager").service("tracingService", TracingService);
+    angular.module("sampleManager").service("registrationTransformService", RegistrationTransformService);
+    angular.module("sampleManager").service("virusService", VirusService);
 
 })();
