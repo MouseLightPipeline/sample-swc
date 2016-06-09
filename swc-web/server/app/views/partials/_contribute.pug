@@ -23,7 +23,7 @@ div(class="row", ng-controller="createTracingController")
         label(for="sampleSelect") Add to sample
         div(class="input-group input-group-sm")
           select(ng-model="sampleId" id="sampleSelect" class="form-control form-control-sm c-select" ng-disabled="sampleService.samples.length == 0" )
-            option(ng-repeat="option in sampleService.samples" value="{{option.id}}") {{option.idNumber}} ({{option.sampledate | date: 'yyyy-MM-dd'}})
+            option(ng-repeat="option in sampleService.samples" value="{{option.id}}") {{option.idNumber}} ({{option.sampleDate | date: 'yyyy-MM-dd'}})
           span(class="input-group-btn input-group-btn-sm")
             button(class="btn btn-success btm-sm]', " type="button" ng-disabled="sampleService.samples.length == 0" data-toggle="modal" data-target="#createSampleModal")
               i(ng-class="['fa', {'fa-spinner': !sampleService.resourcesAreAvailable, 'fa-spin': !sampleService.resourcesAreAvailable, 'fa-plus': sampleService.resourcesAreAvailable}]")
@@ -39,7 +39,7 @@ div(class="row", ng-controller="createTracingController")
         small(class="text-muted") {{sampleId.length > 0 ? '': ('Select a sample to choose or create a neuron')}}
     div(class="row")
       div(class="col-sm-1")
-        button(type="submit" class="btn btn-primary btn-sm", ng-click="send()" ng-disabled="!canCreateTracing()") Upload 
+        button(type="submit" class="btn btn-primary btn-sm", ng-click="send()" ng-disabled="!canCreateTracing()") Upload
           i(class="fa fa-spinner fa-spin" ng-show="isInCreatePost")
       div(class="col-sm-11")
         span {{lastCreateMessage}}

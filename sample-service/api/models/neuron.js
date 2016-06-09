@@ -7,11 +7,26 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4
         },
-        idNumber: DataTypes.INTEGER,
-        tag: DataTypes.TEXT,
-        x: DataTypes.DOUBLE,
-        y: DataTypes.DOUBLE,
-        z: DataTypes.DOUBLE
+        idNumber: {
+            type: DataTypes.INTEGER,
+            defaultValue: -1
+        },
+        tag: {
+            type: DataTypes.TEXT,
+            defaultValue: ''
+        },
+        x: {
+            type: DataTypes.DOUBLE,
+            defaultValue: 0
+        },
+        y: {
+            type: DataTypes.DOUBLE,
+            defaultValue: 0
+        },
+        z: {
+            type: DataTypes.DOUBLE,
+            defaultValue: 0
+        },
     }, {
         classMethods: {
             associate: function(models) {

@@ -29,7 +29,6 @@ class TracingNodeService extends DataService<ITracingNode> {
     }
 
     protected mapQueriedItem(obj: any): ITracingNode {
-        obj.sampledate = new Date(obj.sampledate);
         obj.createdAt = new Date(obj.createdAt);
         obj.updatedAt = new Date(obj.updatedAt);
 

@@ -1,8 +1,9 @@
 'use strict';
 
-var util = require('util');
 var errors = require('../helpers/errors');
 var models = require('../models/index');
+var sampleApi = require('../helpers/sampleApi');
+
 /*
  For a controller you should export the functions referenced in your Swagger document by name.
 
@@ -12,8 +13,16 @@ var models = require('../models/index');
  */
 module.exports = {
     get: get,
-    migrateNeuron: migrateNeuron
+    migrate: migrateNeurons,
+    migrateOne: migrateNeuron
 };
+
+/*
+res.set({
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
+});
+ */
 
 /*
  Functions in controllers used for operations should take two parameters:
@@ -23,30 +32,29 @@ module.exports = {
  */
 
 function get(req, res) {
-    models.Neuron.findAll({}).then(function (neurons) {
+    models.Neuron.findAll({}).then((neurons) => {
         res.json(neurons);
-    }).catch(function(err){
+    }).catch((err) => {
         res.status(500).json(errors.sequelizeError(err));
     });
 }
 
 function migrateNeuron(req, res) {
-    res.set({
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
-    });
-    
-    models.Neuron.findAll({where: {sourceNeuronId: req.swagger.params.sourceNeuronId.value}, limit: 1}).then((neurons) => {        
-        if (neurons.length > 0) {
-            res.status(200).json(neurons[0]);
-        } else {
-            models.Neuron.create({sourceNeuronId: req.swagger.params.sourceNeuronId.value}).then((neuron) => {
-                res.status(200).json(neuron);
-            }).catch((error) => {
-                res.status(500).json(errors.sequelizeError(error));
-            });
-        }        
+    sampleApi.requestNeuron(req.swagger.params.sourceNeuronId.value).then((data) => {
+        models.Neuron.migrateSwcNeuron(data).then((neuron) => {
+            res.status(200).json(neuron);
+        });
     }).catch((error) => {
         res.status(500).json(errors.sequelizeError(error));
-    });   
+    });
+}
+
+function migrateNeurons(req, res) {
+    sampleApi.requestNeurons().then((data) => {
+        models.Neuron.migrateSwcNeurons(data).then((neurons) => {
+            res.status(200).send({neuronCount: neurons.length});
+        });
+    }).catch((err) => {
+        res.status(500).json(errors.sequelizeError(err));
+    });
 }

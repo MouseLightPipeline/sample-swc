@@ -7,10 +7,19 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4
         },
-        idNumber: DataTypes.INTEGER,
-        tag: DataTypes.TEXT,
-        sampledate: DataTypes.DATE,
-        comment: DataTypes.TEXT
+        idNumber: {
+            type: DataTypes.INTEGER,
+            defaultValue: -1
+        },
+        tag: {
+            type: DataTypes.TEXT,
+            defaultValue: ''
+        },
+        comment: {
+            type: DataTypes.TEXT,
+            defaultValue: ''
+        },
+        sampleDate: DataTypes.DATE
     }, {
         classMethods: {
             associate: function(models) {

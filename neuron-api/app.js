@@ -16,7 +16,7 @@ var config = {
   appRoot: __dirname // required config
 };
 
-SwaggerExpress.create(config, function(err, swaggerExpress) {
+SwaggerExpress.create(config, (err, swaggerExpress) => {
   if (err) { throw err; }
 
   app.use(SwaggerUi(swaggerExpress.runner.swagger));
@@ -32,16 +32,15 @@ SwaggerExpress.create(config, function(err, swaggerExpress) {
 sync();
 
 function sync() {
-    db.sequelize.sync().then(function() {
+    db.sequelize.sync().then(() => {
         app.locals.dbready = true;
         
-        db.NodeType.populateDefault().then(function() {
-            broadcastAll();
+        db.NodeType.populateDefault().then(() => {
             console.log('Successful database sync.');
         });
-    }).catch(function(err){
-        console.log('Failed database sync: ');
+    }).catch((err) => {
+        console.log('Failed database sync.');
         console.log(err);
         setTimeout(sync, 5000);
     });
-};
+}

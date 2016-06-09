@@ -7,8 +7,10 @@ var gulp = require('gulp'),
   ts = require("gulp-typescript");
   gulpTypings = require("gulp-typings");
  var sourcemaps = require('gulp-sourcemaps');
- 
-gulp.task('default', ['develop']);
+
+gulp.task('default', ['swcweb']);
+
+gulp.task('swcweb', ['develop']);
 
 gulp.task('build', ['server:dep', 'client:dep', 'client:src']);
 
@@ -82,7 +84,7 @@ gulp.task('lib:css', ['clean'], function() {
 // compile typescript
 gulp.task('ts', ['typings'], function () {
   var tsconfig = require('./tsconfig.json');
-  
+
   var tsResult = gulp.src('client/**/*.ts').pipe(sourcemaps.init()).pipe(ts(tsconfig.compilerOptions));
   // return tsResult.js.pipe(sourcemaps.write('.')).pipe(gulp.dest('dist/public'));
   return tsResult.js.pipe(gulp.dest('dist/public'));

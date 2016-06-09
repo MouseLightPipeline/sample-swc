@@ -1,58 +1,45 @@
 div(class="row", ng-controller="neuronController")
   h4(class="centered") NEURONS
-  form
-    div
-      div(class="col-sm-6 form-group")
-        label(for="neuronNumber") Neuron Id Number
-        input(type="text", class="form-control form-control-sm", id="neuronNumber", placeholder="", ng-model="model.idNumber")
-      div(class="col-sm-6 form-group")
-        label(for="sampleSelect") Add to sample
-        select(ng-model="model.sampleId" id="sampleSelect" ng-class="['form-control', 'form-control-sm', 'c-select', {'form-control-warning': model.sampleId.length > 0}]")
-          option(ng-repeat="option in sampleService.samples" value="{{option.id}}") {{option.idNumber}} ({{option.sampledate | date: 'yyyy-MM-dd'}})
-    div
-      div(class="col-sm-6 form-group")
-        label(for="brainAreaSelect") Brain Area
-        select(ng-model="model.brainAreaId" id="brainAreaSelect" class="form-control form-control-sm c-select" ng-disabled="brainAreaService.brainAreas.length == 0")
-          option(ng-repeat="option in brainAreaService.brainAreas" value="{{option.id}}") ({{option.abiIdNumber}}) {{option.abiName}}
-    div
-      div(class="col-sm-12 centered")
-        span Soma Sample Location
-    div
+  form(class="inset")
+    div(class="row")
+      div(class="col-sm-6")
+        div(ng-class="['form-group', 'label-floating', {'has-warning': !isValidIdNumber}]")
+          label(class="control-label" for="neuronIdNumber") Neuron Id Number
+          input(type="text", class="form-control form-control-sm", id="neuronIdNumber", ng-model="model.idNumber")
+      div(class="col-sm-6")
+        div(class="form-group label-floating")
+          label(class="control-label" for="neuronTag") Tag
+          input(type="text", class="form-control form-control-sm", id="neuronTag", ng-model="model.tag")
+    div(class="row")
+      div(class="col-sm-6")
+        div(ng-class="['form-group', 'label-floating', {'has-warning': model.sampleId.length === 0}]")
+          label(class="control-label" for="sampleSelect") Add to sample
+          select(ng-model="model.sampleId" id="sampleSelect" class="form-control form-control-sm c-select")
+            option(ng-repeat="option in sampleService.samples" value="{{option.id}}") {{sampleService.display(option)}}
+      div(class="col-sm-6")
+        div(class="form-group label-floating")
+          label(class="control-label" for="brainAreaSelect") Brain Area
+          select(ng-model="model.brainAreaId" id="brainAreaSelect" class="form-control form-control-sm c-select")
+            option(ng-repeat="option in brainAreaService.brainAreas" value="{{option.id}}") ({{option.abiIdNumber}}) {{option.abiName}}
+    div(class="row")
       div(class="col-sm-4")
-        label(for="somaX") X
-        div(class="input-group")
-          input(type="text", class="form-control form-control-sm", id="somaX", placeholder="", ng-model="model.x")
-          div(class="input-group-addon form-control-sm") µm
+        div(class="form-group")
+          label(class="control-label" for="somaX") Soma Sample X
+          div(class="input-group")
+            input(type="text", class="form-control", id="somaX", ng-model="model.x")
+            span(class="input-group-addon") µm
       div(class="col-sm-4")
-        label(for="somaY") Y
-        div(class="input-group")
-          input(type="text", class="form-control form-control-sm", id="somaY", placeholder="", ng-model="model.y")
-          div(class="input-group-addon form-control-sm") µm
-      div(class="form-group col-sm-4")
-        label(for="somaZ") Z
-        div(class="input-group")
-          input(type="text", class="form-control form-control-sm", id="somaX", placeholder="", ng-model="model.z")
-          div(class="input-group-addon form-control-sm") µm
-    // div
-    //
-    //  div(class="col-sm-12 centered")
-    //    span Soma Atlas Location
-    //
-    //- div
-    //-   div(class="col-sm-4")
-    //-     label(for="atlasX") X
-    //-     div(class="input-group")
-    //-       input(type="text", class="form-control form-control-sm", id="atlasX", placeholder="", ng-model="model.atlasX")
-    //-       div(class="input-group-addon form-control-sm") µm
-    //-   div(class="col-sm-4")
-    //-     label(for="atlasY") Y
-    //-     div(class="input-group")
-    //-       input(type="text", class="form-control form-control-sm", id="atlasY", placeholder="", ng-model="model.atlasY")
-    //-       div(class="input-group-addon form-control-sm") µm
-    //-   div(class="form-group col-sm-4")
-    //-     label(for="atlasZ") Z
-    //-     div(class="input-group")
-    //-       input(type="text", class="form-control form-control-sm", id="atlasZ", placeholder="", ng-model="model.atlasZ")
-    //-       div(class="input-group-addon form-control-sm") µm
-    div(class="col-sm-12")
-      button(type="submit" class="btn btn-primary btn-sm", ng-disabled='!canCreateNeuron()', ng-click="createNeuron()") Create
+        div(class="form-group")
+          label(class="control-label" for="somaY") Soma Sample Y
+          div(class="input-group")
+            input(type="text", class="form-control", id="somaY", ng-model="model.y")
+            span(class="input-group-addon") µm
+      div(class="col-sm-4")
+        div(class="form-group")
+          label(class="control-label" for="somaZ") Soma Sample Z
+          div(class="input-group")
+            input(type="text", class="form-control", id="somaZ", ng-model="model.z")
+            span(class="input-group-addon") µm
+    div(class="row")
+      div(class="col-sm-12")
+        button(type="submit" class="btn btn-info btn-sm btn-raised", ng-disabled='!canCreateNeuron()', ng-click="createNeuron()") Create

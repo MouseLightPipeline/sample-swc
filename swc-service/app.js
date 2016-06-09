@@ -82,9 +82,6 @@ function broadcastAll() {
         db.TracingNode.count().then(function(val){
             io.emit('tracingNodeCount', val);
         });
-        db.MarkerLocation.count().then(function(val){
-            io.emit('markerLocationCount', val);
-        });
         db.StructureIdentifier.count().then(function(val){
             io.emit('structureIdentifierCount', val);
         });

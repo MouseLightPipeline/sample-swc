@@ -1,56 +1,66 @@
 div(class="row", ng-controller="sampleController")
   include ./_createInjectionModal
   h4(class="centered") SAMPLES
-  form
-    div
-      div(ng-class="['col-sm-6', 'form-group', {'has-warning': !isValidIdNumber}]")
-        label(for="number") Sample Id Number
-        input(type="text", ng-class="['form-control', 'form-control-sm', {'form-control-warning': !isValidIdNumber}]", id="number", placeholder="", ng-model="model.idNumber")
-      div(ng-class="['col-sm-6', 'form-group', {'has-warning': !isValidDate}]")
-        label(for="date") Date
-        input(type="text", ng-class="['form-control', 'form-control-sm', {'form-control-warning': !isValidDate}]", id="date", placeholder="", ng-model="model.sampledate")
-        small(class="text-muted") yyyy-mm-dd
-    div
-      div(class="col-sm-6 form-group")
-        label(for="injectionSelect") Injection Location
-        div(class="input-group input-group-sm")
-          select(ng-model="model.injectionLocation" id="injectionSelect" class="form-control form-control-sm c-select" ng-disabled="!injectionService.resourcesAreAvailable")
-            option(ng-repeat="option in injectionService.injectionLocations" value="{{option.id}}") {{option.name}}
-          span(class="input-group-btn input-group-btn-sm")
-            button(class="btn btn-success btm-sm]', " type="button" ng-disabled="injectionService.injectionLocations.length == 0" data-toggle="modal" data-target="#createInjectionModal")
-              i(ng-class="['fa', {'fa-spinner': !injectionService.resourcesAreAvailable, 'fa-spin': !injectionService.resourcesAreAvailable, 'fa-plus': injectionService.resourcesAreAvailable}]")
-      div(class="col-sm-6 form-group")
-        label(for="transformSelect") Registration Transform
-        div(class="input-group input-group-sm")
-          select(ng-model="model.registrationTransform" id="transformSelect" class="form-control form-control-sm c-select")
-            option(ng-repeat="option in transformService.transforms" value="{{option.id}}") {{option.name}}
-          span(class="input-group-btn input-group-btn-sm")
-            button(class="btn btn-success btm-sm fa fa-plus" type="button" ng-disabled="true")
-    div
-      div(class="col-sm-6 form-group")
-        label(for="virusSelect") Virus
-        div(class="input-group input-group-sm")
-          select(ng-model="model.virus" id="virusSelect" class="form-control form-control-sm c-select")
-            option(ng-repeat="option in virusService.viruses" value="{{option.id}}") {{option.name}}
-          span(class="input-group-btn nput-group-btn-sm")
-            button(class="btn btn-success btm-sm fa fa-plus" type="button" ng-disabled="true")
-      div(class="col-sm-6 form-group")
-        label(for="strainSelect") Strains for {{nameForVirus(model.virus)}}
-        div(class="input-group input-group-sm")
-          select(ng-model="model.strain" id="strainSelect" class="form-control form-control-sm c-select" ng-disabled="model.virus.length == 0")
-            option(ng-repeat="option in strainsForVirus" value="{{option.id}}") {{option.name}}
-          span(class="input-group-btn input-group-btn-sm")
-            button(class="btn btn-success btm-sm fa fa-plus" type="button" ng-disabled="true")
-    div(class="col-sm-12")
-      div(class="form-group")
-        label(for="comment") Comments
-        input(type="text", class="form-control form-control-sm", id="comment", placeholder="", ng-model="model.comments")
-        small(class="text-muted") (optional)
-    div
-        div(class="col-sm-2")
-            button(type="submit" class="btn btn-primary btn-sm", ng-disabled='!canCreateSample()' ng-click="createSample()") Create
-        div(class="col-sm-10")
-          div(class="" ng-show="lastCreateMessage.length > 0")
-            span(class="label label-success") {{lastCreateMessage}}
-          div(class="" ng-show="lastCreateError.length > 0")
-            span(class="label label-danger") {{lastCreateError}}
+  div(class="row" ng-show="(lastCreateMessage.length > 0) || (lastCreateError.length > 0)")
+    div(class="col-sm-12 inset")
+      div(class="alert alert-success" ng-show="lastCreateMessage.length > 0")
+        span {{lastCreateMessage}}
+      div(class="alert alert-danger" ng-show="lastCreateError.length > 0")
+        span {{lastCreateError}}
+  form(class="inset")
+    div(class="row")
+      div(class="col-sm-6")
+        div(ng-class="['form-group', 'label-floating', {'has-warning': !isValidIdNumber}]")
+          label(class="control-label" for="sampleIdNumber") Sample Id Number
+          input(type="text", class="form-control form-control-sm", id="sampleIdNumber", ng-model="model.idNumber")
+      div(class="col-sm-6")
+        div(ng-class="['form-group', 'label-floating', {'has-warning': !isValidDate}]")
+          label(class="control-label" for="date") Date (yyyy-mm-dd)
+          input(type="text", class="form-control form-control-sm", id="date", ng-model="model.sampleDate")
+    div(class="row")
+      div(class="col-sm-6")
+        div(class="form-group label-floating")
+          label(class="control-label" for="injectionSelect") Injection Location
+          div(class="input-group input-group-sm")
+            select(ng-model="model.injectionLocation" id="injectionSelect" class="form-control form-control-sm c-select btn-raised" ng-disabled="!injectionService.resourcesAreAvailable")
+              option(ng-repeat="option in injectionService.injectionLocations" value="{{option.id}}") {{option.name}}
+            span(class="input-group-btn input-group-btn-sm")
+              button(class="btn btn-success btm-sm]', " type="button" ng-disabled="injectionService.injectionLocations.length == 0" data-toggle="modal" data-target="#createInjectionModal")
+                i(ng-class="['fa', {'fa-spinner': !injectionService.resourcesAreAvailable, 'fa-spin': !injectionService.resourcesAreAvailable, 'fa-plus': injectionService.resourcesAreAvailable}]")
+      div(class="col-sm-6")
+        div(class="form-group label-floating")
+          label(class="control-label" for="transformSelect") Registration Transform
+          div(class="input-group input-group-sm")
+            select(ng-model="model.registrationTransform" id="transformSelect" class="form-control form-control-sm c-select")
+              option(ng-repeat="option in transformService.transforms" value="{{option.id}}") {{option.name}}
+            span(class="input-group-btn input-group-btn-sm")
+              button(class="btn btn-success btm-sm fa fa-plus" type="button" ng-disabled="true")
+    div(class="row")
+      div(class="col-sm-6")
+        div(class="form-group label-floating")
+          label(class="control-label" for="virusSelect") Virus
+          div(class="input-group input-group-sm")
+            select(ng-model="model.virus" id="virusSelect" class="form-control form-control-sm c-select")
+              option(ng-repeat="option in virusService.viruses" value="{{option.id}}") {{option.name}}
+            span(class="input-group-btn nput-group-btn-sm")
+              button(class="btn btn-success btm-sm fa fa-plus" type="button" ng-disabled="true")
+      div(class="col-sm-6")
+        div(class="form-group label-floating")
+          label(class="control-label" for="strainSelect") Strains for {{nameForVirus(model.virus)}}
+            div(class="input-group input-group-sm")
+              select(ng-model="model.strain" id="strainSelect" class="form-control form-control-sm c-select" ng-disabled="model.virus.length == 0")
+                option(ng-repeat="option in strainsForVirus" value="{{option.id}}") {{option.name}}
+              span(class="input-group-btn input-group-btn-sm")
+                button(class="btn btn-success btm-sm fa fa-plus" type="button" ng-disabled="true")
+    div(class="row")
+      div(class="col-sm-3")
+        div(class="form-group label-floating")
+          label(class="control-label" for="sampleTag") Tag
+          input(type="text", class="form-control form-control-sm", id="sampleTag", placeholder="", ng-model="model.tag")
+      div(class="col-sm-9")
+        div(class="form-group label-floating")
+          label(class="control-label" for="comment") Comments
+          input(type="text", class="form-control form-control-sm", id="comment", placeholder="", ng-model="model.comments")
+    div(class="row")
+      div(class="col-sm-2")
+        button(type="submit" class="btn btn-info btn-sm btn-raised", ng-disabled='!canCreateSample()' ng-click="createSample()") Create

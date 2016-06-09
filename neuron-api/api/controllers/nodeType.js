@@ -11,7 +11,7 @@ var models = require('../models/index');
  - Or the operationId associated with the operation in your Swagger document
  */
 module.exports = {
-    get: get,
+    get: get
 };
 
 /*
@@ -22,9 +22,9 @@ module.exports = {
  */
 
 function get(req, res) {
-    models.NodeType.findAll({}).then(function (nodeTypes) {
+    models.NodeType.findAll({}).then((nodeTypes) => {
         res.json(nodeTypes);
-    }).catch(function(err){
+    }).catch((err) => {
         res.status(500).json(errors.sequelizeError(err));
     });
 }

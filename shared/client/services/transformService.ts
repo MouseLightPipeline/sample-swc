@@ -37,7 +37,7 @@ class RegistrationTransformService extends DataService<IRegistrationTransform> {
     }
 
     protected createResource(location: string): IRegistrationTransformResource {
-        return <IRegistrationTransformResource>this.$resource(location + 'transforms', {})
+        return <IRegistrationTransformResource>this.$resource(location + 'transforms/:id', { id: '@id' }, {})
     }
 
     public get transforms(): any {

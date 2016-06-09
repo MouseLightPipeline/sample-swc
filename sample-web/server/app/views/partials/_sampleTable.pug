@@ -9,7 +9,7 @@ table(class="table table-sm", ng-show="sampleService.resourcesAreAvailable && sa
   tbody
     tr(ng-repeat="s in sampleService.samples")
       td {{s.idNumber}}
-      td {{s.sampledate | date: 'yyyy-MM-dd'}}
+      td {{s.sampleDate | date: 'yyyy-MM-dd'}}
       td {{s.injectionLocation.name}}
       td {{s.registrationTransform.name}}
       td {{s.strain.name}}

@@ -52,6 +52,23 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+  /neurons/migrate:
+    x-swagger-router-controller: neuron
+    post:
+      tags:
+        - Neurons
+      operationId: migrate
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            type: object
+        "500":
+          description: Database exception
+          schema:
+            type: object
   /neurons/migrate/{sourceNeuronId}:
     x-swagger-router-controller: neuron
     post:
@@ -59,7 +76,7 @@ paths:
         - Neurons
       summary: Update an existing neuron
       description: ""
-      operationId: migrateNeuron
+      operationId: migrateOne
       consumes:
         - application/json
       produces:
@@ -77,6 +94,44 @@ paths:
             $ref: "#/definitions/Neuron"
         "405":
           description: Validation exception
+          schema:
+            type: object
+        "500":
+          description: Database exception
+          schema:
+            type: object
+  /tracings:
+    x-swagger-router-controller: tracing
+    get:
+      summary: Get tracings
+      tags:
+        - Tracings
+      responses:
+        200:
+          description: An array of tracings
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Tracing"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /tracing/migrate:
+    x-swagger-router-controller: tracing
+    post:
+      tags:
+        - Tracings
+      operationId: migrate
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: successful operation
+          schema:
+            type: object
+        "500":
+          description: Database exception
           schema:
             type: object
   /swagger:
@@ -124,6 +179,48 @@ definitions:
         type: number
         format: double
         description: Brain atlas soma Z location (µm)
+      createdAt:
+        type: string
+        format: date-time
+        description: Creation time
+      updatedAt:
+        type: string
+        format: date-time
+        description: Update time
+  Tracing:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id
+      sourceTracingId:
+        type: string
+        description: Source tracing id
+      filename:
+        type: string
+        description: Filename
+      annotator:
+        type: string
+        description: Annotator
+      comments:
+        type: string
+        description: Comments
+      offsetX:
+        type: number
+        format: double
+        description: Janelia SWC coordinate x offset
+      offsetY:
+        type: number
+        format: double
+        description: Janelia SWC coordinate y offset
+      offsetZ:
+        type: number
+        format: double
+        description: Janelia SWC coordinate z offset
+      lengthMicrometers:
+        type: number
+        format: double
+        description: Neuron length
       createdAt:
         type: string
         format: date-time

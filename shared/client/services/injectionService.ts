@@ -38,7 +38,7 @@ class InjectionService extends DataService<IInjection> {
     }
 
     protected createResource(location: string): IInjectionResource {
-        return <IInjectionResource>this.$resource(location + 'injections', {})
+        return <IInjectionResource>this.$resource(location + 'injections/:id', { id: '@id' }, {})
     }
 
     public get injectionLocations(): any {

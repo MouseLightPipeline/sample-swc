@@ -38,7 +38,7 @@ class StrainService extends DataService<IStrain> {
     }
 
     protected createResource(location: string): IStrainResource {
-        return <IStrainResource>this.$resource(location + 'strains', {})
+        return <IStrainResource>this.$resource(location + 'strains/:id', { id: '@id' }, {})
     }
 
     public get strains(): any {

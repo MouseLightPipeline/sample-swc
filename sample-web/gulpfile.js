@@ -6,20 +6,24 @@ var gulp = require('gulp'),
   livereload = require('gulp-livereload'),
   typescript = require("gulp-typescript");
   gulpTypings = require("gulp-typings");
- 
-gulp.task('default', ['develop']);
+
+gulp.task('default', ['sampleweb']);
+
+gulp.task('sampleweb', ['develop']);
 
 gulp.task('build', ['server:dep', 'client:dep', 'client:src']);
 
 gulp.task('develop', ['nodemon', 'watch']);
 
-gulp.task('nodemon', ['build'], function () {
+gulp.task('nodemon', ['build'], () => {
   livereload.listen({port: 34729});
   nodemon({
     script: 'dist/server/app.js',
     ext: 'js pug html css',
     ignore: ['client/**/*.*', 'server/**/*.*', 'gulpfile.js', './*.json'],
-    stdout: false
+    debug: true,
+    stdout: false,
+    delay: 3
   }).on('readable', function () {
     this.stdout.on('data', function (chunk) {
       if(/^Express server listening on port/.test(chunk)){
@@ -58,6 +62,10 @@ gulp.task('lib:js', ['clean'], function() {
       'bower_components/angular-resource/angular-resource.min.js',
       'bower_components/angular-resource/angular-resource.min.js.map',
       'bower_components/bootstrap/dist/js/bootstrap.min.js',
+      'bower_components/bootstrap-material-design/dist/js/material.min.js',
+      'bower_components/bootstrap-material-design/dist/js/material.min.js.map',
+      'bower_components/bootstrap-material-design/dist/js/ripples.min.js',
+      'bower_components/bootstrap-material-design/dist/js/ripples.min.js.map',
       'bower_components/tether/dist/js/tether.min.js',
       'bower_components/socket.io-client/socket.io.js'
     ])
@@ -68,6 +76,10 @@ gulp.task('lib:css', ['clean'], function() {
   return gulp.src([
       'bower_components/bootstrap/dist/css/bootstrap.min.css',
       'bower_components/bootstrap/dist/css/bootstrap.min.css.map',
+      'bower_components/bootstrap-material-design/dist/css/bootstrap-material-design.min.css',
+      'bower_components/bootstrap-material-design/dist/css/bootstrap-material-design.min.css.map',
+      'bower_components/bootstrap-material-design/dist/css/ripples.min.css',
+      'bower_components/bootstrap-material-design/dist/css/ripples.min.css.map',
       'bower_components/tether/dist/css/tether.min.css',
       'bower_components/font-awesome/css/font-awesome.min.css',
       'bower_components/lato/css/lato.min.css'
@@ -78,7 +90,7 @@ gulp.task('lib:css', ['clean'], function() {
 // compile typescript
 gulp.task('ts', ['typings'], function () {
   var tsconfig = require('./tsconfig.json');
-  
+
   return gulp.src('client/**/*.ts').pipe(typescript(tsconfig.compilerOptions)).pipe(gulp.dest('dist/public'));
 });
 

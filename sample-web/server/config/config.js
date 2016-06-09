@@ -15,12 +15,12 @@ var config = {
     port: port,
     service: {
         host: 'localhost',
-        port: service_port.toString(),
+        port: service_port,
         api: 'api/v1'
     },
     status: {
         host: 'localhost',
-        port: status_port.toString(),
+        port: status_port,
     }
   },
 
@@ -32,12 +32,12 @@ var config = {
     port: port,
     service: {
         host: 'sampleservice',
-        port: service_port.toString(),
+        port: service_port,
         api: 'api/v1'
     },
     status: {
         host: 'samplestatus',
-        port: status_port.toString(),
+        port: status_port,
     }
   },
   production: {
@@ -48,12 +48,12 @@ var config = {
     port: port,
     service: {
         host: 'sampleservice',
-        port: service_port.toString(),
+        port: service_port,
         api: 'api/v1'
     },
     status: {
         host: 'samplestatus',
-        port: status_port.toString(),
+        port: status_port,
     }
   }
 };

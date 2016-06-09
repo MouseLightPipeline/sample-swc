@@ -48,7 +48,7 @@ function post(req, res, next) {
         res.status(500).json(errors.invalidIdNumber());
         return;
     }
-    
+
     models.Sample.findAll({where:{idNumber: req.body.idNumber}}).then(function (sample) {
         if (sample != null && sample.length > 0) {
             res.status(500).json(errors.duplicateSample());
@@ -57,25 +57,25 @@ function post(req, res, next) {
         }
     }).catch(function(err){
         res.status(500).json(errors.sequelizeError(err));
-    });    
+    });
 }
 
 function create(body, res) {
-    var date = (body.sampledate && body.sampledate.length > 0) ? new Date(body.sampledate) : new Date();
+    var date = (body.sampleDate && body.sampleDate.length > 0) ? new Date(body.sampleDate) : new Date();
     var tag = body.tag || '';
     var comment = body.comment || '';
     var injectionLocationId = body.injectionLocationId || null;
     var registrationId = body.registrationTransformId || null;
     var strainId = body.strainId || null;
-    
+
     models.Sample.create({
-            idNumber: body.idNumber,
-            sampledate: date,
-            tag: tag,
-            comment: comment,
-            injectionLocationId: injectionLocationId,
-            registrationTransformId: registrationId,
-            strainId: strainId
+        idNumber: body.idNumber,
+        sampleDate: date,
+        tag: tag,
+        comment: comment,
+        injectionLocationId: injectionLocationId,
+        registrationTransformId: registrationId,
+        strainId: strainId
     }).then(function (sample) {
         console.log(sample);
         res.json(sample);
@@ -90,17 +90,17 @@ function replaceWithEmptyObject(prop) {
 }
 
 var GET_SAMPLE_INCLUDE =
-[
-    {
-        model: models.InjectionLocation,
-        as: 'injectionLocation'
-    },
-    {
-        model: models.RegistrationTransform,
-        as: 'registrationTransform'
-    },
-    {
-        model: models.Strain,
-        as: 'strain'
-    }
-]
+    [
+        {
+            model: models.InjectionLocation,
+            as: 'injectionLocation'
+        },
+        {
+            model: models.RegistrationTransform,
+            as: 'registrationTransform'
+        },
+        {
+            model: models.Strain,
+            as: 'strain'
+        }
+    ]

@@ -39,7 +39,7 @@ class VirusService extends DataService<IVirus> {
     }
 
     protected createResource(location: string): IVirusResource {
-        return <IVirusResource>this.$resource(location + 'viruses', {}, {
+        return <IVirusResource>this.$resource(location + 'viruses/:id', { id: '@id' },, {}, {
             strains: {
                 method: 'GET',
                 url: location + 'viruses/:id/strains/',

@@ -298,7 +298,7 @@ definitions:
       idNumber:
         type: integer
         description: Public id number
-      sampledate:
+      sampleDate:
         type: string
         format: date-time
         description: Datestamp
@@ -319,7 +319,7 @@ definitions:
       idNumber:
         type: integer
         description: Public id number
-      sampledate:
+      sampleDate:
         type: string
         format: date-time
         description: Datestamp

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# First agument is location of the swc-datastore directory.  Not required if running from the root ndb directory.
+# First argument is location of the swc-datastore directory.  Not required if running from the root ndb directory.
 
 if [ $# -eq 0 ]; then
     SRCDIR=$(PWD)

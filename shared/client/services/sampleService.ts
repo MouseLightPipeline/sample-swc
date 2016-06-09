@@ -8,7 +8,8 @@
 interface ISample extends ng.resource.IResource<ISample>, IApiItem {
     id: string;
     idNumber: number;
-    sampledate: Date;
+    sampleDate: Date;
+    tag: string;
     comment: string;
     injectionLocationId: string;
     registrationTransformId: string;
@@ -35,7 +36,7 @@ class SampleService extends DataService<ISample> {
     }
 
     protected mapQueriedItem(obj: any): ISample {
-        obj.sampledate = new Date(obj.sampledate);
+        obj.sampleDate = new Date(obj.sampleDate);
         obj.createdAt = new Date(obj.createdAt);
         obj.updatedAt = new Date(obj.updatedAt);
 
@@ -59,5 +60,13 @@ class SampleService extends DataService<ISample> {
 
     public neuronsForSample(id: string) {
         return this.service.neurons({ id: id }).$promise;
+    }
+    
+    public display(sample: ISample): string {
+        if (sample.tag.length > 0) {
+            return sample.idNumber.toString() + ' ' + sample.tag + ' (' + sample.sampleDate.toLocaleDateString() + ')';
+        } else {
+            return sample.idNumber.toString() + ' (' + sample.sampleDate.toLocaleDateString() + ')';
+        }
     }
 }

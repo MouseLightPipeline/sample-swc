@@ -24,8 +24,8 @@ module.exports = function(sequelize, DataTypes) {
 
 
 function populateDefault(model) {
-    return new Promise(function(resolve, reject) {
-        model.count().then(function(count) {
+    return new Promise((resolve, reject) => {
+        model.count().then((count) => {
             if (count < 1) {
                 model.create({name: 'Soma', mutable: false});
             }
@@ -37,6 +37,8 @@ function populateDefault(model) {
             }
 
             resolve();
-         });
+         }).catch((err) => {
+            reject(err);
+        });
     });
 }

@@ -37,7 +37,7 @@ class BrainAreaService extends DataService<IBrainArea> {
     }
 
     protected createResource(location: string): IBrainAreaResource {
-        return <IBrainAreaResource>this.$resource(location + 'brainareas', {})
+        return <IBrainAreaResource>this.$resource(location + 'brainareas/:id', { id: '@id' }, {})
     }
 
     public get brainAreas(): any {

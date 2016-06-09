@@ -46,7 +46,7 @@ abstract class DataService<T extends ApiResourceItem<T>> {
         this.resourcesAreAvailable = false;
 
         return new Promise<boolean>((resolve, reject) => {
-            this.dataSource.query((data, headers) => {
+            this.dataSource.query((data) => {
                 data = data.map((obj) => {
                     var item : IApiItem = this.mapQueriedItem(obj);
                     this[item.id]= item;
@@ -66,8 +66,9 @@ abstract class DataService<T extends ApiResourceItem<T>> {
         return new Promise<T>((resolve, reject) => {
             this.dataSource.save(data).$promise.then((item: T) => {
                 this.dataSource.get({id: item.id}, (fullItem) => {
-                    this.items.push(fullItem); 
-                    resolve(fullItem);
+                    var mappedItem = this.mapQueriedItem(fullItem);
+                    this.items.push(mappedItem);
+                    resolve(mappedItem);
                 });
             }).catch((response) => {
                 reject(response);
@@ -86,7 +87,18 @@ abstract class DataService<T extends ApiResourceItem<T>> {
             return obj.id === id;
         });
     }
-    
+
+    public findWithIdNumber(id: number): T {
+        var item: T = this.items.find((obj) => {
+            return obj.idNumber === id;
+        });
+
+       if (typeof(item) === 'undefined')
+           item = null;
+
+        return item;
+    }
+
     protected get apiUrl() {
         return this.apiLocation;
     }

@@ -35,12 +35,8 @@ var Codes = {
     },
     DUPLICATE_INJECTION: {
         code: 2301,
-        message: 'An injection location with that name number already exists.'
-    },
-    DUPLICATE_INJECTION: {
-        code: 2301,
-        message: 'An injection location with that name number already exists.'
-    },
+        message: 'An injection location with that name already exists.'
+    }
 };
 
 function sequelizeError(err) {

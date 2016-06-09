@@ -1,11 +1,6 @@
 extends layout
 block js
-  script(src='/lib/jquery.min.js')
-  script(src='/lib/angular.min.js')
-  script(src='/lib/angular-resource.min.js')
-  script(src='/lib/tether.min.js')
   script(src='/lib/socket.io.js')
-  script(src='/lib/bootstrap.min.js')
   script(src='/lib/dataService.js')
   script(src='/lib/brainAreaService.js')
   script(src='/lib/injectionService.js')
@@ -74,4 +69,5 @@ block content
       div(class="col-sm-12")
         h2(class="centered") DIAGNOSTICS
     include ./partials/_diagnostics
-  div(id="footer", class="container-fluid dark") Copyright © 2016 Howard Hughes Medical Institute 
+  div(id="footer", class="container-fluid dark") Copyright © 2016 Howard Hughes Medical Institute
+  script $.material.init();

@@ -19,7 +19,8 @@
     "supertest": "^1.0.0"
   },
   "scripts": {
-    "start": "node $NODE_DEBUG_OPTION app.js",
+    "start": "swagger project start",
+    "debug": "node $NODE_DEBUG_OPTION app.js",
     "test": "swagger project test"
   }
 }

@@ -7,17 +7,37 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4
         },
-        filename: DataTypes.TEXT,
-        annotator: DataTypes.TEXT,
-        neuronId:  DataTypes.UUID, // reference to external database entry
-        comments: DataTypes.TEXT, // comments found in file
-        offsetX:  DataTypes.DOUBLE, // Janelia offset defined in file comments
-        offsetY:  DataTypes.DOUBLE,
-        offsetZ:  DataTypes.DOUBLE
+        // reference to external sample database entry
+        neuronId:  DataTypes.UUID,
+        filename: {
+            type: DataTypes.TEXT,
+            defaultValue: ''
+        },
+        annotator: {
+            type: DataTypes.TEXT,
+            defaultValue: ''
+        },
+        // comment lines found in SWC file
+        comments: {
+            type: DataTypes.TEXT,
+            defaultValue: ''
+        },
+        // Janelia offset defined in file comments
+        offsetX: {
+            type: DataTypes.DOUBLE,
+            defaultValue: 0
+        },
+        offsetY: {
+            type: DataTypes.DOUBLE,
+            defaultValue: 0
+        },
+        offsetZ: {
+            type: DataTypes.DOUBLE,
+            defaultValue: 0
+        }
     }, {
         classMethods: {
             associate: function(models) {
-                // Tracing.hasMany(models.MarkerLocation, {foreignKey: 'tracingId', as: 'markers'});
                 Tracing.hasMany(models.TracingNode, {foreignKey: 'tracingId', as: 'nodes'});
             }
         }

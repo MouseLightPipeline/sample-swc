@@ -35,7 +35,6 @@ class TracingService extends DataService<ITracing> {
     }
 
     protected mapQueriedItem(obj: any): ITracing {
-        obj.sampledate = new Date(obj.sampledate);
         obj.createdAt = new Date(obj.createdAt);
         obj.updatedAt = new Date(obj.updatedAt);
 

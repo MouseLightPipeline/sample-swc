@@ -39,7 +39,7 @@ class StructureIdentifierService extends DataService<IStructureIdentifier> {
     }
 
     protected createResource(location: string): IStructureIdentifierResource {
-        return <IStructureIdentifierResource>this.$resource(location + 'structures', {})
+        return <IStructureIdentifierResource>this.$resource(location + 'structures/:id', { id: '@id' }, {})
     }
 
     public get structures(): any {
