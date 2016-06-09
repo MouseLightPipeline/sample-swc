@@ -29,8 +29,8 @@ class NeuronService extends DataService<INeuron> {
     }
 
     protected mapQueriedItem(obj: any): INeuron {
-        obj.createdAt = new Date(obj.createdAt);
-        obj.updatedAt = new Date(obj.updatedAt);
+        obj.createdAt = new Date(<string>obj.createdAt);
+        obj.updatedAt = new Date(<string>obj.updatedAt);
 
         return obj;
     }

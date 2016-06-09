@@ -32,14 +32,14 @@ class VirusService extends DataService<IVirus> {
     }
 
     protected mapQueriedItem(obj: any): IVirus {
-        obj.createdAt = new Date(obj.createdAt);
-        obj.updatedAt = new Date(obj.updatedAt);
+        obj.createdAt = new Date(<string>obj.createdAt);
+        obj.updatedAt = new Date(<string>obj.updatedAt);
 
         return obj;
     }
 
     protected createResource(location: string): IVirusResource {
-        return <IVirusResource>this.$resource(location + 'viruses/:id', { id: '@id' },, {}, {
+        return <IVirusResource>this.$resource(location + 'viruses/:id', { id: '@id' }, {
             strains: {
                 method: 'GET',
                 url: location + 'viruses/:id/strains/',

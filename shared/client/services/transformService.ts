@@ -25,13 +25,9 @@ class RegistrationTransformService extends DataService<IRegistrationTransform> {
         super($resource);
     }
 
-    private get service(): IRegistrationTransformResource {
-        return <IRegistrationTransformResource>this.dataSource;
-    }
-
     protected mapQueriedItem(obj: any): IRegistrationTransform {
-        obj.createdAt = new Date(obj.createdAt);
-        obj.updatedAt = new Date(obj.updatedAt);
+        obj.createdAt = new Date(<string>obj.createdAt);
+        obj.updatedAt = new Date(<string>obj.updatedAt);
 
         return obj;
     }

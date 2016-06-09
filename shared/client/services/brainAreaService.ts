@@ -25,13 +25,9 @@ class BrainAreaService extends DataService<IBrainArea> {
         super($resource);
     }
 
-    private get service(): IBrainAreaResource {
-        return <IBrainAreaResource>this.dataSource;
-    }
-
     protected mapQueriedItem(obj: any): IBrainArea {
-        obj.createdAt = new Date(obj.createdAt);
-        obj.updatedAt = new Date(obj.updatedAt);
+        obj.createdAt = new Date(<string>obj.createdAt);
+        obj.updatedAt = new Date(<string>obj.updatedAt);
 
         return obj;
     }

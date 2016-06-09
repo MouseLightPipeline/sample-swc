@@ -12,11 +12,10 @@ interface IApiItem {
 interface IDataServiceResource<T extends ng.resource.IResource<T>> extends ng.resource.IResourceClass<T> {
 }
 
-interface ApiResourceItem<T> extends ng.resource.IResource<T>, IApiItem {
-    
+interface IApiResourceItem<T> extends ng.resource.IResource<T>, IApiItem {
 }
 
-abstract class DataService<T extends ApiResourceItem<T>> {
+abstract class DataService<T extends IApiResourceItem<T>> {
     public static $inject = [
         '$resource'
     ];

@@ -27,6 +27,8 @@ class SampleService extends DataService<ISample> {
         '$resource'
     ];
 
+    private static directMappedProperties = ['id', 'idNumber', 'tag', 'comment', 'injectionLocationId'];
+
     constructor($resource: ng.resource.IResourceService) {
         super($resource);
     }
@@ -36,9 +38,9 @@ class SampleService extends DataService<ISample> {
     }
 
     protected mapQueriedItem(obj: any): ISample {
-        obj.sampleDate = new Date(obj.sampleDate);
-        obj.createdAt = new Date(obj.createdAt);
-        obj.updatedAt = new Date(obj.updatedAt);
+        obj.sampleDate = new Date(<string>obj.sampleDate);
+        obj.createdAt = new Date(<string>obj.createdAt);
+        obj.updatedAt = new Date(<string>obj.updatedAt);
 
         return obj;
     }

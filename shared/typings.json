@@ -5,8 +5,6 @@
     "angular": "registry:dt/angular#1.5.0+20160517064839",
     "angular-resource": "registry:dt/angular-resource#1.5.0+20160412142209",
     "es6-promise": "registry:dt/es6-promise#0.0.0+20160423074304",
-    "jasmine": "registry:dt/jasmine#2.2.0+20160505161446",
-    "jquery": "registry:dt/jquery#1.10.0+20160417213236",
-    "socket.io-client": "registry:dt/socket.io-client#1.4.4+20160317120654"
+    "jquery": "registry:dt/jquery#1.10.0+20160417213236"
   }
 }
