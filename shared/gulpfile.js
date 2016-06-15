@@ -8,7 +8,9 @@ var tslint = require("gulp-tslint");
 
 gulp.task('default', ['watch']);
 
-gulp.task('build', ['ts']);
+gulp.task('build', ['tslint, ts']);
+
+gulp.task('deploy', ['ts']);
 
 gulp.task('watch', ['build'], () => {
     return gulp.watch(['client/**/*.*', '*.js', '*.json'], ['build']);
@@ -32,7 +34,7 @@ gulp.task("tslint", () => {
     }
 )
 
-gulp.task('ts', ['typings', "tslint"], () => {
+gulp.task('ts', ['typings'], () => {
     var tsConfig = require('./tsconfig.json');
 
     return gulp.src('client/**/*.ts')

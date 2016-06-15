@@ -11,7 +11,7 @@ RUN cd /app; npm install -g bower
 RUN cd /shared; npm install
 RUN cd /shared; bower install --allow-root
 
-RUN cd /shared; gulp build
+RUN cd /shared; gulp deploy
 
 # Install app dependencies
 RUN cd /app; npm install
