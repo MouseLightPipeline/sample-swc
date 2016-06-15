@@ -1,4 +1,5 @@
 /// <reference path="../../../../shared/client/services/neuronService.ts"/>
+/// <reference path="../helpers/validation.ts"/>
 
 class NeuronController {
   public static $inject = [
@@ -16,11 +17,14 @@ class NeuronController {
 
     this.$scope.isValidIdNumber = false;
 
+    this.$scope.lastCreateMessage = "";
+    this.$scope.lastCreateError = "";
+
     this.$scope.$watch("model.idNumber", (newValue) => {
-      this.$scope.isValidIdNumber = this.isValidIdNumberValue(newValue);
+      this.$scope.isValidIdNumber = isValidIdNumberValue(newValue);
     });
 
-    this.$scope.isValidDouble = (val) => this.isValidDouble(val);
+    this.$scope.isValidDouble = (val) => isValidDouble(val);
 
     this.$scope.createNeuron = () => this.createNeuron();
 
@@ -41,16 +45,8 @@ class NeuronController {
     return this.$scope.isValidIdNumber && this.haveValidSample() && this.haveValidSomaLocation();
   }
 
-  private isValidIdNumberValue(val: string) : boolean {
-    return (val.length > 0) && !isNaN(Number(val)) && Number.isInteger(Number(val));
-  }
-
-  private isValidDouble(val: string) {
-    return (val.length > 0) && !isNaN(Number(val));
-  }
-
   private haveValidSomaLocation() {
-    return this.isValidDouble(this.$scope.model.x) && this.isValidDouble(this.$scope.model.y) &&  this.isValidDouble(this.$scope.model.z);
+    return isValidDouble(this.$scope.model.x) && isValidDouble(this.$scope.model.y) &&  isValidDouble(this.$scope.model.z);
   }
 
   private haveValidSample() : boolean {
@@ -74,7 +70,10 @@ class NeuronController {
   }
 
   private createNeuron() {
-    var neuron = {
+    this.$scope.lastCreateMessage = "";
+    this.$scope.lastCreateError = "";
+
+    let item = {
       idNumber: parseInt(this.$scope.model.idNumber),
       tag: this.$scope.model.tag,
       sampleId: this.$scope.model.sampleId,
@@ -84,7 +83,23 @@ class NeuronController {
       z: parseFloat(this.$scope.model.z)
     };
 
-    this.$scope.neuronService.createItem(neuron);
+    this.$scope.neuronService.createItem(item).then((neuron) => {
+      this.$scope.$apply(() => {
+        this.$scope.lastCreateMessage = "Created neuron with id number " + neuron.idNumber;
+      });
+      setTimeout(() => {
+        this.$scope.$apply(() => {
+          this.$scope.lastCreateMessage = "";
+        });
+      }, 4000);
+    }).catch((error) => {
+      this.$scope.$apply(() => {
+        if (error.data != null)
+          this.$scope.lastCreateError = error.data.message;
+        else
+          this.$scope.lastCreateError = "An unknown error occurred connecting to the server.";
+      });
+    });
   }
 }
 

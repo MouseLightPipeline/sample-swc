@@ -12,7 +12,9 @@ var models = require('../models/index');
  */
 module.exports = {
     get: get,
-    getStrainsForVirus: getStrainsForVirus
+    getStrainsForVirus: getStrainsForVirus,
+    getStrainById: getStrainById,
+    post: post
 };
 
 /*
@@ -35,6 +37,53 @@ function getStrainsForVirus(req, res) {
     models.Strain.findAll({where: {virusId: req.swagger.params.virusId.originalValue}}).then(function (strains) {
         res.json(strains);
     }).catch((err) => {
+        res.status(500).json(errors.sequelizeError(err));
+    });
+}
+
+function getStrainById(req, res) {
+    models.Strain.findAll({where: {id: req.swagger.params.strainId.value}, limit: 1}).then(function (strain) {
+        if (strain.length > 0)
+            res.json(strain[0]);
+        else
+            res.status(500).json({message: 'bad id'});
+    }).catch(function(err){
+        res.status(500).json(errors.sequelizeError(err));
+    });
+}
+
+function post(req, res, next) {
+    console.log(req.body);
+
+    if (req.body.name === undefined || req.body.name === null) {
+        res.status(500).json(errors.invalidName());
+        return;
+    }
+
+    if (req.body.virusId === undefined || req.body.virusId === null) {
+        res.status(500).json(errors.invalidName());
+        return;
+    }
+
+    models.Strain.findAll({where:{name: req.body.name, virusId: req.body.virusId}}).then(function (strain) {
+        if (strain != null && strain.length > 0) {
+            res.status(500).json(errors.duplicateStrain());
+        } else {
+            create(req.body, res);
+        }
+    }).catch(function(err){
+        res.status(500).json(errors.sequelizeError(err));
+    });
+}
+
+function create(body, res) {
+    models.Strain.create({
+        name: body.name,
+        virusId: body.virusId,
+        mutable: true
+    }).then(function (strain) {
+        res.json(strain);
+    }).catch(function(err){
         res.status(500).json(errors.sequelizeError(err));
     });
 }

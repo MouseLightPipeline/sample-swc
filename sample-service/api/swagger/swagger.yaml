@@ -186,13 +186,35 @@ paths:
       parameters:
         - in: body
           name: body
-          description: Name of injection to add
+          description: Injection location to add
           required: true
           schema:
             $ref: "#/definitions/InjectionLocationPost"
       responses:
         "405":
           description: Invalid input
+  /injections/{injectionId}:
+    x-swagger-router-controller: injection
+    get:
+      summary: Injection location by id
+      tags:
+        - Injection Locations
+      operationId: getInjectionById
+      parameters:
+        - name: injectionId
+          in: path
+          description: Injection location to find
+          required: true
+          type: string
+      responses:
+        200:
+          description: The inection location
+          schema:
+            $ref: "#/definitions/InjectionLocation"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
   /transforms:
     x-swagger-router-controller: registrations
     get:
@@ -210,12 +232,53 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+    post:
+      summary: Add a new registration transform
+      description: ""
+      tags:
+        - Registration Transforms
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Registration transform to add
+          required: true
+          schema:
+            $ref: "#/definitions/RegistrationTransformPost"
+      responses:
+        "405":
+          description: Invalid input
+  /transforms/{transformId}:
+    x-swagger-router-controller: registrations
+    get:
+      summary: Transform by id
+      tags:
+        - Registration Transforms
+      operationId: getTransformById
+      parameters:
+        - name: transformId
+          in: path
+          description: Registration transform to find
+          required: true
+          type: string
+      responses:
+        200:
+          description: The registration transform
+          schema:
+            $ref: "#/definitions/RegistrationTransform"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
   /viruses:
     x-swagger-router-controller: virus
     get:
       summary: Virus definitions
       tags:
-        - Virus
+        - Viruses
       responses:
         200:
           description: An array of files
@@ -227,13 +290,54 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+    post:
+      summary: Add a new virus
+      description: ""
+      tags:
+        - Viruses
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Virus to add
+          required: true
+          schema:
+            $ref: "#/definitions/VirusPost"
+      responses:
+        "405":
+          description: Invalid input
+  /viruses/{virusId}:
+    x-swagger-router-controller: virus
+    get:
+      summary: Virus by id
+      tags:
+        - Viruses
+      operationId: getVirusById
+      parameters:
+        - name: virusId
+          in: path
+          description: Virus id to find
+          required: true
+          type: string
+      responses:
+        200:
+          description: The inection location
+          schema:
+            $ref: "#/definitions/Virus"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
   /viruses/{virusId}/strains:
     x-swagger-router-controller: strain
     get:
-      summary: Virus definitions
+      summary: Strain definitions for the specified virus
       operationId: getStrainsForVirus
       tags:
-        - Virus
+        - Viruses
       parameters:
         - name: virusId
           in: path
@@ -242,7 +346,7 @@ paths:
           type: string
       responses:
         200:
-          description: An array of strains for the given virus
+          description: An array of strains for the specified virus
           schema:
             type: array
             items:
@@ -256,7 +360,7 @@ paths:
     get:
       summary: Strain definitions
       tags:
-        - Virus
+        - Viruses
       responses:
         200:
           description: An array of files
@@ -264,6 +368,47 @@ paths:
             type: array
             items:
               $ref: '#/definitions/Strain'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      summary: Add a new strain
+      description: ""
+      tags:
+        - Viruses
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Strain to add
+          required: true
+          schema:
+            $ref: "#/definitions/StrainPost"
+      responses:
+        "405":
+          description: Invalid input
+  /strains/{strainId}:
+    x-swagger-router-controller: strain
+    get:
+      summary: Strain by id
+      tags:
+        - Viruses
+      operationId: getStrainById
+      parameters:
+        - name: strainId
+          in: path
+          description: Strain id to find
+          required: true
+          type: string
+      responses:
+        200:
+          description: The strain
+          schema:
+            $ref: "#/definitions/Strain"
         default:
           description: Error
           schema:
@@ -419,6 +564,12 @@ definitions:
         type: string
         format: date-time
         description: Update time
+  RegistrationTransformPost:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name
   Virus:
     type: object
     properties:
@@ -439,6 +590,12 @@ definitions:
         type: string
         format: date-time
         description: Update time
+  VirusPost:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name
   Strain:
     type: object
     properties:
@@ -462,6 +619,15 @@ definitions:
         type: string
         format: date-time
         description: Update time
+  StrainPost:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name
+      virusId:
+        type: string
+        description: Virus reference id
   BrainArea:
     type: object
     properties:

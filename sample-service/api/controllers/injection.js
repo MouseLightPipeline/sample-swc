@@ -13,6 +13,7 @@ var models = require('../models/index');
  */
 module.exports = {
     get: get,
+    getInjectionById: getInjectionById,
     post: post
 };
 
@@ -26,6 +27,17 @@ module.exports = {
 function get(req, res) {
     models.InjectionLocation.findAll({}).then(function (locations) {
         res.json(locations);
+    }).catch(function(err){
+        res.status(500).json(errors.sequelizeError(err));
+    });
+}
+
+function getInjectionById(req, res) {
+    models.InjectionLocation.findAll({where: {id: req.swagger.params.injectionId.value}, limit: 1}).then(function (injection) {
+        if (injection.length > 0)
+            res.json(injection[0]);
+        else
+            res.status(500).json({message: 'bad id'});
     }).catch(function(err){
         res.status(500).json(errors.sequelizeError(err));
     });

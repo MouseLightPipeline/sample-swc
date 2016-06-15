@@ -26,7 +26,7 @@ module.exports = {
  */
 
 function get(req, res) {
-    models.Neuron.findAll({include:GET_NEURON_INCLUDE}).then(function (neurons) {
+    models.Neuron.findAll().then(function (neurons) {
         res.json(neurons);
     }).catch(function(err){
         res.status(500).json(errors.sequelizeError(err));
@@ -34,7 +34,7 @@ function get(req, res) {
 }
 
 function getNeuronById(req, res) {
-    models.Neuron.findAll({include:GET_NEURON_INCLUDE, where: {id: req.swagger.params.neuronId.value}, limit: 1}).then(function (neurons) {
+    models.Neuron.findAll({where: {id: req.swagger.params.neuronId.value}, limit: 1}).then(function (neurons) {
         if (neurons.length > 0)
             res.json(neurons[0]);
         else
@@ -71,12 +71,14 @@ function post(req, res, next) {
 function create(body, res) {
     var sampleId = body.sampleId || null;
     var brainAreaId = body.brainAreaId || null;
+    var tag = body.tag || '';
     var x = body.x || 0;
     var y = body.y || 0;
     var z = body.z || 0;
     
     models.Neuron.create({
             idNumber: body.idNumber,
+            tag: tag,
             sampleId: sampleId,
             brainAreaId: brainAreaId,
             x: x,

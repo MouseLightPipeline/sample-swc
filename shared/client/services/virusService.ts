@@ -51,7 +51,11 @@ class VirusService extends DataService<IVirus> {
         return this.items;
     }
 
-    public strainsForVirus(id: string) {
+    public getDisplayName(item: IVirus, defaultValue: string = ""): string {
+        return item.name;
+    }
+
+    public strainsForVirus(id: string): angular.IPromise<IVirus> {
         return this.service.strains({ id: id }).$promise;
     }
 }

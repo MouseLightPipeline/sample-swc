@@ -37,4 +37,8 @@ class BrainAreaService extends DataService<IBrainArea> {
     public get brainAreas(): any {
         return this.items;
     }
+
+    public getDisplayName(item: IBrainArea, defaultValue: string = ""): string {
+        return item.abiName;
+    }
 }

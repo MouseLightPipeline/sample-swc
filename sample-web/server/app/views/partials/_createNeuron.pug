@@ -1,5 +1,11 @@
 div(class="row", ng-controller="neuronController")
   h4(class="centered") NEURONS
+  div(class="row" ng-show="(lastCreateMessage.length > 0) || (lastCreateError.length > 0)")
+    div(class="col-sm-12 inset")
+      div(class="alert alert-success" ng-show="lastCreateMessage.length > 0")
+        span {{lastCreateMessage}}
+      div(class="alert alert-danger" ng-show="lastCreateError.length > 0")
+        span {{lastCreateError}}
   form(class="inset")
     div(class="row")
       div(class="col-sm-6")
@@ -15,7 +21,7 @@ div(class="row", ng-controller="neuronController")
         div(ng-class="['form-group', 'label-floating', {'has-warning': model.sampleId.length === 0}]")
           label(class="control-label" for="sampleSelect") Add to sample
           select(ng-model="model.sampleId" id="sampleSelect" class="form-control form-control-sm c-select")
-            option(ng-repeat="option in sampleService.samples" value="{{option.id}}") {{sampleService.display(option)}}
+            option(ng-repeat="option in sampleService.samples" value="{{option.id}}") {{sampleService.getDisplayName(option)}}
       div(class="col-sm-6")
         div(class="form-group label-floating")
           label(class="control-label" for="brainAreaSelect") Brain Area

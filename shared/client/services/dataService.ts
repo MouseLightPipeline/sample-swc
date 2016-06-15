@@ -84,9 +84,15 @@ abstract class DataService<T extends IApiResourceItem<T>> {
     }
 
     public find(id: string): T {
-        return this.items.find((obj: IApiItem) => {
+        let item: T = this.items.find((obj: IApiItem) => {
             return obj.id === id;
         });
+
+        if (item === undefined) {
+            item = null;
+        }
+
+        return item;
     }
 
     public findWithIdNumber(id: number): T {
@@ -94,10 +100,24 @@ abstract class DataService<T extends IApiResourceItem<T>> {
             return obj.idNumber === id;
         });
 
-        if (typeof(item) === "undefined")
+        if (item === undefined)
             item = null;
 
         return item;
+    }
+
+    public getDisplayName(ignore: T, defaultValue: string = ""): string {
+        return defaultValue;
+    }
+
+    public getDisplayNameForId(id: string, defaultValue: string = ""): string {
+        let item = this.find(id);
+
+        if (item === null) {
+            return defaultValue;
+        } else {
+            return this.getDisplayName(item);
+        }
     }
 
     protected get apiUrl() {

@@ -4,6 +4,7 @@
   "globalDependencies": {
     "angular": "registry:dt/angular#1.5.0+20160320081937",
     "angular-resource": "registry:dt/angular-resource#1.5.0+20160412142209",
+    "bootstrap": "registry:dt/bootstrap#3.3.5+20160316155526",
     "express": "registry:dt/express#4.0.0+20160317120654",
     "jquery": "registry:dt/jquery#1.10.0+20160316155526",
     "mime": "registry:dt/mime#0.0.0+20160316155526",

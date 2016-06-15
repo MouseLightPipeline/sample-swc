@@ -20,6 +20,11 @@ interface ISampleResource extends IDataServiceResource<ISample> {
     neurons(obj): ISample;
 }
 
+function lpad(n, width, z = "0"): string {
+    n = n + "";
+    return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+}
+
 class SampleService extends DataService<ISample> {
     public static $inject = [
         "$resource"
@@ -60,11 +65,13 @@ class SampleService extends DataService<ISample> {
         return this.service.neurons({ id: id }).$promise;
     }
 
-    public static display(sample: ISample): string {
-        if (sample.tag.length > 0) {
-            return sample.idNumber.toString() + " " + sample.tag + " (" + sample.sampleDate.toLocaleDateString() + ")";
+    public getDisplayName(item: ISample, defaultValue: string = ""): string {
+        let date: string = item.sampleDate.getFullYear() + "-" + lpad(item.sampleDate.getMonth() + 1, 2) + "-" + lpad(item.sampleDate.getDate(), 2);
+
+        if (item.tag.length > 0) {
+            return item.idNumber.toString() + " " + item.tag + " (" + date + ")";
         } else {
-            return sample.idNumber.toString() + " (" + sample.sampleDate.toLocaleDateString() + ")";
+            return item.idNumber.toString() + " (" + date + ")";
         }
     }
 }

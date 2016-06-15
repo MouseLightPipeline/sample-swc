@@ -1,14 +1,4 @@
-'use strict'
-
-module.exports = {
-    Codes: Codes,
-    sequelizeError: sequelizeError,
-    invalidIdNumber: invalidIdNumber,
-    invalidName: invalidName,
-    duplicateSample: duplicateSample,
-    duplicateNeuron: duplicateNeuron,
-    duplicateInjection: duplicateInjection
-}
+'use strict';
 
 var Codes = {
     // Database
@@ -36,6 +26,18 @@ var Codes = {
     DUPLICATE_INJECTION: {
         code: 2301,
         message: 'An injection location with that name already exists.'
+    },
+    DUPLICATE_REGISTRATION: {
+        code: 2401,
+        message: 'A registration transform with that name already exists.'
+    },
+    DUPLICATE_VIRUS: {
+        code: 2501,
+        message: 'A virus with that name already exists.'
+    },
+    DUPLICATE_STRAIN: {
+        code: 2601,
+        message: 'A strain with that name already exists for that virus.'
     }
 };
 
@@ -44,7 +46,7 @@ function sequelizeError(err) {
     error.database = {
         errorMessage: err.message,
         errorName: err.name
-    }
+    };
     
     return error;
 }
@@ -68,3 +70,28 @@ function duplicateNeuron() {
 function duplicateInjection() {
     return Codes.DUPLICATE_INJECTION;
 }
+
+function duplicateRegistration() {
+    return Codes.DUPLICATE_REGISTRATION;
+}
+
+function duplicateVirus() {
+    return Codes.DUPLICATE_VIRUS;
+}
+
+function duplicateStrain() {
+    return Codes.DUPLICATE_STRAIN;
+}
+
+module.exports = {
+    Codes: Codes,
+    sequelizeError: sequelizeError,
+    invalidIdNumber: invalidIdNumber,
+    invalidName: invalidName,
+    duplicateSample: duplicateSample,
+    duplicateNeuron: duplicateNeuron,
+    duplicateInjection: duplicateInjection,
+    duplicateRegistration: duplicateRegistration,
+    duplicateVirus: duplicateVirus,
+    duplicateStrain: duplicateStrain
+};

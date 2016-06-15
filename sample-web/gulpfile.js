@@ -41,7 +41,7 @@ gulp.task('watch', ['build'], function() {
 
 gulp.task('server:dep', ['js', 'pug']);
 
-gulp.task('client:dep', ['html', 'css', 'lib:js', 'lib:css', 'lib:fonts:1', 'lib:fonts:2']);
+gulp.task('client:dep', ['html', 'css', 'lib:js', 'lib:css', 'lib:fonts:1']);
 
 gulp.task('client:src', ['ts', 'client:shared']);
 
@@ -81,8 +81,7 @@ gulp.task('lib:css', ['clean'], function() {
       'bower_components/bootstrap-material-design/dist/css/ripples.min.css',
       'bower_components/bootstrap-material-design/dist/css/ripples.min.css.map',
       'bower_components/tether/dist/css/tether.min.css',
-      'bower_components/font-awesome/css/font-awesome.min.css',
-      'bower_components/lato/css/lato.min.css'
+      'bower_components/font-awesome/css/font-awesome.min.css'
     ])
     .pipe(gulp.dest('dist/public/css'))
 });
@@ -99,13 +98,6 @@ gulp.task('lib:fonts:1', ['clean'], function() {
       'bower_components/font-awesome/fonts/*.*'
     ])
     .pipe(gulp.dest('dist/public/fonts'))
-});
-
-gulp.task('lib:fonts:2', ['clean'], function() {
-  return gulp.src([
-      'bower_components/lato/font/**/*'
-    ])
-    .pipe(gulp.dest('dist/public/font'))
 });
 
 // move js
