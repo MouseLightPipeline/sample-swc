@@ -20,7 +20,7 @@ div(class="row", ng-controller="neuronController")
       div(class="col-sm-6")
         div(ng-class="['form-group', 'label-floating', {'has-warning': model.sampleId.length === 0}]")
           label(class="control-label" for="sampleSelect") Add to sample
-          select(ng-model="model.sampleId" id="sampleSelect" class="form-control form-control-sm c-select")
+          select(ng-model="model.sampleId" id="sampleSelect" class="form-control form-control-sm c-select c-select-sm")
             option(ng-repeat="option in sampleService.samples" value="{{option.id}}") {{sampleService.getDisplayName(option)}}
       div(class="col-sm-6")
         div(class="form-group label-floating")

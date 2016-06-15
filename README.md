@@ -5,7 +5,7 @@ NDB is a collection of services for managing annotated neuron data.
 After installation the various services are available on dedicated ports of the host machine.  For example, the SWC file services are available in the 965x range.  The primary interface will be exposed on port 80.
 
 ## Architecture
-The current vision is to separate the raw data sources from primary, interactive site.  For example, standard SWC files will be managed by a set of SWC services and stored in a database instance aligned with the raw data.  A similar set of resources would exist for additional sources, such as a custom format with additional annotations.
+The current design separates the raw data sources from primary, interactive site.  For example, standard SWC files are managed by a set of SWC services and stored in a database instance aligned with the raw data.  A similar set of resources would exist for additional sources, such as a custom format with additional annotations.
 
 These raw sources will be transformed and collated into a combined repository/database that will back the generally available query service.
 
@@ -16,7 +16,7 @@ Some of the reasons and motivations:
 * Content from the "original" source databases can be collated into multiple "primary" repositories, for example a private internal and public external,  using different transformation rules and behaviors
 
 ## Installation
-The current implementation uses Docker to manage the multiple independent services.  It has been tested on OS X and Linux (Ubuntu and CentOS).  Although individual containers will also work on Windows Docker installations, Docker Compose is not supported on Windows at the time of this writing.  Docker Compose simplifies launching the collection of services as a system.  OS X has only been tested with VMWare fusion as the host and not VirtualBox which is builtin/default with the OS X Docker installer.
+The current implementation uses Docker to manage the multiple independent services.  It has been tested on OS X and Linux (Ubuntu\).  Although individual containers will also work on Windows Docker installations, Docker Compose is not supported on Windows at the time of this writing.  Docker Compose simplifies launching the collection of services as a system.  OS X has only been tested with VMWare fusion as the host but not VirtualBox which is builtin/default with the OS X Docker installer.
 
 ### Docker Engine and Compose
 Standard installation of Docker Enginge and Compose on Mac OS X and Linux  are sufficient.  Be sure to follow the instructions for installing the latest version of Compose.  Not all package repositories contain the latest version at the time of this writing.  Current minimum versions are:
@@ -36,15 +36,20 @@ From a native Linux host or a Docker Machine session in the root directory of th
 docker-compose stop
 ```
 
-2. Build the custom images
+2. Copy shared code
+```
+cp -r shared sample-web/
+cp -r shared swc-web/
+```
+3. Build the custom images
 ```
 docker-compose build
 ```
 For the first build on a new host this will take some time.
 
-3. Start the services
+4. Start the services
 ```
 docker-compose up
 ```
 
-Databases use Data Volume Containers.  The above procedure will not wipe existing data as listed, however there are variations of these commands that will remove containers and their associated volumes.  The data backup service should prevent a catastrophic loss, but use caution if modifying containers and volumes or using other Engine, Compose, or Machine commands.
+The databases use Data Volume Containers.  The above procedure will not wipe existing data as listed, however there are variations of these commands that will remove containers and their associated volumes.  A data backup service should prevent a catastrophic loss, but use caution if modifying containers and volumes or using other Engine, Compose, or Machine commands.

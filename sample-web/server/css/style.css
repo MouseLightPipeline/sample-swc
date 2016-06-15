@@ -29,6 +29,10 @@ body {
   color: white;
 }
 
+.c-select {
+  color: black;
+}
+
 .form-group label.control-label {
   color: #dfdfdf;
 }

@@ -24,7 +24,7 @@ div(class="row", ng-controller="createSampleController")
       div(class="col-sm-6")
         div(class="form-group label-floating")
           label(class="control-label" for="injectionSelect") Injection Location
-          div(class="input-group input-group-sm")
+          div(class="input-group")
             select(ng-model="model.injectionLocation" id="injectionSelect" class="form-control form-control-sm c-select btn-raised" ng-disabled="!injectionService.resourcesAreAvailable")
               option(ng-repeat="option in injectionService.injectionLocations" value="{{option.id}}") {{option.name}}
             span(class="input-group-btn")
@@ -33,7 +33,7 @@ div(class="row", ng-controller="createSampleController")
       div(class="col-sm-6")
         div(class="form-group label-floating")
           label(class="control-label" for="transformSelect") Registration Transform
-          div(class="input-group input-group-sm")
+          div(class="input-group")
             select(ng-model="model.registrationTransform" id="transformSelect" class="form-control form-control-sm c-select" ng-disabled="!transformService.resourcesAreAvailable")
               option(ng-repeat="option in transformService.transforms" value="{{option.id}}") {{option.name}}
             span(class="input-group-btn")
@@ -43,7 +43,7 @@ div(class="row", ng-controller="createSampleController")
       div(class="col-sm-6")
         div(class="form-group label-floating")
           label(class="control-label" for="virusSelect") Virus
-          div(class="input-group input-group-sm")
+          div(class="input-group")
             select(ng-model="model.virus" id="virusSelect" class="form-control form-control-sm c-select" ng-disabled="!virusService.resourcesAreAvailable")
               option(ng-repeat="option in virusService.viruses" value="{{option.id}}") {{option.name}}
             span(class="input-group-btn")
@@ -52,7 +52,7 @@ div(class="row", ng-controller="createSampleController")
       div(class="col-sm-6")
         div(class="form-group label-floating")
           label(class="control-label" for="strainSelect") Strains for {{nameForVirus(model.virus)}}
-          div(class="input-group input-group-sm")
+          div(class="input-group")
             select(ng-model="model.strain" id="strainSelect" class="form-control form-control-sm c-select" ng-disabled="(model.virus.length) === 0 || (strainsForVirus.length === 0) ||  !strainService.resourcesAreAvailable")
               option(ng-repeat="option in strainsForVirus" value="{{option.id}}") {{option.name}}
             span(class="input-group-btn")
