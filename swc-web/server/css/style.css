@@ -41,29 +41,22 @@ p.partial {
   text-align: center;
 }
 
+div.main-section {
+  padding: 40px 40px 40px 40px;
+}
+
 #landing {
   min-height: 300px;
   padding: 40px 20px 20px 20px;
 }
 
-#upload {
-  padding: 40px 40px 40px 40px;
-}
-
-#search {
-  padding: 40px 40px 40px 40px;
-}
-
-#status {
-  padding: 40px 40px 40px 40px;
-}
-
 #footer {
-  font-size: 14px;
+  font-size: 12px;
   position: fixed;
   bottom: 0;
   width: 100%;
-  padding: 20px;
+  padding: 10px;
+  z-index: 1000;
 }
 
 div.error {

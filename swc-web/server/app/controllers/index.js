@@ -7,5 +7,5 @@ module.exports = function (app) {
 };
 
 router.get('/', function (req, res, next) {
-    res.render('index', {});
+    res.render('index', {appName: 'tracingManager', appController: 'appController', title: 'Mouse Light Tracing Manager'});
 });

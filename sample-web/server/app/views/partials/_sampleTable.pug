@@ -1,0 +1,22 @@
+div(ng-controller="sampleTableController")
+  table(class="table table-sm", ng-show="sampleService.resourcesAreAvailable && sampleService.samples.length > 0")
+    thead
+      tr
+        th Id
+        th Tag
+        th Date
+        th Injection
+        th Registration
+        th Strain
+    tbody
+      tr(ng-repeat="s in sampleService.samples")
+        td {{s.idNumber}}
+        td {{s.tag || '(none)'}}
+        td {{s.sampleDate | date: 'yyyy-MM-dd'}}
+        td {{s.injection ? s.injectionLocation.name : '(none)'}}
+        td {{s.registrationTransform ? s.registrationTransform.name : '(none)'}}
+        td {{formatStrain(s.strain)}}
+  div(class="centered" ng-show="sampleService.resourcesAreAvailable && sampleService.samples.length == 0")
+    h5 There are no samples in the database.  Define samples in the "Create" section.
+  div(class="centered" ng-show="!sampleService.resourcesAreAvailable")
+    i(class="fa fa-spinner fa-spin" style="font-size:48px")

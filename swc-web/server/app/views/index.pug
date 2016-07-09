@@ -1,0 +1,91 @@
+extends layout
+block js
+  script(src='/lib/jquery.min.js')
+  script(src='/lib/angular.min.js')
+  script(src='/lib/angular-resource.min.js')
+  script(src='/lib/dirPagination.js')
+  script(src='/lib/tether.min.js')
+  script(src='/lib/bootstrap.min.js')
+  script(src='/lib/dataService.js')
+  script(src='/lib/brainAreaService.js')
+  script(src='/lib/injectionService.js')
+  script(src='/lib/neuronService.js')
+  script(src='/lib/sampleService.js')
+  script(src='/lib/strainService.js')
+  script(src='/lib/structureIdentifierService.js')
+  script(src='/lib/tracingNodeService.js')
+  script(src='/lib/tracingService.js')
+  script(src='/lib/transformService.js')
+  script(src='/lib/virusService.js')
+  script(src='/app/app.js')
+  script(src='/app/directives/fileinput.js')
+  script(src='/app/services/apiAccessService.js')
+  script(src='/app/controllers/appController.js')
+  script(src='/app/controllers/createTracingController.js')
+  script(src='/app/controllers/tracingTableController.js')
+  script(src='/app/controllers/queryController.js')
+
+block content
+  div(class="blue", id="landing")
+    div(class="row centered")
+      h1 Tracing Manager
+      hr(class="partial")
+      p(class="partial").
+        An interactive server to upload and query tracings defined by SWC files.
+    div(class="row")
+      h3(class="centered") Services Provided
+    br
+    div(class="row")
+      div(class="col-md-2 col-xs-1 centered")
+      div(class="col-md-4 col-xs-5 centered")
+        a(href="#upload" class="iconlink")
+          i(class="fa fa-cloud-upload fa-3x")
+          p(class="lead") Upload tracings from SWC files
+      div(class="col-md-4 col-xs-5 centered")
+        a(href="#search" class="iconlink")
+          i(class="fa fa-search fa-3x")
+          p(class="lead") Query tracings and nodes
+  div(class="orange main-section", id="upload")
+    div(class="row centered")
+    h2(class="centered") CONTRIBUTE
+    include ./partials/_contribute
+  div(class="blue main-section")
+    div(class="row centered")
+    h2(class="centered") LIST
+    include ./partials/_listTraces
+  div(class="orange main-section", id="search", ng-controller="queryController")
+    div(class="row")
+      h2(class="centered") SEARCH
+      form(class="inset")
+        fieldset(class="form-group")
+          label(for="structure") Structure Id
+          br
+          select(class="c-select", id="structure", ng-model="structureId")
+            option(ng-repeat="option in structureIdentifierService.structures" value="{{option.id}}") {{option.name}}
+          button(type="submit" class="btn btn-primary left", ng-click="query()" ng-disabled="isInQuery || structureId.length == 0")
+            i(class="fa fa-search" ng-show="!isInQuery")
+            i(class="fa fa-spinner fa-spin" ng-show="isInQuery")
+            span(class="left")   Search
+          span(class="left" ng-show="!isInQuery") {{queryResults}}
+      div
+        dir-pagination-controls(template-url="/lib/dirPagination.tpl.html", boundary-links="true", pagination-id="query_nodes")
+      table(class="table table-sm")
+        thead
+          tr
+            th File
+            th Sample Number
+            th X
+            th Y
+            th Z
+            th Radius
+            th Parent Sample Number
+        tbody
+          tr(dir-paginate="s in samples | itemsPerPage: 20" pagination-id="query_nodes")
+            td {{s.Tracing.filename}}
+            td {{s.sampleNumber}}
+            td {{s.x}}
+            td {{s.y}}
+            td {{s.z}}
+            td {{s.radius}}
+            td {{s.parentNumber}}
+  div(id="footer", class="container-fluid dark") Mouse Light Neuron Data Browser Copyright © 2016 Howard Hughes Medical Institute 

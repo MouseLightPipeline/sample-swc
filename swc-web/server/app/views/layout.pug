@@ -1,0 +1,17 @@
+doctype html
+html(lang='en', ng-app= appName)
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport', content='width=device-width')
+    block title
+      title= title
+    block css
+      link(rel='stylesheet', href='/css/tether.min.css')
+      link(rel='stylesheet', href='/css/bootstrap.min.css')
+      link(rel='stylesheet', href='/css/style.css')
+    block css
+    block js
+    if ENV_DEVELOPMENT
+      script(src='http://localhost:34731/livereload.js')
+  body(ng-controller= appController)
+    block content

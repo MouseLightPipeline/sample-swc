@@ -1,12 +1,12 @@
 'use strict';
 
 var util = require('util');
-
-var models = require('../models/index');
-
 var fs = require('fs'), byline = require('byline');
-
 var io = require('../../app.js').io;
+
+var app = require('../../app');
+var errors = require('../helpers/errors');
+var models = require('../models/index');
 
 /*
 For a controller you should export the functions referenced in your Swagger document by name.
@@ -19,11 +19,15 @@ module.exports = {
     post: post,
 };
 
+var currentStructureMap = {};
+
 function post(req, res) {  
+    //console.log('start post');
+    //console.log(req.file);
     if (!req.app.locals.dbready) {
         return res.status(503).send({code: 503, message: 'Database service unavailable'});
     }
-  
+  /*
     req.file('contents').upload(function (err, uploadedFiles) {
         if (err) {
             console.log(err);
@@ -35,30 +39,56 @@ function post(req, res) {
         }
     
         var tmpFile = uploadedFiles[0];
+    */
+    var tmpFile = req.file.path;
+    var originalName = req.file.originalname;
     
-        var stream = byline(fs.createReadStream(tmpFile.fd, { encoding: 'utf8' }));
+    //console.log('rec ' + tmpFile)
+        var stream = byline(fs.createReadStream(tmpFile, { encoding: 'utf8' }));
 
         var comments = '';
     
-        var submitter = req.swagger.params.submitter.value || '';
-        var tag = req.swagger.params.tag.value || '';
-    
-        var swcFile = {submitter: submitter, tag: tag, filename: uploadedFiles[0].filename, comments: comments};
+        var annotator = req.swagger.params.annotator.value || '';
 
-        var samples = []
-  
-        stream.on('data', function(line) {
-            onData(line, samples, comments)
-        });
+        var neuronId = req.swagger.params.neuronId.value || '';
     
-        stream.on('end', function() {
-            swcFile.comments = comments;
-            onComplete(res, swcFile, samples, tmpFile);
-        });
-    });
+        var tracing = {
+            filename: originalName,
+            annotator: annotator,
+            neuronId: neuronId,
+            comments: comments,
+            offsetX: 0,
+            offsetY: 0,
+            offsetZ: 0
+        };
+        
+        //console.log(tracing);
+
+        currentStructureMap = {};
+ 
+        models.StructureIdentifier.findAll().then((structures) => {
+            structures.forEach((obj) => {
+                currentStructureMap[obj.value] = obj.id;
+            });
+
+            var samples = [];
+  
+            stream.on('data', function(line) {
+                onData(line, samples, comments)
+            });
+    
+            stream.on('end', function() {
+                tracing.comments = comments;
+                onComplete(res, tracing, samples, tmpFile);
+            });
+        }).catch(function(err){
+            res.status(500).json(errors.sequelizeError(err));
+        });        
+        //});
 }
 
 function onData(line, samples, comments) {
+    //console.log('data');
     var data = line.trim();
 
     if (data.length > 0 ) {
@@ -67,32 +97,51 @@ function onData(line, samples, comments) {
         } else {
             data = data.split(' ');
             if (data.length == 7) {
-                samples.push({sampleNumber: parseInt(data[0]), structure: parseInt(data[1]), x: parseFloat(data[2]),y: parseFloat(data[3]),
-                    z: parseFloat(data[4]), radius: parseFloat(data[5]), parentNumber: parseInt(data[6])});
+                var sample = {
+                    sampleNumber: parseInt(data[0]),
+                    structureIdentifierId: currentStructureMap[parseInt(data[1])],
+                    x: parseFloat(data[2]),
+                    y: parseFloat(data[3]),
+                    z: parseFloat(data[4]),
+                    radius: parseFloat(data[5]),
+                    parentNumber: parseInt(data[6])
+                };
+                if (isNaN(sample.sampleNumber) || isNaN(sample.parentNumber)) {
+                    // console.log('Unexpected line in swc file - not a comment and sample and/or parent number is NaN');
+                } else {
+                    samples.push(sample);
                 }
             }
         }
     }
+}
 
-    function onComplete(res, swcFile, samples, tmpFile) {
-        var file = null;
+function onComplete(res, tracingData, samples, tmpFile) {
   
-        fs.unlink(tmpFile.fd);
-
-        models.sequelize.transaction(function(t) {
-            return models.SwcFile.create(swcFile, {transaction: t}).then(function(newFile) {
-                file = newFile;
-                samples.forEach(function(sample) {
-                    sample.fileId = newFile.id;
-                });
-                models.NeuronSample.bulkCreate(samples);
-            })
-        }).then(function(result) {
-            models.SwcFile.count().then(function(val) { io.emit('file_count', val)});
-            models.NeuronSample.count().then(function(val) { io.emit('sample_count', val)});
-            return res.status(200).send(file);
-        }).catch(function(err) {
-            console.log(err);
-            return res.status(500).send({code: 500, message: 'File upload error', details: err});
-        });      
+    console.log('complete');
+    
+    // remove temporary upload
+    fs.unlink(tmpFile);
+    
+    if (samples.length == 0) {
+        res.status(500).json(errors.noSamplesInSwcFile(tracingData.filename));
+        return;
     }
+    
+    var tracing = null;
+    
+    models.sequelize.transaction(function(t) {
+        return models.Tracing.create(tracingData, {transaction: t}).then(function(createdTracing) {
+            tracing = createdTracing;
+            samples.forEach(function(sample) {
+                sample.tracingId = tracing.id;
+            });
+            models.TracingNode.bulkCreate(samples);
+        })
+    }).then(function(result) {
+        app.broadcast();
+        return res.status(200).send(tracing);
+    }).catch(function(err) {
+        res.status(500).json(errors.sequelizeError(err));
+    });      
+}

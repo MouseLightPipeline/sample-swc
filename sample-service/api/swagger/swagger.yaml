@@ -1,0 +1,659 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  description: "Manage static/mostly static ndb data"
+  title: Static Data
+# basePath prefixes all resource paths 
+basePath: /api/v1
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  /samples:
+    x-swagger-router-controller: sample
+    get:
+      summary: Sample definitions
+      tags:
+        - Samples
+      responses:
+        200:
+          description: An array of files
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Sample"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      tags:
+        - Samples
+      summary: Add a new sample
+      description: ""
+      operationId: post
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Sample object that needs to be added
+          required: false
+          schema:
+            $ref: "#/definitions/SamplePost"
+      responses:
+        "405":
+          description: Invalid input
+  /samples/{sampleId}:
+    x-swagger-router-controller: sample
+    get:
+      summary: Sample definitions
+      tags:
+        - Samples
+      operationId: getSampleById
+      parameters:
+        - name: sampleId
+          in: path
+          description: Sample object to find
+          required: true
+          type: string
+      responses:
+        200:
+          description: The sample
+          schema:
+            $ref: "#/definitions/Sample"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /neurons:
+    x-swagger-router-controller: neuron
+    get:
+      summary: Neuron definitions
+      operationId: get
+      tags:
+        - Neurons
+      responses:
+        200:
+          description: An array of files
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Neuron'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      summary: Add a new neuron
+      description: ""
+      tags:
+        - Neurons
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Neuron object that needs to be added
+          required: false
+          schema:
+            $ref: "#/definitions/NeuronPost"
+      responses:
+        "405":
+          description: Invalid input
+  /neurons/{neuronId}:
+    x-swagger-router-controller: neuron
+    get:
+      summary: Get neuron definition
+      tags:
+        - Neurons
+      operationId: getNeuronById
+      parameters:
+        - name: neuronId
+          in: path
+          description: Neuron object to find
+          required: true
+          type: string
+      responses:
+        200:
+          description: The Neuron
+          schema:
+            $ref: "#/definitions/Neuron"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /samples/{sampleId}/neurons:
+    x-swagger-router-controller: neuron
+    get:
+      summary: Neurons for a sample
+      operationId: getNeuronsForSample
+      tags:
+        - Samples
+        - Neurons
+      parameters:
+        - name: sampleId
+          in: path
+          description: Sample id for neuron lookup
+          required: true
+          type: string
+      responses:
+        200:
+          description: An array of neurons for the given sample
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Neuron'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /injections:
+    x-swagger-router-controller: injection
+    get:
+      summary: Injection location definitions
+      tags:
+        - Injection Locations
+      responses:
+        200:
+          description: An array of files
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/InjectionLocation'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      summary: Add a new injection location
+      description: ""
+      tags:
+        - Injection Locations
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Injection location to add
+          required: true
+          schema:
+            $ref: "#/definitions/InjectionLocationPost"
+      responses:
+        "405":
+          description: Invalid input
+  /injections/{injectionId}:
+    x-swagger-router-controller: injection
+    get:
+      summary: Injection location by id
+      tags:
+        - Injection Locations
+      operationId: getInjectionById
+      parameters:
+        - name: injectionId
+          in: path
+          description: Injection location to find
+          required: true
+          type: string
+      responses:
+        200:
+          description: The inection location
+          schema:
+            $ref: "#/definitions/InjectionLocation"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /transforms:
+    x-swagger-router-controller: registrations
+    get:
+      summary: Registration transform definitions
+      tags:
+        - Registration Transforms
+      responses:
+        200:
+          description: An array of files
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/RegistrationTransform'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      summary: Add a new registration transform
+      description: ""
+      tags:
+        - Registration Transforms
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Registration transform to add
+          required: true
+          schema:
+            $ref: "#/definitions/RegistrationTransformPost"
+      responses:
+        "405":
+          description: Invalid input
+  /transforms/{transformId}:
+    x-swagger-router-controller: registrations
+    get:
+      summary: Transform by id
+      tags:
+        - Registration Transforms
+      operationId: getTransformById
+      parameters:
+        - name: transformId
+          in: path
+          description: Registration transform to find
+          required: true
+          type: string
+      responses:
+        200:
+          description: The registration transform
+          schema:
+            $ref: "#/definitions/RegistrationTransform"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /viruses:
+    x-swagger-router-controller: virus
+    get:
+      summary: Virus definitions
+      tags:
+        - Viruses
+      responses:
+        200:
+          description: An array of files
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Virus'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      summary: Add a new virus
+      description: ""
+      tags:
+        - Viruses
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Virus to add
+          required: true
+          schema:
+            $ref: "#/definitions/VirusPost"
+      responses:
+        "405":
+          description: Invalid input
+  /viruses/{virusId}:
+    x-swagger-router-controller: virus
+    get:
+      summary: Virus by id
+      tags:
+        - Viruses
+      operationId: getVirusById
+      parameters:
+        - name: virusId
+          in: path
+          description: Virus id to find
+          required: true
+          type: string
+      responses:
+        200:
+          description: The inection location
+          schema:
+            $ref: "#/definitions/Virus"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /viruses/{virusId}/strains:
+    x-swagger-router-controller: strain
+    get:
+      summary: Strain definitions for the specified virus
+      operationId: getStrainsForVirus
+      tags:
+        - Viruses
+      parameters:
+        - name: virusId
+          in: path
+          description: Virus id for strain lookup
+          required: true
+          type: string
+      responses:
+        200:
+          description: An array of strains for the specified virus
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Strain'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /strains:
+    x-swagger-router-controller: strain
+    get:
+      summary: Strain definitions
+      tags:
+        - Viruses
+      responses:
+        200:
+          description: An array of files
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Strain'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      summary: Add a new strain
+      description: ""
+      tags:
+        - Viruses
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Strain to add
+          required: true
+          schema:
+            $ref: "#/definitions/StrainPost"
+      responses:
+        "405":
+          description: Invalid input
+  /strains/{strainId}:
+    x-swagger-router-controller: strain
+    get:
+      summary: Strain by id
+      tags:
+        - Viruses
+      operationId: getStrainById
+      parameters:
+        - name: strainId
+          in: path
+          description: Strain id to find
+          required: true
+          type: string
+      responses:
+        200:
+          description: The strain
+          schema:
+            $ref: "#/definitions/Strain"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /brainareas:
+    x-swagger-router-controller: brainareas
+    get:
+      summary: Brain area definitions
+      tags:
+        - Neurons
+      responses:
+        200:
+          description: An array of brain area definitions
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/BrainArea'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /swagger:
+    x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+  Sample:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id
+      idNumber:
+        type: integer
+        description: Public id number
+      sampleDate:
+        type: string
+        format: date-time
+        description: Datestamp
+      comment:
+        type: string
+        description: Comments
+      createdAt:
+        type: string
+        format: date-time
+        description: Creation time
+      updatedAt:
+        type: string
+        format: date-time
+        description: Update time
+  SamplePost:
+    type: object
+    properties:
+      idNumber:
+        type: integer
+        description: Public id number
+      sampleDate:
+        type: string
+        format: date-time
+        description: Datestamp
+      comment:
+        type: string
+        description: Comments
+      injectionLocationId:
+        type: string
+        description: Injection location reference id
+      registrationTransformId:
+        type: string
+        description: Registration tranform reference id
+      strainId:
+        type: string
+        description: Strain
+  Neuron:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id
+      sampleId:
+        type: string
+        description: Sample reference id
+      createdAt:
+        type: string
+        format: date-time
+        description: Creation time
+      updatedAt:
+        type: string
+        format: date-time
+        description: Update time
+  NeuronPost:
+    type: object
+    properties:
+      sampleId:
+        type: string
+        description: Sample reference id
+      brainAreaId:
+        type: string
+        description: Brain area reference id
+      x:
+        type: number
+        format: double
+        description: Soma X location
+      y:
+        type: number
+        format: double
+        description: Soma Y location
+      z:
+        type: number
+        format: double
+        description: Soma Z location
+  InjectionLocation:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id
+      name:
+        type: string
+        description: Name
+      mutable:
+        type: boolean
+        description: Mutability
+      createdAt:
+        type: string
+        format: date-time
+        description: Creation time
+      updatedAt:
+        type: string
+        format: date-time
+        description: Update time
+  InjectionLocationPost:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name
+  RegistrationTransform:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id
+      name:
+        type: string
+        description: Name
+      mutable:
+        type: boolean
+        description: Mutability
+      createdAt:
+        type: string
+        format: date-time
+        description: Creation time
+      updatedAt:
+        type: string
+        format: date-time
+        description: Update time
+  RegistrationTransformPost:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name
+  Virus:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id
+      name:
+        type: string
+        description: Name
+      mutable:
+        type: boolean
+        description: Mutability
+      createdAt:
+        type: string
+        format: date-time
+        description: Creation time
+      updatedAt:
+        type: string
+        format: date-time
+        description: Update time
+  VirusPost:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name
+  Strain:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id
+      virusId:
+        type: string
+        description: Virus reference id
+      name:
+        type: string
+        description: Name
+      mutable:
+        type: boolean
+        description: Mutability
+      createdAt:
+        type: string
+        format: date-time
+        description: Creation time
+      updatedAt:
+        type: string
+        format: date-time
+        description: Update time
+  StrainPost:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name
+      virusId:
+        type: string
+        description: Virus reference id
+  BrainArea:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id
+      abiIdNumber:
+        type: integer
+      abiName:
+        type: string
+        description: Name
+      createdAt:
+        type: string
+        format: date-time
+        description: Creation time
+      updatedAt:
+        type: string
+        format: date-time
+        description: Update time
+  Error: 
+    type: object
+    required:
+      - message
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string

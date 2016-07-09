@@ -1,95 +1,101 @@
 version: '2'
 services:
-  swc-datastore:
+### Janelia sample/neuron entries and constants
+  sample-datastore:
     image: postgres:latest
     volumes:
-      - /swcdbstore
+      - /sampledbstore
     entrypoint: /bin/bash
-  swc-db-server:
+  sample-db-server:
+    image: postgres:latest
+    volumes:
+      - ./sample-datastore:/docker-entrypoint-initdb.d
+    volumes_from:
+      - sample-datastore
+    environment:
+      POSTGRES_PASSWORD: pgsecret
+      PGDATA: /sampledbstore/pgdata
+    ports:
+      - 5433:5432
+  sample-service:
+    build: ./sample-service
+    environment:
+      NODE_ENV: production
+    command: node /app/app.js
+    ports:
+      - 9641:9641
+    links:
+      - "sample-db-server:sampledatabase"
+  sample-status:
+    build: ./sample-status
+    environment:
+      NODE_ENV: production
+      SAMPLE_SERVICE_PORT: 9641
+    command: node /app/dist/server/app.js
+    ports:
+      - 9642:9642
+    links:
+      - "sample-service:sampleservice"
+  sample-web:
+    build: ./sample-web
+    environment:
+      NODE_ENV: production
+      SAMPLE_SERVICE_PORT: 9641
+      SAMPLE_STATUS_PORT: 9642
+    command: node /app/dist/server/app.js
+    ports:
+      - 9643:9643
+    links:
+      - "sample-service:sampleservice"
+      - "sample-status:samplestatus"
+### SWC raw tracing entries
+  tracing-datastore:
+    image: postgres:latest
+    volumes:
+      - /tracingdbstore
+    entrypoint: /bin/bash
+  tracing-db-server:
     image: postgres:latest
     volumes:
       - ./swc-datastore:/docker-entrypoint-initdb.d
     volumes_from:
-      - swc-datastore
+      - tracing-datastore
     environment:
       POSTGRES_PASSWORD: pgsecret
-      PGDATA: /swcdbstore/pgdata
+      PGDATA: /tracingdbstore/pgdata
     ports:
-      - "5432:5432"
-  swc-service:
+      - 5432:5432
+  tracing-service:
     build: ./swc-service
     environment:
       NODE_ENV: production
     command: node /app/app.js
     ports:
-      - "9651:9651"
+      - 9651:9651
     links:
-      - swc-db-server:swcdatabase
-    depends_on:
-      - swc-db-server
-  swc-status:
+      - "tracing-db-server:swcdatabase"
+  tracing-status:
     build: ./swc-status
     environment:
       NODE_ENV: production
-      SWC_SERVICE_PORT: 9651
+      SWC_SERVICE_PORT: 9652
     command: node /app/dist/server/app.js
     ports:
-      - "9652:9652"
+      - 9652:9652
     links:
-      - swc-service:swcservice
-      - swc-web:swcweb
-    depends_on:
-      - swc-service
-  swc-web:
+      - "tracing-service:tracingervice"
+  tracing-web:
     build: ./swc-web
     environment:
       NODE_ENV: production
       SWC_SERVICE_PORT: 9651
+      SWC_STATUS_PORT: 9652
+      SAMPLE_SERVICE_PORT: 9641
     command: node /app/dist/server/app.js
     ports:
-      - "9653:9653"
+      - 9653:9653
     links:
-      - swc-service:swcservice
-    depends_on:
-      - swc-service
-  ndb-datastore:
-    image: arangodb/arangodb:latest
-    volumes:
-      - /ndbdatastore
-    entrypoint: /bin/bash
-  ndb-db:
-    image: arangodb/arangodb:latest
-    volumes_from:
-      - ndb-datastore
-    volumes:
-      - ./ndb-datastore/foxx:/var/lib/arangodb-apps/
-    environment:
-      ARANGO_ROOT_PASSWORD: arsecret
-    links:
-    - swc-service:swcservice
-    ports:
-      - "8529:8529"
-  ndb-db-initializer:
-    build: ./ndb-datastore
-    environment:
-      ARANGO_ROOT_PASSWORD: arsecret
-      NODE_ENV: production
-      MAIN_DB_PORT: 8529
-    volumes_from:
-      - ndb-datastore
-    volumes:
-      - ./ndb-datastore/foxx:/var/lib/arangodb-apps/
-    links:
-      - ndb-db:database
-    command: node /app/app.js
-  ndb-web:
-    build: ./ndb-web
-    environment:
-      ARANGO_ROOT_PASSWORD: arsecret
-      NODE_ENV: production
-      MAIN_DB_PORT: 8529
-    links:
-      - ndb-db:database
-    ports:
-      - "9663:9663"
-    command: node /app/dist/server/app.js
+      - "tracing-service:tracingservice"
+      - "tracing-status:tracingstatus"
+### NDB Front End
+

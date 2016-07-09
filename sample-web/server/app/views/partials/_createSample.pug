@@ -1,0 +1,72 @@
+div(class="row", ng-controller="createSampleController")
+  include ./_createInjectionModal
+  include ./_createRegistrationModal
+  include ./_createVirusModal
+  include ./_createStrainModal
+  h4(class="centered") SAMPLES
+  div(class="row" ng-show="(lastCreateMessage.length > 0) || (lastCreateError.length > 0)")
+    div(class="col-sm-12 inset")
+      div(class="alert alert-success" ng-show="lastCreateMessage.length > 0")
+        span {{lastCreateMessage}}
+      div(class="alert alert-danger" ng-show="lastCreateError.length > 0")
+        span {{lastCreateError}}
+  form(class="inset")
+    div(class="row")
+      div(class="col-sm-6")
+        div(ng-class="['form-group', 'label-floating', {'has-warning': !isValidIdNumber}]")
+          label(class="control-label" for="sampleIdNumber") Sample Id Number
+          input(type="text", class="form-control form-control-sm", id="sampleIdNumber", ng-model="model.idNumber")
+      div(class="col-sm-6")
+        div(ng-class="['form-group', 'label-floating', {'has-warning': !isValidDate}]")
+          label(class="control-label" for="date") Date (yyyy-mm-dd)
+          input(type="text", class="form-control form-control-sm", id="date", ng-model="model.sampleDate")
+    div(class="row")
+      div(class="col-sm-6")
+        div(class="form-group label-floating")
+          label(class="control-label" for="injectionSelect") Injection Location
+          div(class="input-group")
+            select(ng-model="model.injectionLocation" id="injectionSelect" class="form-control form-control-sm c-select btn-raised" ng-disabled="!injectionService.resourcesAreAvailable")
+              option(ng-repeat="option in injectionService.injectionLocations" value="{{option.id}}") {{option.name}}
+            span(class="input-group-btn")
+              button(class="btn btn-info btm-sm]', " type="button" data-toggle="modal" data-target="#createInjectionModal")
+                i(ng-class="['fa', {'fa-spinner': !injectionService.resourcesAreAvailable, 'fa-spin': !injectionService.resourcesAreAvailable, 'fa-plus': injectionService.resourcesAreAvailable}]")
+      div(class="col-sm-6")
+        div(class="form-group label-floating")
+          label(class="control-label" for="transformSelect") Registration Transform
+          div(class="input-group")
+            select(ng-model="model.registrationTransform" id="transformSelect" class="form-control form-control-sm c-select" ng-disabled="!transformService.resourcesAreAvailable")
+              option(ng-repeat="option in transformService.transforms" value="{{option.id}}") {{option.name}}
+            span(class="input-group-btn")
+              button(class="btn btn-info btm-sm" type="button" data-toggle="modal" data-target="#createRegistrationModal")
+                i(ng-class="['fa', {'fa-spinner': !transformService.resourcesAreAvailable, 'fa-spin': !transformService.resourcesAreAvailable, 'fa-plus': transformService.resourcesAreAvailable}]")
+    div(class="row")
+      div(class="col-sm-6")
+        div(class="form-group label-floating")
+          label(class="control-label" for="virusSelect") Virus
+          div(class="input-group")
+            select(ng-model="model.virus" id="virusSelect" class="form-control form-control-sm c-select" ng-disabled="!virusService.resourcesAreAvailable")
+              option(ng-repeat="option in virusService.viruses" value="{{option.id}}") {{option.name}}
+            span(class="input-group-btn")
+              button(class="btn btn-info btm-sm" type="button" data-toggle="modal" data-target="#createVirusModal")
+                i(ng-class="['fa', {'fa-spinner': !virusService.resourcesAreAvailable, 'fa-spin': !virusService.resourcesAreAvailable, 'fa-plus': virusService.resourcesAreAvailable}]")
+      div(class="col-sm-6")
+        div(class="form-group label-floating")
+          label(class="control-label" for="strainSelect") Strains for {{nameForVirus(model.virus)}}
+          div(class="input-group")
+            select(ng-model="model.strain" id="strainSelect" class="form-control form-control-sm c-select" ng-disabled="(model.virus.length) === 0 || (strainsForVirus.length === 0) ||  !strainService.resourcesAreAvailable")
+              option(ng-repeat="option in strainsForVirus" value="{{option.id}}") {{option.name}}
+            span(class="input-group-btn")
+              button(class="btn btn-info btm-sm" type="button" data-toggle="modal" data-target="#createStrainModal")
+                i(ng-class="['fa', {'fa-spinner': !strainService.resourcesAreAvailable, 'fa-spin': !strainService.resourcesAreAvailable, 'fa-plus': strainService.resourcesAreAvailable}]")
+    div(class="row")
+      div(class="col-sm-3")
+        div(class="form-group label-floating")
+          label(class="control-label" for="sampleTag") Tag
+          input(type="text", class="form-control form-control-sm", id="sampleTag", placeholder="", ng-model="model.tag")
+      div(class="col-sm-9")
+        div(class="form-group label-floating")
+          label(class="control-label" for="comment") Comments
+          input(type="text", class="form-control form-control-sm", id="comment", placeholder="", ng-model="model.comments")
+    div(class="row")
+      div(class="col-sm-2")
+        button(type="submit" class="btn btn-info btn-sm btn-raised", ng-disabled='!canCreateSample()' ng-click="createSample()") Create

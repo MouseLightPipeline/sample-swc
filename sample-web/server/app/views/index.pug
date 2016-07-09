@@ -1,0 +1,78 @@
+extends layout
+block js
+  script(src='/lib/socket.io.js')
+  script(src='/lib/dataService.js')
+  script(src='/lib/brainAreaService.js')
+  script(src='/lib/injectionService.js')
+  script(src='/lib/neuronService.js')
+  script(src='/lib/sampleService.js')
+  script(src='/lib/strainService.js')
+  script(src='/lib/structureIdentifierService.js')
+  script(src='/lib/tracingNodeService.js')
+  script(src='/lib/tracingService.js')
+  script(src='/lib/transformService.js')
+  script(src='/lib/virusService.js')
+  script(src='/app/helpers/validation.js')
+  script(src='/app/app.js')
+  script(src='/app/services/apiAccessService.js')
+  script(src='/app/controllers/appController.js')
+  script(src='/app/controllers/sampleController.js')
+  script(src='/app/controllers/neuronController.js')
+  script(src='/app/controllers/abstractCreateItemController.js')
+  script(src='/app/controllers/createInjectionController.js')
+  script(src='/app/controllers/createRegistrationController.js')
+  script(src='/app/controllers/createVirusController.js')
+  script(src='/app/controllers/createStrainController.js')
+  script(src='/app/controllers/sampleTableController.js')
+  script(src='/app/controllers/neuronTableController.js')
+block content
+  div(class="blue section")
+    div(class="row centered")
+      h1 Sample and Neuron Manager
+      hr(class="partial")
+      p An interactive service to manage sample definitions and related information.
+    div(class="row")
+      h3(class="centered") Services Provided
+    br
+    div(class="row")
+      div(class="col-md-2 col-xs-1 centered")
+      div(class="col-md-4 col-xs-5 centered")
+        a(href="#upload" class="iconlink")
+          i(class="fa fa-plus-circle fa-3x")
+          p(class="lead") Create definitions
+      div(class="col-md-4 col-xs-5 centered")
+        a(href="#search" class="iconlink")
+          i(class="fa fa-search fa-3x")
+          p(class="lead") Query definitions
+  div(class="orange section")
+    div(class="row")
+      div(class="col-sm-12")
+        h2(class="centered") SUMMARY
+    include ./partials/_summary
+  div(class="blue section" id="query-tables")
+    div(class="row")
+      div(class="col-sm-12")
+        h2(class="centered") QUERY
+    div(class="row")
+      div(class="col-sm-6")
+        h4(class="centered") SAMPLES
+        include ./partials/_sampleTable
+      div(class="col-sm-6")
+        h4(class="centered") NEURONS
+        include ./partials/_neuronTable
+  div(class="orange section", id="create")
+    div(class="row")
+      div(class="col-sm-12")
+        h2(class="centered") CREATE
+    div(class="row")
+      div(class="col-sm-6")
+        include ./partials/_createSample
+      div(class="col-sm-6")
+        include ./partials/_createNeuron
+  div(class="blue section")
+    div(class="row")
+      div(class="col-sm-12")
+        h2(class="centered") DIAGNOSTICS
+    include ./partials/_diagnostics
+  div(id="footer", class="container-fluid dark") Copyright © 2016 Howard Hughes Medical Institute
+  script $.material.init();

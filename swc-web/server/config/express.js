@@ -14,16 +14,18 @@ module.exports = function(app, config) {
   
   app.locals.ENV = env;
   app.locals.ENV_DEVELOPMENT = env == 'development';
-  app.locals.apiHost = config.service;
+  app.locals.serviceHost = config.service;
+  app.locals.statusHost = config.status;
+  app.locals.sampleHost = config.sampleService;
   
   // Proxy to the REST service.
-  app.use('/api/v1', function(req, res) {
-    var url = 'http://' + app.locals.apiHost + '/api/v1' + req.url;
-    req.pipe(request(url)).pipe(res);
-  });
+  //app.use('/api/v1', function(req, res) {
+  //  var url = 'http://' + req.app.locals.serviceHost.host + ':' + req.app.locals.serviceHost.port + '/' + req.app.locals.serviceHost.api + req.url;
+ //   req.pipe(request(url)).pipe(res);
+  //});
   
   app.set('views', config.root + '/app/views');
-  app.set('view engine', 'jade');
+  app.set('view engine', 'pug');
 
   // app.use(favicon(config.root + '/public/img/favicon.ico'));
   app.use(logger('dev'));

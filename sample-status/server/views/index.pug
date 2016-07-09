@@ -1,0 +1,40 @@
+extends layout
+
+block content
+  div(id="landing", class="blue")
+    div(class="row centered")
+      h1 Sample Definition Service Status
+      hr(class="partial")
+      p(class="partial") The Sample Definition service manages samples, neurons, and meta information such as injection locations, registration transformation types, and virus strains.  This status service is a diagnostic element of the NDB system and is generally not directly accessed by users. 
+      p(class="partial") Use this site to quickly view the status of the service.
+      br
+      p(class="lead")
+      p Service is #[span(id="service_status") down]
+      p Database is #[span(id="db_status") unavailable]
+      br
+      h4 #[span(id="neuron_count") ?] neurons in #[span(id="sample_count") ?] samples
+      br
+      div(class="table-counts")
+        table(class="table table-sm table-bordered")
+          tr
+            td Injection locations
+            td #[span(id="injection_count") ?]
+          tr
+            td Registration Transforms
+            td #[span(id="registration_count") ?]
+          tr
+            td Virus Definitions (Strains)
+            td #[span(id="virus_count") ?] (#[span(id="strain_count") ?])
+  div(id="description", class="green")
+    div(class="row")
+      h3(class="centered") Services Provided
+    br
+    div(class="row")
+      div(class="col-md-2 col-xs-1 centered")
+      div(class="col-md-4 col-xs-5 centered")
+        ri(class="fa fa-plus-circle fa-3x")
+        p(class="lead") Create new definitions
+      div(class="col-md-4 col-xs-5 centered")
+        i(class="fa fa-search fa-3x")
+        p(class="lead") Query existing definitions
+  script(src='/lib/io.js')

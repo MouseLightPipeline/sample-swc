@@ -15,25 +15,26 @@ var connected = false;
 
 var serviceSocket = null;
 
-var fileCount = 0;
+var traceCount = 0;
 
-var sampleCount = 0;
+var traceNodeCount = 0;
+
+var structureIdentifierCount = 0;
+
+var markerLocationCount = 0;
 
 var db_status = false;
 
 connectToServiceIO();
 
 io.on('connection', function(socket) {
-  console.log('Web client connected to status service.')
+    console.log('Web client connected to status service.')
   
-  socket.emit('connected', connected);
-  socket.emit('file_count', fileCount);
-  socket.emit('sample_count', sampleCount);
-  socket.emit('db_status', db_status);
-  
-  socket.on('disconnect', function(){
-    console.log('Web client disconnected from status service.')
-  });
+    relayAllStatus();
+    
+    socket.on('disconnect', function(){
+        console.log('Web client disconnected from status service.')
+    });
 });
 
 var env = process.env.NODE_ENV || 'development';
@@ -42,7 +43,7 @@ app.locals.ENV_DEVELOPMENT = env == 'development';
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
 // app.use(favicon(__dirname + '/public/img/favicon.ico'));
 app.use(logger('dev'));
@@ -93,64 +94,81 @@ module.exports = app;
 app.set('port', process.env.PORT || 9652);
 
 var server = http.listen(app.get('port'), function() {
-  console.log('Express server listening on port ' + server.address().port);
+    console.log('Express server listening on port ' + server.address().port);
 });
 
 
 function connectToServiceIO() {
-  serviceHost = 'localhost';
+    serviceHost = 'localhost';
 
-  if (process.env.NODE_ENV === 'production') {
-    serviceHost = 'swcservice';
-  }
+    if (process.env.NODE_ENV === 'production') {
+        serviceHost = 'swcservice';
+    }
   
-  var host = 'http://' + serviceHost + ':9651';
+    var host = 'http://' + serviceHost + ':9651';
   
-  var client = require('socket.io-client');
+    var client = require('socket.io-client');
  
-  var serviceSocket = client.connect(host);
+    var serviceSocket = client.connect(host);
   
-  console.log('Trying to establish socket connection to REST service at ' + host);
+    console.log('Trying to establish socket connection to REST service at ' + host);
   
-  serviceSocket.on('connect', function(msg) {
-    console.log('Connected to REST servivce');
-    connected = true;
-    io.emit('connected', connected);
-  });
-  serviceSocket.on('reconnect', function(msg) {
-    console.log('Reconnected to REST servivce');
-    connected = true;
-    io.emit('connected', connected);
-  });
-  serviceSocket.on('disconnect', function(msg) {
-    console.log('Disconnected from REST servivce');
-    connected = false;
-    sample_count = 0;
-    file_count = 0;
-    db_status = false;
+    serviceSocket.on('connect', function(msg) {
+        console.log('Connected to REST servivce');
+        connected = true;
+        io.emit('connected', connected);
+    });
+    serviceSocket.on('reconnect', function(msg) {
+        console.log('Reconnected to REST servivce');
+        connected = true;
+        io.emit('connected', connected);
+    });
+    serviceSocket.on('disconnect', function(msg) {
+        console.log('Disconnected from REST servivce');
+        connected = false;
+        traceCount = 0;
+        traceNodeCount = 0;
+        structureCount = 0;
+        db_status = false;
+        relayAllStatus();
+    });
+    serviceSocket.on('error', function(msg) {
+        console.log('Error for REST servivce');
+        connected = false;
+        io.emit('connected', connected);
+    });
+    serviceSocket.on('db_status', function(msg) {
+        console.log('Received file count update from REST service');
+        db_status = msg;
+        io.emit('db_status', msg);
+    });
+    serviceSocket.on('traceCount', function(msg) {
+        console.log('Received trace count update from REST service');
+        traceCount = msg;
+        io.emit('traceCount', msg);
+    });
+    serviceSocket.on('traceNodeCount', function(msg) {
+        console.log('Received traceNode count update from REST service');
+        traceNodeCount = msg;
+        io.emit('traceNodeCount', msg);
+    });
+    serviceSocket.on('structureIdentifierCount', function(msg) {
+        console.log('Received structure identifier count update from REST service');
+        structureIdentifierCount = msg;
+        io.emit('structureIdentifierCount', msg);
+    });
+    serviceSocket.on('markerLocationCount', function(msg) {
+        console.log('Received markerLocation count update from REST service');
+        markerLocationCount = msg;
+        io.emit('markerLocationCount', msg);
+    });
+}
+
+function relayAllStatus() {
     io.emit('connected', connected);
     io.emit('db_status', db_status);
-    io.emit('file_count', file_count);
-    io.emit('sample_count', sample_count);
-  });
-  serviceSocket.on('error', function(msg) {
-    console.log('Error for REST servivce');
-    connected = false;
-    io.emit('connected', connected);
-  });
-  serviceSocket.on('db_status', function(msg) {
-    console.log('Received file count update from REST servivce');
-    db_status = msg;
-    io.emit('db_status', msg);
-  });
-  serviceSocket.on('file_count', function(msg) {
-    console.log('Received file count update from REST servivce');
-    fileCount = msg;
-    io.emit('file_count', msg);
-  });
-  serviceSocket.on('sample_count', function(msg) {
-    console.log('Received sample count update from REST servivce');
-    sampleCount = msg;
-    io.emit('sample_count', msg);
-  });
+    io.emit('traceCount', traceCount);
+    io.emit('traceNodeCount', traceNodeCount);
+    io.emit('structureIdentifierCount', structureIdentifierCount);
+    io.emit('markerLocationCount', markerLocationCount);
 }

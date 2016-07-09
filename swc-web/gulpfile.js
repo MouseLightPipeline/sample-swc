@@ -4,26 +4,30 @@ var gulp = require('gulp'),
   nodemon = require('gulp-nodemon'),
   plumber = require('gulp-plumber'),
   livereload = require('gulp-livereload'),
-  typescript = require("gulp-typescript");
+  ts = require("gulp-typescript");
   gulpTypings = require("gulp-typings");
- 
-gulp.task('default', ['develop']);
+ var sourcemaps = require('gulp-sourcemaps');
+
+gulp.task('default', ['swcweb']);
+
+gulp.task('swcweb', ['develop']);
 
 gulp.task('build', ['server:dep', 'client:dep', 'client:src']);
 
 gulp.task('develop', ['nodemon', 'watch']);
 
 gulp.task('nodemon', ['build'], function () {
-  livereload.listen({port: 34729});
+  livereload.listen({port: 34731, basePath: 'dist'});
   nodemon({
     script: 'dist/server/app.js',
-    ext: 'js jade html css',
+    ext: 'js pug html css',
     ignore: ['client/**/*.*', 'server/**/*.*', 'gulpfile.js', './*.json'],
-    stdout: false
+    stdout: false,
+    delay: 5,
+    debug: true
   }).on('readable', function () {
     this.stdout.on('data', function (chunk) {
       if(/^Express server listening on port/.test(chunk)){
-          console.log('triggered')
         livereload.changed(__dirname);
       }
     });
@@ -33,14 +37,14 @@ gulp.task('nodemon', ['build'], function () {
 });
 
 gulp.task('watch', ['build'], function() {
-    return gulp.watch(['server/**/*.*', 'client/**/*.*'], ['build']);
+    return gulp.watch(['server/**/*.*', 'client/**/*.*', '../shared/dist/**/*.*'], ['build']);
 });
 
-gulp.task('server:dep', ['js', 'jade']);
+gulp.task('server:dep', ['js', 'pug']);
 
 gulp.task('client:dep', ['html', 'css', 'lib:js', 'lib:css', 'lib:fonts:1', 'lib:fonts:2']);
 
-gulp.task('client:src', ['ts']);
+gulp.task('client:src', ['ts', 'client:shared']);
 
 gulp.task('clean', function () {
   return del('dist/**/*');
@@ -58,8 +62,10 @@ gulp.task('lib:js', ['clean'], function() {
       'bower_components/angular/angular.min.js.map',
       'bower_components/angular-resource/angular-resource.min.js',
       'bower_components/angular-resource/angular-resource.min.js.map',
+      'bower_components/angularUtils-pagination/dirPagination.js',
       'bower_components/bootstrap/dist/js/bootstrap.min.js',
-      'bower_components/tether/dist/js/tether.min.js'
+      'bower_components/tether/dist/js/tether.min.js',
+      'bower_components/socket.io-client/socket.io.js'
     ])
     .pipe(gulp.dest('dist/public/lib'))
 });
@@ -77,11 +83,11 @@ gulp.task('lib:css', ['clean'], function() {
 
 // compile typescript
 gulp.task('ts', ['typings'], function () {
-  var tsconfig = './tsconfig.json';
-  return gulp
-    .src('client/**/*.ts')
-    .pipe(typescript(tsconfig.compilerOptions))
-    .pipe(gulp.dest('dist/public'));
+  var tsconfig = require('./tsconfig.json');
+
+  var tsResult = gulp.src('client/**/*.ts').pipe(sourcemaps.init()).pipe(ts(tsconfig.compilerOptions));
+  // return tsResult.js.pipe(sourcemaps.write('.')).pipe(gulp.dest('dist/public'));
+  return tsResult.js.pipe(gulp.dest('dist/public'));
 });
 
 gulp.task('lib:fonts:1', ['clean'], function() {
@@ -104,20 +110,25 @@ gulp.task('js', ['clean'], function () {
     .pipe(gulp.dest('dist/server'));
 });
 
-// move jade
-gulp.task('jade', ['clean'], function () {
-  return gulp.src('server/**/*.jade')
+// move pug
+gulp.task('pug', ['clean'], function () {
+  return gulp.src('server/**/*.pug')
     .pipe(gulp.dest('dist/server'))
 });
 
-// move html
+// move template html
 gulp.task('html', ['clean'], function () {
-  return gulp.src('server/**/*.html')
-    .pipe(gulp.dest('dist/public'))
+  return gulp.src('server/template/**/*.html')
+    .pipe(gulp.dest('dist/public/lib'))
 });
 
 // move css
 gulp.task('css', ['clean'], function () {
   return gulp.src('server/**/*.css')
     .pipe(gulp.dest('dist/public'))
+});
+
+// move shared
+gulp.task('client:shared', ['clean'], function () {
+  return gulp.src('../shared/dist/client/services/*.js').pipe(gulp.dest('dist/public/lib'))
 });

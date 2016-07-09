@@ -14,58 +14,75 @@ schemes:
 produces:
   - application/json
 paths:
-  /files:
-    x-swagger-router-controller: file
+  /tracings:
+    x-swagger-router-controller: tracing
     get:
-      summary: Stored SWC files
-      description: |
-        The files endpoint manages contents of SWC files uploaded and stored in
-        raw format on the server.
+      summary: Tracing uploads
       tags:
-        - Files
+        - Tracings
       responses:
         200:
-          description: An array of files
+          description: An array of tracings from SWC file uploads
           schema:
             type: array
             items:
-              $ref: '#/definitions/SwcFile'
+              $ref: '#/definitions/Tracing'
         default:
           description: Error
           schema:
             $ref: "#/definitions/Error"
-  /samples:
-    x-swagger-router-controller: sample
+  /tracings/{tracingId}:
+    x-swagger-router-controller: tracing
     get:
-      summary: Stored SWC samples
-      description: |
-        The samples endpoint manages contents of the samples table.
+      summary: Tracing definitions
       tags:
-        - Samples
+        - Tracings
+      operationId: getTracingById
+      parameters:
+        - name: tracingId
+          in: path
+          description: Tracing object to find
+          required: true
+          type: string
       responses:
         200:
-          description: An array of files
+          description: The tracing
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/Sample'
+            $ref: "#/definitions/Tracing"
         default:
           description: Error
           schema:
             $ref: "#/definitions/Error"
-  /samples/findByStructure/{structure}:
-    x-swagger-router-controller: sample
+  /nodes:
+    x-swagger-router-controller: tracingNode
+    get:
+      summary: Tracing nodes
+      tags:
+        - Nodes
+      responses:
+        200:
+          description: An array of tracing nodes
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Node'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /nodes/findByStructure/{structureIdentifierId}:
+    x-swagger-router-controller: tracingNode
     get:
       tags:
-        - Samples
-      summary: Finds samples by structure type
+        - Nodes
+      summary: Finds nodes by structure type
       operationId: findByStructure
       produces:
         - application/json
         - application/xml
       parameters:
         - in: path
-          name: structure
+          name: structureIdentifierId
           description: structure id to filter by
           required: true
           type: string
@@ -75,23 +92,24 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Sample'
+              $ref: '#/definitions/Node'
         "400":
           description: Invalid structure id value
-  /samples/forFile/{fileId}:
-    x-swagger-router-controller: sample
+  /nodes/forTracing/{tracingId}:
+    x-swagger-router-controller: tracing
     get:
       tags:
-        - Samples
-      summary: Finds samples by file
-      operationId: forFile
+        - Nodes
+        - Tracings
+      summary: Finds nodes by tracing
+      operationId: forTracing
       produces:
         - application/json
         - application/xml
       parameters:
         - in: path
-          name: fileId
-          description: structure id to filter by
+          name: tracingId
+          description: tracing id to filter by
           required: true
           type: string
       responses:
@@ -100,9 +118,26 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Sample'
+              $ref: '#/definitions/Node'
         "400":
           description: Invalid structure id value
+  /structures:
+    x-swagger-router-controller: structureIdentifier
+    get:
+      summary: Structure identifier definitions
+      tags:
+        - Structure Identifiers
+      responses:
+        200:
+          description: An array of files
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/StructureIdentifier'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
   /upload:
     # binds a127 app logic to a route
     x-swagger-router-controller: upload
@@ -110,18 +145,18 @@ paths:
       summary: Upload file to the database
       # used as the method name of the controller
       tags:
-        - Files
         - Upload
+        - Tracings
       consumes:
         - multipart/form-data
       parameters:
-        - name: submitter
+        - name: annotator
           in: query
-          description: Submitter
+          description: Annotator name
           type: string
-        - name: tag
+        - name: neuronId
           in: query
-          description: Submitter
+          description: Neuron Id
           type: string
         - name: contents
           in: formData
@@ -132,7 +167,7 @@ paths:
           description: Success
           schema:
             # a pointer to a definition
-            $ref: '#/definitions/SwcFile'
+            $ref: '#/definitions/TracingPost'
         # responses may fall through to errors
         default:
           description: Error
@@ -142,39 +177,82 @@ paths:
     x-swagger-pipe: swagger_raw
 # complex objects have schema definitions
 definitions:
-  SwcFile:
+  Tracing:
     type: object
     properties:
       id:
         type: string
-        description: Internal id.
+        description: Internal id
       filename:
         type: string
-        description: Original filename.
-      tag:
+        description: Original filename
+      annotator:
         type: string
-        description: Optional tag.
-      submitter:
+        description: Annotator name
+      neuronId:
         type: string
-        description: Submitter identification.
+        description: Id of neuron in sample database
+      lengthMicrometers:
+        type: number
+        format: double
+        description: Length
       createdAt:
         type: string
-        description: Creation time.
+        format: date-time
+        description: Creation time
       updatedAt:
         type: string
-        description: Update time.
-  Sample:
+        format: date-time
+        description: Update time
+  TracingPost:
+    type: object
+    properties:
+      filename:
+        type: string
+        description: Original filename
+      annotator:
+        type: string
+        description: Annotator name
+      neuronId:
+        type: string
+        description: Id of neuron in sample database
+  Node:
     type: object
     properties:
       id:
         type: string
-        description: Internal id.
+        description: Internal id
       createdAt:
         type: string
-        description: Creation time.
+        format: date-time
+        description: Creation time
       updatedAt:
         type: string
-        description: Update time.
+        format: date-time
+        description: Update time
+  StructureIdentifier:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id
+      name:
+        type: string
+        description: Name
+      value:
+        type: integer
+        description: Enumeration value
+      mutable:
+        type: boolean
+        description: Mutability
+      createdAt:
+        type: string
+        format: date-time
+        description: Creation time
+      updatedAt:
+        type: string
+        format: date-time
+        description: Update time
   Error: 
     type: object
     required:
