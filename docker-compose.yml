@@ -48,7 +48,7 @@ services:
     links:
       - "sample-service:sampleservice"
       - "sample-status:samplestatus"
-### SWC raw tracing entries
+### # SWC raw tracing entries
   tracing-datastore:
     image: postgres:latest
     volumes:
