@@ -35,7 +35,7 @@ div(class="modal fade model-wide" id="editInjectionsModal" tabindex="-1" role="d
                       span(class="caret")
                       span(class="sr-only")
                     ul(class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="injectionVirusButton")
-                      li(role="menuitem" ng-repeat="option in virusService.viruses")
+                      li(role="menuitem" ng-repeat="option in injectionVirusService.injectionViruses")
                         a(ng-click="setInjectionVirusName(option)") {{option.name}}
                 input(type="text", class="form-control", id="injectionVirusName" ng-model="injectionVirusName")
 

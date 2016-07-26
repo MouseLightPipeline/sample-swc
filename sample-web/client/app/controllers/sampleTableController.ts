@@ -7,6 +7,8 @@ class SampleTableController {
 
     constructor(private $scope: any) {
 
+        this.$scope.injectionsForSample = {};
+
         this.$scope.formatRegistrationTransform = (registrationTransformId) => {
             return this.formatRegistrationTransform(registrationTransformId);
         };
@@ -24,6 +26,16 @@ class SampleTableController {
                 // sample.injections.push(injection.id);
             })
         });
+
+        this.$scope.$watchCollection("sampleService.samples", () => this.onSampleCollectionChanged());
+
+        this.$scope.$watchCollection("injectionsService.injections", () => this.onInjectionCollectionChanged());
+    }
+
+    private onSampleCollectionChanged() {
+    }
+
+    private onInjectionCollectionChanged() {
     }
 
     private formatRegistrationTransform(registrationTransformId: string): string {
@@ -44,7 +56,7 @@ class SampleTableController {
 
     private formatInjections(injections) {
         if (injections.length === 0) {
-            return "(none)";
+            return "(click to add)";
         } else {
             // let str = "";
             // injections.forEach((obj: string) => {

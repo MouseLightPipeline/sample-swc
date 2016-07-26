@@ -19,13 +19,6 @@ class MouseStrainService extends DataService<IMouseStrain> {
         super($resource, $rootScope);
     }
 
-    protected mapQueriedItem(obj: any): IMouseStrain {
-        obj.createdAt = new Date(<string>obj.createdAt);
-        obj.updatedAt = new Date(<string>obj.updatedAt);
-
-        return obj;
-    }
-
     protected createResource(location: string): IMouseStrainResource {
         return <IMouseStrainResource>this.$resource(location + "mousestrains/:id", { id: "@id" }, {});
     }

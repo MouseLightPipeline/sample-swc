@@ -22,13 +22,6 @@ class StructureIdentifierService extends DataService<IStructureIdentifier> {
         super($resource, $rootScope);
     }
 
-    protected mapQueriedItem(obj: any): IStructureIdentifier {
-        obj.createdAt = new Date(<string>obj.createdAt);
-        obj.updatedAt = new Date(<string>obj.updatedAt);
-
-        return obj;
-    }
-
     protected createResource(location: string): IStructureIdentifierResource {
         return <IStructureIdentifierResource>this.$resource(location + "structures/:id", { id: "@id" }, {});
     }

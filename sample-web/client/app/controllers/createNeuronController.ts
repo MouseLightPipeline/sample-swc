@@ -9,6 +9,7 @@ interface ICreateNeuronScope extends IAppScope {
     injectionsForSample: any;
     brainAreaNavigationNeuron: Array<BrainAreaDepthEntry>;
     initialBrainAreaReset: boolean;
+    sampleId: string;
 
     isValidDouble(val: string);
     createNeuron();
@@ -17,7 +18,7 @@ interface ICreateNeuronScope extends IAppScope {
     updateLocation(depth: number, index: number);
 }
 
-class NeuronController {
+class CreateNeuronController {
     public static $inject = [
         "$scope",
         "$http",
@@ -28,9 +29,8 @@ class NeuronController {
         this.$scope.model = {};
         this.$scope.model.idNumber = "";
         this.$scope.model.tag = "";
-        this.$scope.model.sampleId = "";
         this.$scope.model.injectionId = "";
-        this.$scope.model.brainAreaId = "";
+        this.$scope.sampleId = "";
 
         this.$scope.isValidIdNumber = false;
 
@@ -53,7 +53,9 @@ class NeuronController {
 
         this.$scope.canCreateNeuron = (): boolean => this.isValidNeuronEntry();
 
-        this.$scope.formatInjection = (s) => { return "Foo" };
+        this.$scope.formatInjection = (s) => {
+            return "Foo"
+        };
 
         this.$scope.$watchCollection("neuronService.neurons", (newValues) => this.onNeuronCollectionChanged());
 
@@ -61,7 +63,7 @@ class NeuronController {
 
         this.$scope.$watchCollection("injectionService.injections", (newValues) => this.onInjectionsChanged());
 
-        this.$scope.$watch("model.sampleId", (newValues) => this.onSampleIdChanged());
+        this.$scope.$watch("sampleId", (newValue, oldValue) => this.onSampleIdChanged(newValue, oldValue));
 
         this.$scope.model.x = "0";
         this.$scope.model.y = "0";
@@ -93,7 +95,7 @@ class NeuronController {
     }
 
     private isValidNeuronEntry(): boolean {
-        return this.$scope.isValidIdNumber && this.haveValidSample() && this.haveValidSomaLocation();
+        return this.$scope.isValidIdNumber && this.haveValidSample() && this.haveValidSomaLocation() && (this.$scope.model.injectionId.length > 0);
     }
 
     private haveValidSomaLocation() {
@@ -101,7 +103,7 @@ class NeuronController {
     }
 
     private haveValidSample(): boolean {
-        return this.$scope.model.sampleId.length > 0;
+        return this.$scope.sampleId.length > 0;
     }
 
     private onNeuronCollectionChanged() {
@@ -115,23 +117,33 @@ class NeuronController {
     }
 
     private onSampleCollectionChanged() {
-        if ((this.$scope.model.sampleId.length == 0) && (this.$scope.sampleService.samples.length > 0)) {
-            this.$scope.model.sampleId = this.$scope.sampleService.samples.slice(-1).pop().id;
+        if ((this.$scope.sampleId.length == 0) && (this.$scope.sampleService.samples.length > 0)) {
+            this.$scope.sampleId = this.$scope.sampleService.samples.slice(-1).pop().id;
         }
     }
 
     private onInjectionsChanged() {
-        //if ((this.$scope.model.sampleId.length == 0) && (this.$scope.sampleService.samples.length > 0)) {
-        //     this.$scope.model.sampleId = this.$scope.sampleService.samples.slice(-1).pop().id;
+        //if ((this.$scope.sampleId.length == 0) && (this.$scope.sampleService.samples.length > 0)) {
+        //     this.$scope.sampleId = this.$scope.sampleService.samples.slice(-1).pop().id;
         // }
     }
 
-    private onSampleIdChanged() {
-        if (this.$scope.model.sampleId.length == 0) {
-            this.$scope.injectionsForSample = [];
-        } else {
-            this.$scope.sampleService.injectionsForSample(this.$scope.model.sampleId).then((data) => {
-                this.$scope.injectionsForSample = data;
+    private onSampleIdChanged(newValue, oldValue) {
+        if (newValue === oldValue) {
+            return;
+        }
+
+        this.$scope.injectionsForSample = [];
+
+        if (this.$scope.sampleId.length > 0) {
+            this.$scope.injectionService.injectionsForSample(this.$scope.sampleId).then((data) => {
+                this.$scope.$apply(() => {
+                    this.$scope.injectionsForSample = data;
+
+                    if (data.length > 0) {
+                        this.$scope.model.injectionId = data[0].id;
+                    }
+                });
             });
         }
     }
@@ -140,11 +152,14 @@ class NeuronController {
         this.$scope.lastCreateMessage = "";
         this.$scope.lastCreateError = "";
 
+        let areaEntry: BrainAreaDepthEntry = this.$scope.brainAreaNavigationNeuron[this.$scope.brainAreaNavigationNeuron.length - 1];
+        let area: IBrainArea = areaEntry.areas[areaEntry.selectedAreaIndex];
+
         let item = {
             idNumber: parseInt(this.$scope.model.idNumber),
             tag: this.$scope.model.tag,
-            sampleId: this.$scope.model.sampleId,
-            brainAreaId: this.$scope.model.brainAreaId,
+            injectionId: this.$scope.model.injectionId,
+            brainAreaId: area.id,
             x: parseFloat(this.$scope.model.x),
             y: parseFloat(this.$scope.model.y),
             z: parseFloat(this.$scope.model.z)
@@ -209,4 +224,4 @@ class NeuronController {
     }
 }
 
-angular.module("sampleManager").controller("neuronController", NeuronController);
+angular.module("sampleManager").controller("createNeuronController", CreateNeuronController);

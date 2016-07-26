@@ -61,6 +61,7 @@ gulp.task('lib:js', ['clean'], function() {
       'bower_components/angular/angular.min.js.map',
       'bower_components/angular-animate/angular-animate.min.js',
       'bower_components/angular-bootstrap/ui-bootstrap.min.js',
+      'bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js',
       'bower_components/angular-resource/angular-resource.min.js',
       'bower_components/angular-resource/angular-resource.min.js.map',
       'bower_components/bootstrap/dist/js/bootstrap.min.js',

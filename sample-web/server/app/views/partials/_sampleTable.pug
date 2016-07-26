@@ -1,7 +1,7 @@
 div(ng-controller="sampleTableController")
   include ./sample/_editInjections
   h4(class="centered") EXISTING
-  table(class="table table-sm", ng-show="sampleService.resourcesAreAvailable")
+  table(class="table table-sm", ng-show="sampleService.resourcesAreAvailable && sampleService.samples.length > 0")
     thead
       tr
         th Id
@@ -19,7 +19,9 @@ div(ng-controller="sampleTableController")
         td {{formatRegistrationTransform(s.registrationTransformId)}}
         td
           a(data-toggle="modal" data-target="#editInjectionsModal" data-sample="{{s}}")
-            span(class="right-edge") {{formatInjections(s.injections)}}
+            span(class="right-edge") {{1}}
             i(class="fa fa-plus-circle")
+  div(class="centered" ng-show="sampleService.resourcesAreAvailable && sampleService.samples.length == 0")
+    h5 There are no samples in the database.  Define samples below in the "Create" section.
   div(class="centered" ng-show="!sampleService.resourcesAreAvailable")
     i(class="fa fa-spinner fa-spin" style="font-size:48px")

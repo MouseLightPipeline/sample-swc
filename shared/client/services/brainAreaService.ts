@@ -62,18 +62,10 @@ class BrainAreaService extends DataService<IBrainArea> {
         });
     }
 
-    protected refreshDataWithCallback(fcn: any) {
-        this.service.queryForDepth({depth: 0}).$promise.then(fcn);
-    }
-
-    public get brainAreas(): any {
-        return this.items;
-    }
-
     public brainAreasForDepth(depth: number): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             this.service.queryForDepth({depth: depth}).$promise.then((data) => {
-                data = this.acceptNewItems(data);
+                data = this.registerNewItems(data);
                 resolve(data);
             }).catch((err) => {
                 reject(err);
@@ -84,7 +76,7 @@ class BrainAreaService extends DataService<IBrainArea> {
     public brainAreasForParent(parentId: number): Promise<any> {
         return new Promise<any>((resolve, reject) => {
             this.service.queryForParent({parentId: parentId}).$promise.then((data) => {
-                data = this.acceptNewItems(data);
+                data = this.registerNewItems(data);
                 resolve(data);
             }).catch((err) => {
                 reject(err);

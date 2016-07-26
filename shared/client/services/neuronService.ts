@@ -4,7 +4,8 @@
 /// <reference path="dataService.ts" />
 
 interface INeuron extends IApiNumberedResourceItem<INeuron> {
-    sampleId: string;
+    injectionId: string;
+    brainAreaId: string;
 }
 
 interface INeuronResource extends IDataServiceResource<INeuron> {
@@ -18,13 +19,6 @@ class NeuronService extends DataService<INeuron> {
 
     constructor($resource: ng.resource.IResourceService, protected $rootScope: ng.IScope) {
         super($resource, $rootScope);
-    }
-
-    protected mapQueriedItem(obj: any): INeuron {
-        obj.createdAt = new Date(<string>obj.createdAt);
-        obj.updatedAt = new Date(<string>obj.updatedAt);
-
-        return obj;
     }
 
     protected createResource(location: string): INeuronResource {

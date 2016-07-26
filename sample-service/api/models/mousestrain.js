@@ -15,7 +15,7 @@ module.exports = function(sequelize, DataTypes) {
             model.count().then((count) => {
                 if (count < 2) {
                     if (count < 1) {
-                        model.create({name: 'C57BL/6J’'});
+                        model.create({name: "C57BL/6J"});
                     }
                     resolve(true);
                 } else {

@@ -1,6 +1,5 @@
 /// <reference path="../../../../shared/client/services/sampleService.ts"/>
 /// <reference path="../helpers/validation.ts"/>
-/// <reference path="../polyfill.ts"/>
 
 class CreateSampleController {
     public static $inject = [
@@ -13,8 +12,8 @@ class CreateSampleController {
         this.$scope.model.sampleDate = "";
         this.$scope.model.tag = "";
         this.$scope.model.comment = "";
-        this.$scope.model.registrationTransform = "";
-        this.$scope.model.strain = "";
+        this.$scope.model.registrationTransformId = "";
+        this.$scope.model.mouseStrainId = "";
 
         this.$scope.isValidIdNumber = false;
         this.$scope.isValidDate = false;
@@ -22,21 +21,23 @@ class CreateSampleController {
         this.$scope.lastCreateMessage = "";
         this.$scope.lastCreateError = "";
 
+        this.$scope.sampleDatePickerIsOpen = false;
+
         this.$scope.$watch("model.idNumber", (newValue) => {
             this.$scope.isValidIdNumber = isValidIdNumberValue(newValue);
         });
 
         this.$scope.$watch("model.sampleDate", (newValue) => {
             this.$scope.isValidDate = isValidDateValue(new Date(newValue));
-        });
+         });
 
         this.$scope.$watchCollection("sampleService.samples", (newValues) => this.onSampleCollectionChanged());
 
-        this.$scope.$watch("transformService.transforms", () => {
+        this.$scope.$watchCollection("transformService.transforms", () => {
             this.updateRegistrationSelection();
         });
 
-        this.$scope.$watch("mouseStrainService.mouseStrains", () => {
+        this.$scope.$watchCollection("mouseStrainService.mouseStrains", () => {
             this.updateMouseStrainSelection();
         });
 
@@ -47,6 +48,10 @@ class CreateSampleController {
         this.$scope.$on("mouseStrainCreatedEvent", (evt, strain: string) => {
             this.onMouseStrainCreatedEvent(evt, strain);
         });
+
+        this.$scope.openSampleDatePicker = () => {
+            this.$scope.sampleDatePickerIsOpen = true;
+        }
 
         this.$scope.createSample = () => this.createSample();
 
@@ -62,11 +67,11 @@ class CreateSampleController {
     }
 
     private onRegistrationCreatedEvent(ignore, registration) {
-        this.$scope.model.registrationTransform = registration.id;
+        this.$scope.model.registrationTransformId = registration.id;
     }
 
     private onMouseStrainCreatedEvent(ignore, strain) {
-        this.$scope.model.strain = strain.id;
+        this.$scope.model.mouseStrainId = strain.id;
     }
 
     private onSampleCollectionChanged() {
@@ -80,14 +85,22 @@ class CreateSampleController {
     }
 
     private updateRegistrationSelection() {
-        if (this.$scope.transformService.findIndex(this.$scope.model.registrationTransform) < 0) {
-            this.$scope.model.registrationTransform = "";
+        if (this.$scope.transformService.find(this.$scope.model.registrationTransformId) === null) {
+            this.$scope.model.registrationTransformId = "";
+        }
+
+        if (this.$scope.model.registrationTransformId === "" && this.$scope.transformService.transforms.length > 0) {
+            this.$scope.model.registrationTransformId = this.$scope.transformService.transforms[0].id;
         }
     }
 
     private updateMouseStrainSelection() {
-        if (this.$scope.mouseStrainService.findIndex(this.$scope.model.strain) < 0) {
-            this.$scope.model.strain = "";
+        if (this.$scope.mouseStrainService.find(this.$scope.model.mouseStrainId) === null) {
+            this.$scope.model.mouseStrainId = "";
+        }
+
+        if (this.$scope.model.mouseStrainId === "" && this.$scope.mouseStrainService.mouseStrains.length > 0) {
+            this.$scope.model.mouseStrainId = this.$scope.mouseStrainService.mouseStrains[0].id;
         }
     }
 
@@ -100,8 +113,8 @@ class CreateSampleController {
             sampleDate: new Date(this.$scope.model.sampleDate + "T12:00:00Z").toISOString(),
             tag: this.$scope.model.tag,
             comment: this.$scope.model.comment,
-            registrationTransformId: this.$scope.model.registrationTransform === "" ? "" : this.$scope.model.registrationTransform,
-            mouseStrainId: this.$scope.model.strain === "" ? "" : this.$scope.model.strain
+            registrationTransformId: this.$scope.model.registrationTransformId,
+            mouseStrainId: this.$scope.model.mouseStrainId
         };
 
         this.$scope.sampleService.createItem(sample).then((sample) => {

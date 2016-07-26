@@ -27,12 +27,6 @@ class TracingNodeService extends DataService<ITracingNode> {
         return <ITracingNodeResource>this.dataSource;
     }
 
-    protected mapQueriedItem(obj: any): ITracingNode {
-        obj.createdAt = new Date(<string>obj.createdAt);
-        obj.updatedAt = new Date(<string>obj.updatedAt);
-
-        return obj;
-    }
 
     protected createResource(location: string): ITracingNodeResource {
         return <ITracingNodeResource>this.$resource(location + "nodes/:id", { id: "@id" }, {

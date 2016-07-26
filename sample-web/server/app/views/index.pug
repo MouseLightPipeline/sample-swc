@@ -9,7 +9,7 @@ block js
   script(src='/lib/tracingNodeService.js')
   script(src='/lib/tracingService.js')
   script(src='/lib/registrationTransformService.js')
-  script(src='/lib/virusService.js')
+  script(src='/lib/injectionVirusService.js')
   script(src='/lib/fluorophoreService.js')
   script(src='/lib/injectionService.js')
   script(src='/lib/mouseStrainService.js')
@@ -18,7 +18,7 @@ block js
   script(src='/app/services/apiAccessService.js')
   script(src='/app/controllers/appController.js')
   script(src='/app/controllers/createSampleController.js')
-  script(src='/app/controllers/neuronController.js')
+  script(src='/app/controllers/createNeuronController.js')
   script(src='/app/controllers/abstractCreateItemController.js')
   script(src='/app/controllers/createRegistrationController.js')
   script(src='/app/controllers/createVirusController.js')
@@ -56,10 +56,13 @@ block content
       div(class="col-sm-12")
         h2(class="centered") SAMPLES
     div(class="row")
-      div(class="col-sm-5")
-        include ./partials/_createSample
-      div(class="col-sm-7")
+      div(class="col-sm-12")
         include ./partials/_sampleTable
+    div(class="row")
+      div(class="col-sm-2")
+      div(class="col-sm-8")
+        include ./partials/_createSample
+      div(class="col-sm-2")
   div(class="orange section", id="create")
     div(class="row")
       div(class="col-sm-12")

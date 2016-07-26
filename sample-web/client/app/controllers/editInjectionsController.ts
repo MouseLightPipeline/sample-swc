@@ -9,7 +9,7 @@ interface IEditInjectionsScope extends IAppScope {
 
     canAddInjection: boolean;
 
-    setInjectionVirusName(virus: IVirus);
+    setInjectionVirusName(virus: IInjectionVirus);
     setFluorophoreName(fluorophore: IFluorophore);
 
     formatInjectionVirus(injectionVirusId: string);
@@ -38,7 +38,7 @@ class EditInjectionsController {
 
         $scope.canAddInjection = false;
 
-        $scope.setInjectionVirusName = (virus: IVirus) => {
+        $scope.setInjectionVirusName = (virus: IInjectionVirus) => {
             this.$scope.injectionVirusName = virus.name;
         };
 
@@ -75,10 +75,10 @@ class EditInjectionsController {
             this.$scope.$apply(() => {
                 // Related target does not send the actual object from the service.
                 let clone: ISample = a.data('sample');
-                this.$scope.sampleService.find(clone.id).then((item: ISample) => {
-                    this.setSample(item);
-                    this.resetBrainAreaPath();
-                });
+                let item: ISample = this.$scope.sampleService.find(clone.id);
+                this.setSample(item);
+                this.resetBrainAreaPath();
+
             });
         });
 
@@ -92,7 +92,7 @@ class EditInjectionsController {
         if (sample === null) {
             this.$scope.injectionsForSample = [];
         } else {
-            this.$scope.sampleService.injectionsForSample(sample.id).then((data) => {
+            this.$scope.injectionService.injectionsForSample(sample.id).then((data) => {
                 this.$scope.injectionsForSample = data;
             }).catch((err) => {
                 console.log(err);
@@ -100,8 +100,8 @@ class EditInjectionsController {
             });
         }
 
-        if (this.$scope.virusService.viruses.length > 0) {
-            this.$scope.injectionVirusName = this.$scope.virusService.viruses[0].name;
+        if (this.$scope.injectionVirusService.injectionViruses.length > 0) {
+            this.$scope.injectionVirusName = this.$scope.injectionVirusService.injectionViruses[0].name;
             this.updateCanAddInjection();
         }
 
@@ -111,13 +111,9 @@ class EditInjectionsController {
         }
     }
 
-    public getSample(): ISample {
-        return this.$scope.sample;
-    }
-
     private formatInjectionVirus(injectionVirusId: string) {
         if (injectionVirusId !== null && injectionVirusId.length > 0) {
-            return this.$scope.virusService.getDisplayNameForId(injectionVirusId);
+            return this.$scope.injectionVirusService.getDisplayNameForId(injectionVirusId);
         } else {
             return "(none)";
         }
@@ -200,14 +196,14 @@ class EditInjectionsController {
         this.$scope.canAddInjection = this.$scope.injectionVirusName.length > 0 && this.$scope.fluorophoreName.length > 0
     }
 
-    private createOrGetVirus(name: string): Promise<IVirus> {
-        return new Promise<IVirus>((resolve, reject) => {
-            let virus = this.$scope.virusService.findWithName(name);
+    private createOrGetVirus(name: string): Promise<IInjectionVirus> {
+        return new Promise<IInjectionVirus>((resolve, reject) => {
+            let virus = this.$scope.injectionVirusService.findWithName(name);
 
             if (virus !== null) {
                 resolve(virus);
             } else {
-                this.$scope.virusService.createItem({name: name}).then((virus) => {
+                this.$scope.injectionVirusService.createItem({name: name}).then((virus) => {
                     resolve(virus);
                 }).catch((err) => {
                     reject(err);

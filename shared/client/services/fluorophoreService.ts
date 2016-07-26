@@ -20,13 +20,6 @@ class FluorophoreService extends DataService<IFluorophore> {
         super($resource, $rootScope);
     }
 
-    protected mapQueriedItem(obj: any): IFluorophore {
-        obj.createdAt = new Date(<string>obj.createdAt);
-        obj.updatedAt = new Date(<string>obj.updatedAt);
-
-        return obj;
-    }
-
     protected createResource(location: string): IFluorophoreResource {
         return <IFluorophoreResource>this.$resource(location + "fluorophores/:id", {id: "@id"}, {});
     }

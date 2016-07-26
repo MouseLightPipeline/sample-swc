@@ -487,7 +487,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Injection'
+              type: string
         default:
           description: Error
           schema:
@@ -987,7 +987,7 @@ definitions:
         description: Datestamp
       tag:
         type: string
-        description: Comments
+        description: Tag
       comment:
         type: string
         description: Comments
@@ -1136,6 +1136,12 @@ definitions:
       injectionId:
         type: string
         description: Injection id
+      brainAreaId:
+        type: string
+        description: Brain area id
+      tag:
+        type: string
+        description: tag
       createdAt:
         type: string
         format: date-time
@@ -1150,6 +1156,9 @@ definitions:
       idNumber:
         type: integer
         description: Public id number
+      tag:
+        type: string
+        description: tag
       injectionId:
         type: string
         description: Injection id

@@ -12,7 +12,9 @@ interface IInjection extends IApiItem {
 interface IInjectionResourceItem extends IInjection, IApiResourceItem<IInjectionResourceItem> {
 }
 
+
 interface IInjectionResource extends IDataServiceResource<IInjectionResourceItem> {
+    injectionsForSample(obj): Array<string>;
 }
 
 class InjectionService extends DataService<IInjectionResourceItem> {
@@ -20,22 +22,40 @@ class InjectionService extends DataService<IInjectionResourceItem> {
     public static $inject = [
         "$resource",
         "$rootScope",
-        "virusService"
+        "injectionVirusService"
     ];
 
-    constructor($resource: ng.resource.IResourceService, protected $rootScope: ng.IScope, private virusService: VirusService) {
+    constructor($resource: ng.resource.IResourceService, protected $rootScope: ng.IScope, private injectionVirusService: InjectionVirusService) {
         super($resource, $rootScope);
     }
 
-    protected mapQueriedItem(obj: any): IInjectionResourceItem {
-        obj.createdAt = new Date(<string>obj.createdAt);
-        obj.updatedAt = new Date(<string>obj.updatedAt);
-
-        return obj;
+    private get service(): IInjectionResource {
+        return <IInjectionResource>this.dataSource;
     }
 
     protected createResource(location: string): IInjectionResource {
-        return <IInjectionResource>this.$resource(location + "injections/:id", {id: "@id"}, {});
+        return <IInjectionResource>this.$resource(location + "injections/:id", {id: "@id"}, {
+            injectionsForSample: {
+                method: "GET",
+                url: location + "injections/sample/:id/",
+                params: { id: "@id" },
+                isArray: true
+            }
+        });
+    }
+
+    public injectionsForSample(id: string): Promise<any> {
+        return new Promise<any>((resolve, reject) => {
+            this.service.injectionsForSample({ id: id }).$promise.then((injectionIds) => {
+                let injections = injectionIds.map((injectionId) => {
+                    return this[injectionId];
+                });
+                resolve(injections);
+            }).catch((err) => {
+                reject(err);
+                console.log(err);
+            });
+        });
     }
 
     public get injections(): any {
@@ -43,6 +63,6 @@ class InjectionService extends DataService<IInjectionResourceItem> {
     }
 
     public getDisplayName(item: IInjection, defaultValue: string = ""): string {
-        return this.virusService.getDisplayNameForId(item.injectionVirusId);
+        return this.injectionVirusService.getDisplayNameForId(item.injectionVirusId);
     }
 }

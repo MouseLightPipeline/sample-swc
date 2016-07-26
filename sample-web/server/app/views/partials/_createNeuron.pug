@@ -1,4 +1,4 @@
-div(class="row", ng-controller="neuronController")
+div(class="row", ng-controller="createNeuronController")
   h4(class="centered") CREATE
   div(class="row" ng-show="(lastCreateMessage.length > 0) || (lastCreateError.length > 0)")
     div(class="col-sm-12 inset")
@@ -14,19 +14,21 @@ div(class="row", ng-controller="neuronController")
           input(type="text", class="form-control form-control-sm", id="neuronIdNumber", ng-model="model.idNumber")
       div(class="col-sm-6")
         div(class="form-group label-floating")
-          label(class="control-label" for="neuronTag") Tag
+          label(class="control-label" for="neuronTag") Tag (optional)
           input(type="text", class="form-control form-control-sm", id="neuronTag", ng-model="model.tag")
+
     div(class="row")
       div(class="col-sm-6")
-        div(ng-class="['form-group', 'label-floating', {'has-warning': model.sampleId.length === 0}]")
+        div(ng-class="['form-group', 'label-floating', {'has-warning': sampleId.length === 0}]")
           label(class="control-label" for="sampleSelect") Add to sample
-          select(ng-model="model.sampleId" id="sampleSelect" class="form-control form-control-sm c-select c-select-sm")
+          select(ng-model="sampleId" id="sampleSelect" class="form-control form-control-sm c-select c-select-sm" ng-disabled="sampleService.samples.length == 0")
             option(ng-repeat="option in sampleService.samples" value="{{option.id}}") {{sampleService.getDisplayName(option)}}
       div(class="col-sm-6")
-        div(class="form-group label-floating")
-          label(class="control-label" for="injectionSelect") Injection
-          select(ng-model="model.injectionId" id="injectionSelect" class="form-control form-control-sm c-select")
-            option(ng-repeat="option in injectionsForSample" value="{{option.id}}") {{formatInjection(option)}}
+        div(ng-class="['form-group', 'label-floating', {'has-warning': model.injectionId.length === 0}]")
+          label(class="control-label" for="injectionSelect") Injections for sample
+          select(ng-model="model.injectionId" id="injectionSelect" class="form-control form-control-sm c-select" ng-disabled="injectionsForSample.length == 0")
+            option(ng-repeat="option in injectionsForSample" value="{{option.id}}") {{injectionService.getDisplayName(option)}}
+
     div(class="row")
       div(class="col-sm-12")
         label(class="control-label") Brain Area
@@ -37,6 +39,7 @@ div(class="row", ng-controller="neuronController")
               ul(class="dropdown-menu" uib-dropdown-menu role="menu")
                 li(role="menuitem" ng-repeat="area in depthNav.areas")
                   a(ng-click="updateLocation($parent.$index, $index)") {{area.name}}
+
     div(class="row")
       div(class="col-sm-4")
         div(class="form-group")
@@ -56,6 +59,7 @@ div(class="row", ng-controller="neuronController")
           div(class="input-group")
             input(type="text", class="form-control", id="somaZ", ng-model="model.z")
             span(class="input-group-addon") µm
+
     div(class="row")
       div(class="col-sm-12")
         button(type="submit" class="btn btn-info btn-sm btn-raised", ng-disabled='!canCreateNeuron()', ng-click="createNeuron()") Create

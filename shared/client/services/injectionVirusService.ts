@@ -3,13 +3,13 @@
 /// <reference path="../../typings/globals/angular-resource/index.d.ts" />
 /// <reference path="dataService.ts" />
 
-interface IRegistrationTransform extends IApiNamedResourceItem<IRegistrationTransform> {
+interface IInjectionVirus extends IApiNamedResourceItem<IInjectionVirus> {
 }
 
-interface IRegistrationTransformResource extends IDataServiceResource<IRegistrationTransform> {
+interface IInjectionVirusResource extends IDataServiceResource<IInjectionVirus> {
 }
 
-class RegistrationTransformService extends DataService<IRegistrationTransform> {
+class InjectionVirusService extends DataService<IInjectionVirus> {
     public static $inject = [
         "$resource",
         "$rootScope"
@@ -19,11 +19,11 @@ class RegistrationTransformService extends DataService<IRegistrationTransform> {
         super($resource, $rootScope);
     }
 
-    protected createResource(location: string): IRegistrationTransformResource {
-        return <IRegistrationTransformResource>this.$resource(location + "registrationtransforms/:id", { id: "@id" }, {});
+    protected createResource(location: string): IInjectionVirusResource {
+        return <IInjectionVirusResource>this.$resource(location + "viruses/:id", {id: "@id"}, {});
     }
 
-    public get transforms(): any {
+    public get injectionViruses(): any {
         return this.items;
     }
 }

@@ -1,12 +1,12 @@
-/// <reference path="../../../../shared/client/services/virusService.ts"/>
+/// <reference path="../../../../shared/client/services/injectionVirusService.ts"/>
 
-class CreateVirusController extends AbstractCreateItemController<IVirus> {
+class CreateVirusController extends AbstractCreateItemController<IInjectionVirus> {
   public static $inject = [
     "$scope"
   ];
 
   constructor(protected $scope: any) {
-    super($scope, $scope.virusService, "#createVirusModal", "virusCreatedEvent");
+    super($scope, $scope.injectionVirusService, "#createVirusModal", "virusCreatedEvent");
   }
 
   protected createObject(): any {

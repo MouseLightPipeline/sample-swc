@@ -13,7 +13,6 @@ interface ISample extends IApiNumberedResourceItem<ISample> {
 }
 
 interface ISampleResource extends IDataServiceResource<ISample> {
-    injections(obj): ISample;
 }
 
 function lpad(n, width, z = "0"): string {
@@ -31,60 +30,20 @@ class SampleService extends DataService<ISample> {
         super($resource, $rootScope);
     }
 
-    private get service(): ISampleResource {
-        return <ISampleResource>this.dataSource;
-    }
-
     protected mapQueriedItem(obj: any): ISample {
-        obj.sampleDate = new Date(<string>obj.sampleDate);
-        obj.createdAt = new Date(<string>obj.createdAt);
-        obj.updatedAt = new Date(<string>obj.updatedAt);
+        obj = super.mapQueriedItem(obj);
 
-        obj.injections = [];
+        obj.sampleDate = new Date(<string>obj.sampleDate);
 
         return obj;
     }
 
     protected createResource(location: string): ISampleResource {
-        return <ISampleResource>this.$resource(location + "samples/:id", { id: "@id" }, {
-            injections: {
-                method: "GET",
-                url: location + "injections/sample/:id/",
-                params: { id: "@id" },
-                isArray: true
-            }
-        });
-    }
-
-
-    public mapChildren(items) {
-
-        items.forEach((item: ISample) => {
-            let injections = [];
-            this.injectionsForSample(item.id).then((objs) => {
-                objs.forEach((injection) => {
-                    injections.push(injection.id);
-                });
-                this.$rootScope.$apply(() => {
-                    item.injections = injections;
-                });
-             });
-        });
+        return <ISampleResource>this.$resource(location + "samples/:id", { id: "@id" }, {});
     }
 
     public get samples(): any {
         return this.items;
-    }
-
-    public injectionsForSample(id: string): Promise<any> {
-        return new Promise<any>((resolve, reject) => {
-            this.service.injections({ id: id }).$promise.then(data => {
-                resolve(data);
-            }).catch((err) => {
-                reject(err);
-                console.log(err);
-            });
-        });
     }
 
     public getDisplayName(item: ISample, defaultValue: string = ""): string {

@@ -47,6 +47,12 @@ abstract class DataService<T extends IApiResourceItem<T>> {
     constructor(protected $resource: ng.resource.IResourceService, protected $rootScope: ng.IScope) {
     }
 
+    protected abstract createResource(location: string): IDataServiceResource<T>;
+
+    protected get apiUrl() {
+        return this.apiLocation;
+    }
+
     public setLocation(resourceLocation: string): Promise<boolean> {
         this.resourcesAreAvailable = false;
 
@@ -57,24 +63,53 @@ abstract class DataService<T extends IApiResourceItem<T>> {
         return this.refreshData();
     }
 
+    protected mapQueriedItem(obj: any): T {
+        obj.createdAt = new Date(<string>obj.createdAt);
+        obj.updatedAt = new Date(<string>obj.updatedAt);
+
+        return obj;
+    }
+
+    protected registerNewItem(obj) {
+        let item: IApiItem = this.mapQueriedItem(obj);
+
+        this[item.id] = item;
+
+        let index: number = this.items.findIndex((obj: IApiItem) => {
+            return obj.id === item.id;
+        });
+
+        if (index > -1) {
+            this.items[index] = item;
+        } else {
+            this.items.push(item);
+        }
+
+        return item;
+    }
+
+    protected registerNewItems(items) {
+        items = items.map((obj) => {
+            return this.registerNewItem(obj);
+        });
+
+        return items;
+    }
+
+    protected refreshDataWithCallback(fcn: any) {
+        this.dataSource.query(fcn);
+    }
+
     public refreshData(): Promise<boolean> {
         this.resourcesAreAvailable = false;
 
+        this.items = [];
+
         return new Promise<boolean>((resolve) => {
+            // Allows subclasses to do something other than a full query as the first call for data.
             this.refreshDataWithCallback((data) => {
-                /*
-                 data = data.map((obj) => {
-                 let item: IApiItem = this.mapQueriedItem(obj);
-                 this[item.id] = item;
-                 return item;
-                 });
 
-                 this.mapChildren(data);
-                 */
-
-                data = this.acceptNewItems(data);
-
-                this.items = data;
+                this.registerNewItems(data);
 
                 this.resourcesAreAvailable = true;
 
@@ -83,80 +118,44 @@ abstract class DataService<T extends IApiResourceItem<T>> {
         });
     }
 
-    protected acceptNewItems(items) {
-        items = items.map((obj) => {
-            let item: IApiItem = this.mapQueriedItem(obj);
-            this[item.id] = item;
-            return item;
-        });
-
-        this.mapChildren(items);
-
-        return items;
-    }
-
     public createItem(data): Promise<T> {
         return new Promise<T>((resolve, reject) => {
-            this.dataSource.save(data).$promise.then((item: T) => {
-                this.dataSource.get({id: item.id}, (fullItem) => {
-                    let mappedItem = this.mapQueriedItem(fullItem);
-                    this.items.push(mappedItem);
-                    resolve(mappedItem);
+            this.dataSource.save(data).$promise.then((obj: T) => {
+                this.dataSource.get({id: obj.id}, (item) => {
+                    item = this.registerNewItem(item);
+                    resolve(item);
                 });
-            }).catch((response) => {
-                reject(response);
+            }).catch((err) => {
+                reject(err);
             });
         });
     }
 
-    public findIndex(id: string): number {
-        return this.items.findIndex((element: IApiItem) => {
-            return element.id === id;
-        });
-    }
+    public find(id: string, fcn = null): T {
+        let item: T;
 
-    public find(id: string): Promise<T> {
-        // let item: T = this.items.find((obj: IApiItem) => {
-        //    return obj.id === id;
-        // });
+        if (fcn === null) {
+            item = this[id];
+        } else {
+            item = this.items.find(fcn);
+        }
 
-        return new Promise<T>((resolve, reject) => {
-            let item: T = this[id];
+        if (item === undefined)
+            item = null;
 
-            if (item === undefined) {
-                this.dataSource.get({ id: id }).$promise.then(data => {
-                    console.log(data);
-                    data = this.acceptNewItems(data);
-                    resolve(data);
-                }).catch((err) => {
-                    reject(err);
-                });
-            } else {
-                resolve(item);
-            }
-        });
+        return item;
     }
 
     public findWithIdNumber(id: number): T {
-        let item: T = this.items.find((obj: IApiIdNumberItem) => {
+        return this.find("", (obj: IApiIdNumberItem) => {
             return obj.idNumber === id;
         });
-
-        if (item === undefined)
-            item = null;
-
-        return item;
     }
 
     public findWithName(name: string): T {
-        let item: T = this.items.find((obj: IApiNamedItem) => {
+        return this.find("", (obj: IApiNamedItem) => {
             return obj.name.toLowerCase() === name.toLowerCase();
         });
-
-        if (item === undefined)
-            item = null;
-
-        return item;
     }
 
     public getDisplayName(item: T, defaultValue: string = ""): string {
@@ -167,27 +166,8 @@ abstract class DataService<T extends IApiResourceItem<T>> {
     }
 
     public getDisplayNameForId(id: string, defaultValue: string = ""): string {
-        let item : T = this[id];
+        let item: T = this.find(id);
 
-        if (item === undefined) {
-            return defaultValue;
-        } else {
-            return this.getDisplayName(item);
-        }
+        return item === null ? defaultValue : this.getDisplayName(item);
     }
-
-    protected get apiUrl() {
-        return this.apiLocation;
-    }
-
-    protected refreshDataWithCallback(fcn: any) {
-        this.dataSource.query(fcn);
-    }
-
-    public mapChildren(items) {
-    }
-
-    protected abstract mapQueriedItem(obj: any): T;
-
-    protected abstract createResource(location: string): IDataServiceResource<T>;
 }

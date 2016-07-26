@@ -6,7 +6,7 @@
 /// <reference path="../../../../shared/client/services/tracingNodeService.ts"/>
 /// <reference path="../../../../shared/client/services/tracingService.ts"/>
 /// <reference path="../../../../shared/client/services/registrationTransformService.ts"/>
-/// <reference path="../../../../shared/client/services/virusService.ts"/>
+/// <reference path="../../../../shared/client/services/injectionVirusService.ts"/>
 /// <reference path="../../../../shared/client/services/mouseStrainService.ts"/>
 /// <reference path="../../../../shared/client/services/fluorophoreService.ts"/>
 
@@ -16,7 +16,7 @@ class ApiAccessService {
         "$location",
         "injectionService",
         "registrationTransformService",
-        "virusService",
+        "injectionVirusService",
         "brainAreaService",
         "sampleService",
         "neuronService",
@@ -32,7 +32,7 @@ class ApiAccessService {
     private apiLocation: any;
 
     constructor(private $resource: any, private $location: any, private injectionService: InjectionService,
-                private transformService: RegistrationTransformService, private virusService: VirusService,
+                private transformService: RegistrationTransformService, private injectionVirusService: InjectionVirusService,
                 private brainAreaService: BrainAreaService, private sampleService: SampleService,
                 private neuronService: NeuronService, private mouseStrainService: MouseStrainService,
                 private fluorophoreService: FluorophoreService) {
@@ -55,7 +55,7 @@ class ApiAccessService {
 
         this.injectionService.setLocation(this.serviceUrl);
         this.transformService.setLocation(this.serviceUrl);
-        this.virusService.setLocation(this.serviceUrl);
+        this.injectionVirusService.setLocation(this.serviceUrl);
         this.brainAreaService.setLocation(this.serviceUrl);
         this.sampleService.setLocation(this.serviceUrl);
         this.neuronService.setLocation(this.serviceUrl);

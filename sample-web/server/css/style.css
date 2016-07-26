@@ -30,7 +30,7 @@ body {
 }
 
 .form-control {
-    color: white;
+    color: black;
 }
 
 .c-select {
@@ -99,10 +99,6 @@ pre {
     color: white;
 }
 
-.dropzone {
-    background-color: #72b5cc;
-}
-
 .inset {
     padding: 20px;
 }
@@ -120,10 +116,15 @@ a.iconlink:hover {
 }
 
 .brain-area-nav {
+    color: black;
     text-decoration: underline;
 }
 
 .modal-content {
     width: 1200px;
     margin-left: -300px;
+}
+
+.fa-color {
+    color: #efefef;
 }

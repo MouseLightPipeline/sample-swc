@@ -2,7 +2,7 @@ interface IAppScope extends ng.IScope {
     service: ApiAccessService;
     injectionService: InjectionService;
     transformService: RegistrationTransformService;
-    virusService: VirusService;
+    injectionVirusService: InjectionVirusService;
     brainAreaService: BrainAreaService;
     sampleService: SampleService;
     neuronService: NeuronService;
@@ -23,7 +23,7 @@ class AppController {
         "apiAccessService",
         "injectionService",
         "registrationTransformService",
-        "virusService",
+        "injectionVirusService",
         "brainAreaService",
         "sampleService",
         "neuronService",
@@ -33,23 +33,19 @@ class AppController {
 
     constructor(private $scope: IAppScope, private $resource: any, private serviceApi: ApiAccessService,
                 private injectionService: InjectionService, private transformService: RegistrationTransformService,
-                private virusService: VirusService, private brainAreaService: BrainAreaService,
+                private injectionVirusService: InjectionVirusService, private brainAreaService: BrainAreaService,
                 private sampleService: SampleService, private neuronService: NeuronService,
                 private mouseStrainService: MouseStrainService, private fluorophoreService: FluorophoreService) {
 
         $scope.service = serviceApi;
         $scope.injectionService = injectionService;
         $scope.transformService = transformService;
-        $scope.virusService = virusService;
+        $scope.injectionVirusService = injectionVirusService;
         $scope.brainAreaService = brainAreaService;
         $scope.sampleService = sampleService;
         $scope.neuronService = neuronService;
         $scope.mouseStrainService = mouseStrainService;
         $scope.fluorophoreService = fluorophoreService;
-
-        $scope.formatSample = (sampleId: string) => {
-            return this.formatSample(sampleId);
-        };
 
         $scope.$watch("service.serviceUrl", (val) => this.updateService(val));
         $scope.$watch("service.serviceDocUrl", (val) => this.updateServiceDoc(val));
@@ -70,10 +66,6 @@ class AppController {
 
     private updateStatus(val) {
         this.$scope.statusUrl = val;
-    }
-
-    private formatSample(sampleId: string): string {
-        return this.$scope.sampleService.getDisplayNameForId(sampleId);
     }
 
 }
