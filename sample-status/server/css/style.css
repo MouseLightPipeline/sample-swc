@@ -1,13 +1,10 @@
-@import "lato.min.css";
 @import "font-awesome.min.css";
-body {
-  font-family: "Lato", "Lucida Grande", Helvetica, Arial, sans-serif;
-  font-weight: 300;
-  background-color: #72b5cc;
-}
 
-h1, h2, h3, h4 {
-  font-weight: 300;
+body {
+  font-family: "Roboto", "Lucida Grande", Helvetica, Arial, sans-serif;
+  color: white;
+  background-color: #72b5cc;
+  margin-bottom: 60px;
 }
 
 .blue {
@@ -36,16 +33,15 @@ hr.partial {
 p.partial {
   padding-left: 15%;
   width: 85%;
-  text-align: center;
 }
 
 #landing {
   min-height: 400px;
-  padding: 100px 20px 50px 20px;
+  padding: 20px 20px 20px 20px;
 }
 
-#description {
-  padding: 50px 0px 50px 0px;
+#tables {
+  padding: 20px 40px 20px 40px;
 }
 
 #footer {

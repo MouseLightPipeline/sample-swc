@@ -3,15 +3,13 @@
 /// <reference path="../../typings/globals/angular-resource/index.d.ts" />
 /// <reference path="dataService.ts" />
 
-
-interface IStructureIdentifier extends IApiNamedResourceItem<IStructureIdentifier> {
-    value: number;
+interface IFluorophore extends IApiNamedResourceItem<IFluorophore> {
 }
 
-interface IStructureIdentifierResource extends IDataServiceResource<IStructureIdentifier> {
+interface IFluorophoreResource extends IDataServiceResource<IFluorophore> {
 }
 
-class StructureIdentifierService extends DataService<IStructureIdentifier> {
+class FluorophoreService extends DataService<IFluorophore> {
 
     public static $inject = [
         "$resource",
@@ -22,18 +20,18 @@ class StructureIdentifierService extends DataService<IStructureIdentifier> {
         super($resource, $rootScope);
     }
 
-    protected mapQueriedItem(obj: any): IStructureIdentifier {
+    protected mapQueriedItem(obj: any): IFluorophore {
         obj.createdAt = new Date(<string>obj.createdAt);
         obj.updatedAt = new Date(<string>obj.updatedAt);
 
         return obj;
     }
 
-    protected createResource(location: string): IStructureIdentifierResource {
-        return <IStructureIdentifierResource>this.$resource(location + "structures/:id", { id: "@id" }, {});
+    protected createResource(location: string): IFluorophoreResource {
+        return <IFluorophoreResource>this.$resource(location + "fluorophores/:id", {id: "@id"}, {});
     }
 
-    public get structures(): any {
+    public get fluorophores(): any {
         return this.items;
     }
 }

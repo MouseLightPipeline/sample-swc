@@ -1,13 +1,13 @@
 /// <reference path="../../../typings/globals/bootstrap/index.d.ts"/>
-/// <reference path="../../../../shared/client/services/transformService.ts"/>
+/// <reference path="../../../../shared/client/services/registrationTransformService.ts"/>
 
-class CreateRegistrationController extends AbstractCreateItemController<IInjection> {
+class CreateRegistrationController extends AbstractCreateItemController<IRegistrationTransform> {
   public static $inject = [
     "$scope"
   ];
 
   constructor(protected $scope: any) {
-    super($scope, $scope.virusService, "#createRegistrationModal", "registrationCreatedEvent");
+    super($scope, $scope.transformService, "#createRegistrationModal", "registrationCreatedEvent");
   }
 
   protected createObject(): any {

@@ -12,6 +12,9 @@ var models = require('../models/index');
  */
 module.exports = {
     get: get,
+    getBrainAreaById: getBrainAreaById,
+    getBrainAreasForDepth: getBrainAreasForDepth,
+    getBrainAreasForParent: getBrainAreasForParent
 };
 
 /*
@@ -22,8 +25,35 @@ module.exports = {
  */
 
 function get(req, res) {
-    models.BrainArea.findAll({}).then(function (transforms) {
-        res.json(transforms);
+    models.BrainArea.findAll({}).then(function (areas) {
+        res.json(areas);
+    }).catch(function(err) {
+        res.status(500).json(errors.sequelizeError(err));
+    });
+}
+
+function getBrainAreaById(req, res) {
+    models.BrainArea.findAll({where: {id: req.swagger.params.brainAreaId.value}, limit: 1}).then(function (areas) {
+        if (areas.length > 0)
+            res.json(areas[0]);
+        else
+            res.status(500).json({message: 'bad id'});
+    }).catch(function(err){
+        res.status(500).json(errors.sequelizeError(err));
+    });
+}
+
+function getBrainAreasForDepth(req, res) {
+    models.BrainArea.findAll({where: {depth: req.swagger.params.depth.value}}).then((areas) => {
+        res.json(areas);
+    }).catch(function(err) {
+        res.status(500).json(errors.sequelizeError(err));
+    });
+}
+
+function getBrainAreasForParent(req, res) {
+    models.BrainArea.findAll({where: {parentStructureId: req.swagger.params.parentId.value}}).then((areas) => {
+        res.json(areas);
     }).catch(function(err) {
         res.status(500).json(errors.sequelizeError(err));
     });

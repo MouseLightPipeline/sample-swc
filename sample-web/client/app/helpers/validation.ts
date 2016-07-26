@@ -11,7 +11,7 @@ function isValidDateValue(val: any): boolean {
   return !isNaN(val) && val.getFullYear() > 1900;
 }
 
-function isValidDouble(val: string) {
+function isValidDouble(val: string): boolean {
   return (val.length > 0) && !isNaN(Number(val));
 }
 

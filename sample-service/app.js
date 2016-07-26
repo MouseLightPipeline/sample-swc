@@ -57,55 +57,95 @@ SwaggerExpress.create(config, function (err, swaggerExpress) {
 sync();
 
 function sync() {
-    db.sequelize.sync().then(function () {
-        app.locals.dbready = true;
-
-        db.InjectionLocation.populateDefault()
-            .then(function () {
-                return db.RegistrationTransform.populateDefault();
-            }).then(function () {
-            return db.Virus.populateDefault(db);
-        }).then(function () {
-            return db.BrainArea.populateDefault(db);
-        }).then(function () {
-            broadcastAll();
-            console.log('Successful database sync.');
-        });
-    }).catch(function (err) {
+    syncDatabase().then(() => {
+        return db.RegistrationTransform.populateDefault()
+    }).then((didPopulate) => {
+        if (didPopulate) {
+            console.log("Populated registration transforms with defaults.");
+        }
+        return db.InjectionVirus.populateDefault();
+    }).then((didPopulate) => {
+        if (didPopulate) {
+            console.log("Populated injection viruses with defaults.");
+        }
+        return db.MouseStrain.populateDefault();
+    }).then((didPopulate) => {
+        if (didPopulate) {
+            console.log("Populated mouse strains with defaults.");
+        }
+        return db.Fluorophore.populateDefault();
+    }).then((didPopulate) => {
+        if (didPopulate) {
+            console.log("Populated fluorophores with defaults.");
+        }
+        return db.BrainArea.populateDefault();
+    }).then((didPopulate) => {
+        if (didPopulate) {
+            console.log("Populated brain areas with defaults.");
+        }
+        return broadcastAll();
+    }).then(() => {
+        console.log("Successful database sync");
+    }).catch((err) => {
         console.log('Failed database sync: ');
         console.log(err);
         setTimeout(sync, 5000);
     });
 };
 
-function broadcastAll() {
-    io.emit('db_status', app.locals.dbready);
+function syncDatabase() {
+    return new Promise((resolve, reject) => {
+        db.sequelize.sync().then(() => {
+            app.locals.dbready = true;
+            resolve(db);
+        }).catch((err) => {
+            reject(err);
+        })
+    });
+}
 
-    if (app.locals.dbready) {
-        db.Sample.count().then(function (val) {
-            io.emit('sample_count', val);
-        });
-        db.Neuron.count().then(function (val) {
-            io.emit('neuron_count', val);
-        });
-        db.InjectionLocation.count().then(function (val) {
-            io.emit('injection_count', val);
-        });
-        db.RegistrationTransform.count().then(function (val) {
-            io.emit('registration_count', val);
-        });
-        db.Virus.count().then(function (val) {
-            io.emit('virus_count', val);
-        });
-        db.Strain.count().then(function (val) {
-            io.emit('strain_count', val);
-        });
-    } else {
-        io.emit('sample_count', -1);
-        io.emit('neuron_count', -1);
-        io.emit('injection_count', -1);
-        io.emit('registration_count', -1);
-        io.emit('virus_count', -1);
-        io.emit('strain_count', -1);
-    }
+function broadcastAll() {
+    return new Promise((resolve) => {
+        io.emit('db_status', app.locals.dbready);
+
+        if (app.locals.dbready) {
+            db.Sample.count().then(function (val) {
+                io.emit('sampleCount', val);
+            });
+            db.MouseStrain.count().then(function (val) {
+                io.emit('mouseStrainCount', val);
+            });
+            db.RegistrationTransform.count().then(function (val) {
+                io.emit('registrationTransformCount', val);
+            });
+
+            db.Injection.count().then(function (val) {
+                io.emit('injectionCount', val);
+            });
+            db.InjectionVirus.count().then(function (val) {
+                io.emit('injectionVirusCount', val);
+            });
+            db.Fluorophore.count().then(function (val) {
+                io.emit('fluorophoreCount', val);
+            });
+
+            db.Neuron.count().then(function (val) {
+                io.emit('neuronCount', val);
+            });
+            db.BrainArea.count().then(function (val) {
+                io.emit('brainAreaCount', val);
+            });
+            resolve(true);
+        } else {
+            io.emit('sampleCount', -1);
+            io.emit('mouseStrainCount', -1);
+            io.emit('registrationTransformCount', -1);
+            io.emit('injectionCount', -1);
+            io.emit('injectionVirusCount', -1);
+            io.emit('fluorophoreCount', -1);
+            io.emit('neuronCount', -1);
+            io.emit('brainAreaCount', -1);
+            resolve(false);
+        }
+    });
 };

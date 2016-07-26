@@ -3,12 +3,7 @@
 /// <reference path="../../typings/globals/angular-resource/index.d.ts" />
 /// <reference path="dataService.ts" />
 
-interface IRegistrationTransform extends ng.resource.IResource<IRegistrationTransform>, IApiItem {
-    id: string;
-    name: string;
-    mutable: boolean;
-    createdAt: Date;
-    updatedAt: Date;
+interface IRegistrationTransform extends IApiNamedResourceItem<IRegistrationTransform> {
 }
 
 interface IRegistrationTransformResource extends IDataServiceResource<IRegistrationTransform> {
@@ -16,11 +11,12 @@ interface IRegistrationTransformResource extends IDataServiceResource<IRegistrat
 
 class RegistrationTransformService extends DataService<IRegistrationTransform> {
     public static $inject = [
-        "$resource"
+        "$resource",
+        "$rootScope"
     ];
 
-    constructor($resource: ng.resource.IResourceService) {
-        super($resource);
+    constructor($resource: ng.resource.IResourceService, protected $rootScope: ng.IScope) {
+        super($resource, $rootScope);
     }
 
     protected mapQueriedItem(obj: any): IRegistrationTransform {
@@ -31,7 +27,7 @@ class RegistrationTransformService extends DataService<IRegistrationTransform> {
     }
 
     protected createResource(location: string): IRegistrationTransformResource {
-        return <IRegistrationTransformResource>this.$resource(location + "transforms/:id", { id: "@id" }, {});
+        return <IRegistrationTransformResource>this.$resource(location + "registrationtransforms/:id", { id: "@id" }, {});
     }
 
     public get transforms(): any {

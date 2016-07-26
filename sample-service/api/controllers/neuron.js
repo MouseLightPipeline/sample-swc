@@ -4,26 +4,15 @@ var util = require('util');
 var app = require('../../app');
 var errors = require('../helpers/errors');
 var models = require('../models/index');
-/*
- For a controller you should export the functions referenced in your Swagger document by name.
 
- Either:
- - The HTTP Verb of the corresponding operation (get, put, post, delete, etc)
- - Or the operationId associated with the operation in your Swagger document
- */
 module.exports = {
     get: get,
     post: post,
     getNeuronById: getNeuronById,
-    getNeuronsForSample: getNeuronsForSample
+    getNeuronsForInjection: getNeuronsForInjection,
+    updateNeuron: updateNeuron,
+    deleteNeuron: deleteNeuron
 };
-
-/*
- Functions in controllers used for operations should take two parameters:
-
- Param 1: a handle to the request object
- Param 2: a handle to the response object
- */
 
 function get(req, res) {
     models.Neuron.findAll().then(function (neurons) {
@@ -38,27 +27,28 @@ function getNeuronById(req, res) {
         if (neurons.length > 0)
             res.json(neurons[0]);
         else
-            res.status(500).json({message: 'bad id'});
+            res.status(500).json(errors.idDoesNotExit());
     }).catch(function(err){
         res.status(500).json(errors.sequelizeError(err));
     });
 }
 
-function getNeuronsForSample(req, res) {
-    models.Neuron.findAll({where: {sampleId: req.swagger.params.sampleId.originalValue}}).then(function (neurons) {
+function getNeuronsForInjection(req, res) {
+    models.Neuron.findAll({where: {injectionId: req.swagger.params.injectionId.originalValue}}).then(function (neurons) {
         res.json(neurons);
-    }).catch((err) => {
+    }).catch(function(err) {
         res.status(500).json(errors.sequelizeError(err));
     });
 }
 
-function post(req, res, next) {
+function post(req, res) {
     if (req.body.idNumber === undefined || req.body.idNumber === null) {
         res.status(500).json(errors.invalidIdNumber());
         return;
     }
-    models.Neuron.findAll({where:{idNumber: req.body.idNumber}}).then(function (neuron) {
-        if (neuron != null && neuron.length > 0) {
+    
+    models.Neuron.findAll({where:{idNumber: req.body.idNumber}}).then(function (neurons) {
+        if (neurons != null && neurons.length > 0) {
             res.status(500).json(errors.duplicateNeuron());
         } else {
             create(req.body, res);
@@ -69,7 +59,7 @@ function post(req, res, next) {
 }
 
 function create(body, res) {
-    var sampleId = body.sampleId || null;
+    var injectionId = body.injectionId || null;
     var brainAreaId = body.brainAreaId || null;
     var tag = body.tag || '';
     var x = body.x || 0;
@@ -79,7 +69,7 @@ function create(body, res) {
     models.Neuron.create({
             idNumber: body.idNumber,
             tag: tag,
-            sampleId: sampleId,
+            injectionId: injectionId,
             brainAreaId: brainAreaId,
             x: x,
             y: y,
@@ -92,14 +82,60 @@ function create(body, res) {
     });
 }
 
-var GET_NEURON_INCLUDE =
-[
-    {
-        model: models.Sample,
-        as: 'sample'
-    },
-    {
-        model: models.BrainArea,
-        as: 'brainArea'
+function updateNeuron(req, res) {
+    if (req.body.id === undefined || req.body.id === null) {
+        res.status(500).json(errors.invalidIdNumber());
+        return;
     }
-]
+
+    models.Neuron.findAll({where:{id: req.body.id}}).then(function (neurons) {
+        if (neurons === null || neurons.length === 0) {
+            res.status(500).json(errors.idDoesNotExit());
+        } else {
+            var neuron = neurons[0];
+
+            neuron.update({
+                tag: req.body.tag,
+                injectionId: req.body.injectionId,
+                brainAreaId: req.body.brainAreaId,
+                x: req.body.x,
+                y: req.body.y,
+                z: req.body.z
+            }).then(function (updated) {
+                res.json(updated);
+            }).catch(function(err){
+                res.status(500).json(errors.sequelizeError(err));
+            });
+        }
+    }).catch(function(err){
+        res.status(500).json(errors.sequelizeError(err));
+    });
+}
+
+function deleteNeuron(req, res) {
+    var neuronParam = req.swagger.params.neuronId;
+
+    if (neuronParam === undefined || neuronParam === null || neuronParam.value === undefined || neuronParam.value === null) {
+        res.status(500).json(errors.invalidIdNumber());
+        return;
+    }
+
+    var neuronId = neuronParam.value;
+
+    models.Neuron.findAll({where:{id: neuronId}}).then(function (neurons) {
+        if (neurons === null || neurons.length === 0) {
+            res.status(500).json(errors.idDoesNotExit());
+        } else {
+            var neuron = neurons[0];
+
+            neuron.destroy().then(function () {
+                res.json({id: neuronId});
+                app.broadcast();
+            }).catch(function(err){
+                res.status(500).json(errors.sequelizeError(err));
+            });
+        }
+    }).catch(function(err){
+        res.status(500).json(errors.sequelizeError(err));
+    });
+}

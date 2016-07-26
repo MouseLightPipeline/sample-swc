@@ -6,7 +6,7 @@
 /// <reference path="../../../shared/client/services/structureIdentifierService.ts"/>
 /// <reference path="../../../shared/client/services/tracingNodeService.ts"/>
 /// <reference path="../../../shared/client/services/tracingService.ts"/>
-/// <reference path="../../../shared/client/services/transformService.ts"/>
+/// <reference path="../../../shared/client/services/registrationTransformService.ts"/>
 /// <reference path="../../../shared/client/services/virusService.ts"/>
 
 ((): void => {

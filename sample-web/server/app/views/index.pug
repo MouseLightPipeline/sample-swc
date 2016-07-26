@@ -3,28 +3,30 @@ block js
   script(src='/lib/socket.io.js')
   script(src='/lib/dataService.js')
   script(src='/lib/brainAreaService.js')
-  script(src='/lib/injectionService.js')
   script(src='/lib/neuronService.js')
   script(src='/lib/sampleService.js')
-  script(src='/lib/strainService.js')
   script(src='/lib/structureIdentifierService.js')
   script(src='/lib/tracingNodeService.js')
   script(src='/lib/tracingService.js')
-  script(src='/lib/transformService.js')
+  script(src='/lib/registrationTransformService.js')
   script(src='/lib/virusService.js')
+  script(src='/lib/fluorophoreService.js')
+  script(src='/lib/injectionService.js')
+  script(src='/lib/mouseStrainService.js')
   script(src='/app/helpers/validation.js')
   script(src='/app/app.js')
   script(src='/app/services/apiAccessService.js')
   script(src='/app/controllers/appController.js')
-  script(src='/app/controllers/sampleController.js')
+  script(src='/app/controllers/createSampleController.js')
   script(src='/app/controllers/neuronController.js')
   script(src='/app/controllers/abstractCreateItemController.js')
-  script(src='/app/controllers/createInjectionController.js')
   script(src='/app/controllers/createRegistrationController.js')
   script(src='/app/controllers/createVirusController.js')
-  script(src='/app/controllers/createStrainController.js')
+  script(src='/app/controllers/createMouseStrainController.js')
+  script(src='/app/controllers/editInjectionsController.js')
   script(src='/app/controllers/sampleTableController.js')
   script(src='/app/controllers/neuronTableController.js')
+  script(src='/app/controllers/mouseStrainController.js')
 block content
   div(class="blue section")
     div(class="row centered")
@@ -52,23 +54,24 @@ block content
   div(class="blue section" id="query-tables")
     div(class="row")
       div(class="col-sm-12")
-        h2(class="centered") QUERY
+        h2(class="centered") SAMPLES
     div(class="row")
-      div(class="col-sm-6")
-        h4(class="centered") SAMPLES
+      div(class="col-sm-5")
+        include ./partials/_createSample
+      div(class="col-sm-7")
         include ./partials/_sampleTable
-      div(class="col-sm-6")
-        h4(class="centered") NEURONS
-        include ./partials/_neuronTable
   div(class="orange section", id="create")
     div(class="row")
       div(class="col-sm-12")
-        h2(class="centered") CREATE
+        h2(class="centered") NEURONS
     div(class="row")
-      div(class="col-sm-6")
-        include ./partials/_createSample
-      div(class="col-sm-6")
+      div(class="col-sm-12")
+        include ./partials/_neuronTable
+    div(class="row")
+      div(class="col-sm-2")
+      div(class="col-sm-8")
         include ./partials/_createNeuron
+      div(class="col-sm-2")
   div(class="blue section")
     div(class="row")
       div(class="col-sm-12")

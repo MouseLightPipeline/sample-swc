@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 
-var servicePort = process.env.SWC_SERVICE_PORT || 9641;
+var servicePort = process.env.SAMPLE_SERVICE_PORT || 9641;
 
 var env = process.env.NODE_ENV || 'development';
 

@@ -1,7 +1,7 @@
 'use strict';
 
-module.exports = function (sequelize, DataTypes) {
-    var RegistrationTransform = sequelize.define('RegistrationTransform', {
+module.exports = function(sequelize, DataTypes) {
+    var Fluorophore = sequelize.define('Fluorophore', {
         id: {
             primaryKey: true,
             type: DataTypes.UUID,
@@ -10,8 +10,8 @@ module.exports = function (sequelize, DataTypes) {
         name: DataTypes.TEXT
     }, {
         classMethods: {
-            associate: function (models) {
-                RegistrationTransform.hasMany(models.Sample, {foreignKey: 'registrationTransformId', as: 'samples'});
+            associate: function(models) {
+                Fluorophore.hasMany(models.Injection, {foreignKey: 'fluorophoreId', as: 'injections'});
             }
         }
     });
@@ -21,10 +21,10 @@ module.exports = function (sequelize, DataTypes) {
             model.count().then((count) => {
                 if (count < 2) {
                     if (count < 1) {
-                        model.create({name: 'Affine'});
+                        model.create({name: 'eGFP'});
                     }
                     if (count < 2) {
-                        model.create({name: 'B-spline'});
+                        model.create({name: 'tdTomato'});
                     }
                     resolve(true);
                 } else {
@@ -36,9 +36,9 @@ module.exports = function (sequelize, DataTypes) {
         });
     }
 
-    RegistrationTransform.populateDefault = () => {
-        return populateDefault(RegistrationTransform);
+    Fluorophore.populateDefault = () => {
+        return populateDefault(Fluorophore);
     };
 
-    return RegistrationTransform;
+    return Fluorophore;
 };

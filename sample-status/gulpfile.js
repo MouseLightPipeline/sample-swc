@@ -6,7 +6,7 @@ var del = require('del');
 
 gulp.task('default', ['develop']);
 
-gulp.task('build', ['lib:js', 'lib:css', 'lib:fonts:1', 'lib:fonts:2', 'client:js', 'js', 'pug', 'css']);
+gulp.task('build', ['lib:js', 'lib:css', 'lib:fonts:1', 'lib:fonts:2', 'client:src', 'js', 'pug', 'css']);
 
 gulp.task('develop', ['nodemon', 'watch']);
 
@@ -29,7 +29,7 @@ gulp.task('nodemon', ['build'], function () {
 });
 
 gulp.task('watch', function() {
-    return gulp.watch(['server/**/*.*', 'client/**/*.*'], ['build']);
+    return gulp.watch(['server/**/*.*', 'client/**/*.*', 'gulpfile.js'], ['build']);
 });
 
 gulp.task('clean', function () {
@@ -40,8 +40,12 @@ gulp.task('lib:js', ['clean'], function() {
   return gulp.src([
       'bower_components/jquery/dist/jquery.min.js',
       'bower_components/bootstrap/dist/js/bootstrap.min.js',
+      'bower_components/bootstrap-material-design/dist/js/material.min.js',
+      'bower_components/bootstrap-material-design/dist/js/material.min.js.map',
+      'bower_components/bootstrap-material-design/dist/js/ripples.min.js',
+      'bower_components/bootstrap-material-design/dist/js/ripples.min.js.map',
       'bower_components/tether/dist/js/tether.min.js',
-      'bower_components/socket.io.client/dist/socket.io-1.3.5.js'
+      'bower_components/socket.io-client/socket.io.js'
     ])
     .pipe(gulp.dest('dist/public/lib'))
 });
@@ -51,9 +55,12 @@ gulp.task('lib:css', ['clean'], function() {
   return gulp.src([
       'bower_components/bootstrap/dist/css/bootstrap.min.css',
       'bower_components/bootstrap/dist/css/bootstrap.min.css.map',
+      'bower_components/bootstrap-material-design/dist/css/bootstrap-material-design.min.css',
+      'bower_components/bootstrap-material-design/dist/css/bootstrap-material-design.min.css.map',
+      'bower_components/bootstrap-material-design/dist/css/ripples.min.css',
+      'bower_components/bootstrap-material-design/dist/css/ripples.min.css.map',
       'bower_components/tether/dist/css/tether.min.css',
       'bower_components/font-awesome/css/font-awesome.min.css',
-      'bower_components/lato/css/lato.min.css'
     ])
     .pipe(gulp.dest('dist/public/css'))
 });
@@ -71,6 +78,7 @@ gulp.task('lib:fonts:2', ['clean'], function() {
     ])
     .pipe(gulp.dest('dist/public/font'))
 });
+gulp.task('client:src', ['client:js', 'client:shared']);
 
 // move client js
 gulp.task('client:js', ['clean'], function () {
@@ -95,4 +103,9 @@ gulp.task('js', ['clean'], function () {
 gulp.task('pug', ['clean'], function () {
   return gulp.src('server/**/*.pug')
     .pipe(gulp.dest('dist/server'))
+});
+
+// move shared
+gulp.task('client:shared', ['clean'], function () {
+    return gulp.src('../shared/dist/client/services/*.js').pipe(gulp.dest('dist/public/lib'))
 });

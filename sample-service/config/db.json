@@ -2,17 +2,17 @@
   "development": {
     "username": "postgres",
     "password": "pgsecret",
-    "database": "static_development",
-    "host": "192.168.6.134",
-    "port": "5433",
+    "database": "samples_development",
+    "host": "localhost",
+    "port": "5432",
     "dialect": "postgres",
     "logging": null
   },
   "test": {
     "username": "postgres",
     "password": "pgsecret",
-    "database": "static_test",
-    "host": "192.168.6.134",
+    "database": "samples_test",
+    "host": "localhost",
     "port": "5432",
     "dialect": "postgres",
     "logging": null
@@ -20,7 +20,7 @@
   "production": {
     "username": "postgres",
     "password": "pgsecret",
-    "database": "static_production",
+    "database": "samples_production",
     "host": "sampledatabase",
     "port": "5432",
     "dialect": "postgres",

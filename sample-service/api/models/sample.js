@@ -23,10 +23,8 @@ module.exports = function(sequelize, DataTypes) {
     }, {
         classMethods: {
             associate: function(models) {
-                Sample.belongsTo(models.InjectionLocation, {foreignKey: 'injectionLocationId', as: 'injectionLocation'});
                 Sample.belongsTo(models.RegistrationTransform, {foreignKey: 'registrationTransformId', as: 'registrationTransform'});
-                Sample.belongsTo(models.Strain, {foreignKey: 'strainId', as: 'strain'});
-                Sample.hasMany(models.Neuron, {foreignKey: 'sampleId', as: 'neurons'});
+                Sample.belongsTo(models.MouseStrain, {foreignKey: 'mouseStrainId', as: 'mouseStrain'});
             }
         }
     });

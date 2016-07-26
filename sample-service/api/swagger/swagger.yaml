@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  version: "0.0.1"
+  version: "1.1.0"
   description: "Manage static/mostly static ndb data"
   title: Static Data
 # basePath prefixes all resource paths 
@@ -22,7 +22,7 @@ paths:
         - Samples
       responses:
         200:
-          description: An array of files
+          description: An array of samples
           schema:
             type: array
             items:
@@ -49,12 +49,44 @@ paths:
           schema:
             $ref: "#/definitions/SamplePost"
       responses:
-        "405":
-          description: Invalid input
+        200:
+          description: The mouse strain
+          schema:
+            $ref: "#/definitions/Sample"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    put:
+      tags:
+        - Samples
+      summary: Update sample
+      description: ""
+      operationId: updateSample
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Sample object that needs to be updated
+          required: false
+          schema:
+            $ref: "#/definitions/SamplePost"
+      responses:
+        200:
+          description: The sample
+          schema:
+            $ref: "#/definitions/Sample"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
   /samples/{sampleId}:
     x-swagger-router-controller: sample
     get:
-      summary: Sample definitions
+      summary: Sample by id
       tags:
         - Samples
       operationId: getSampleById
@@ -73,6 +105,619 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - Samples
+      summary: Deletes a sample
+      description: ""
+      operationId: deleteSample
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: sampleId
+          description: Sample id to delete
+          required: true
+          type: string
+      responses:
+        200:
+          description: The deleted sample id
+          schema:
+            $ref: "#/definitions/DeletedId"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /mousestrains:
+    x-swagger-router-controller: mousestrain
+    get:
+      summary: Mouse strain definitions
+      tags:
+        - Samples
+      responses:
+        200:
+          description: An array of mouse strains
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/MouseStrain'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      summary: Add a new mouse strain
+      description: ""
+      tags:
+        - Samples
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Mouse strain to add
+          required: true
+          schema:
+            $ref: "#/definitions/MouseStrainPost"
+      responses:
+        200:
+          description: The mouse strain
+          schema:
+            $ref: "#/definitions/MouseStrain"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    put:
+      tags:
+        - Samples
+      summary: Update mouse strain
+      description: ""
+      operationId: updateMouseStrain
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Mouse strain object that needs to be updated
+          required: false
+          schema:
+            $ref: "#/definitions/MouseStrainPost"
+      responses:
+        200:
+          description: The mouse strain
+          schema:
+            $ref: "#/definitions/MouseStrain"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /mousestrains/{strainId}:
+    x-swagger-router-controller: mousestrain
+    get:
+      summary: Mouse strain by id
+      tags:
+        - Samples
+      operationId: getStrainById
+      parameters:
+        - name: strainId
+          in: path
+          description: Mouse strain id to find
+          required: true
+          type: string
+      responses:
+        200:
+          description: The mouse strain
+          schema:
+            $ref: "#/definitions/MouseStrain"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - Samples
+      summary: Deletes a mouse strain
+      description: ""
+      operationId: deleteMouseStrain
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: strainId
+          description: Mouse strain id to delete
+          required: true
+          type: string
+      responses:
+        200:
+          description: The deleted mouse strain id
+          schema:
+            $ref: "#/definitions/DeletedId"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /registrationtransforms:
+    x-swagger-router-controller: registrationtransform
+    get:
+      summary: Registration transform definitions
+      tags:
+        - Samples
+      responses:
+        200:
+          description: An array of registration transforms
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/RegistrationTransform'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      summary: Add a new registration transform
+      description: ""
+      tags:
+        - Samples
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Registration transform to add
+          required: true
+          schema:
+            $ref: "#/definitions/RegistrationTransformPost"
+      responses:
+        200:
+          description: The mouse strain
+          schema:
+            $ref: "#/definitions/RegistrationTransform"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    put:
+      tags:
+        - Samples
+      summary: Update registration transform
+      description: ""
+      operationId: updateRegistrationTransform
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Registration transform object that needs to be updated
+          required: false
+          schema:
+            $ref: "#/definitions/RegistrationTransformPost"
+      responses:
+        200:
+          description: The registration transform
+          schema:
+            $ref: "#/definitions/RegistrationTransform"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /registrationtransforms/{transformId}:
+    x-swagger-router-controller: registrationtransform
+    get:
+      summary: Registration transform by id
+      tags:
+        - Samples
+      operationId: getRegistrationTransformById
+      parameters:
+        - name: transformId
+          in: path
+          description: Registration transform to find
+          required: true
+          type: string
+      responses:
+        200:
+          description: The registration transform
+          schema:
+            $ref: "#/definitions/RegistrationTransform"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - Samples
+      summary: Deletes a registration transform
+      description: ""
+      operationId: deleteRegistrationTransform
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: transformId
+          description: Registration transform id to delete
+          required: true
+          type: string
+      responses:
+        200:
+          description: The deleted registration transform id
+          schema:
+            $ref: "#/definitions/DeletedId"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /injections:
+    x-swagger-router-controller: injection
+    get:
+      summary: Injection definitions
+      tags:
+        - Injections
+      responses:
+        200:
+          description: An array of injections
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Injection'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      summary: Add a new injection
+      description: ""
+      tags:
+        - Injections
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Injection to add
+          required: true
+          schema:
+            $ref: "#/definitions/InjectionPost"
+      responses:
+        200:
+          description: The injection
+          schema:
+            $ref: "#/definitions/Injection"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    put:
+      tags:
+        - Injections
+      summary: Update injection
+      description: ""
+      operationId: updateInjection
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Injection object that needs to be updated
+          required: false
+          schema:
+            $ref: "#/definitions/InjectionPost"
+      responses:
+        200:
+          description: The injection
+          schema:
+            $ref: "#/definitions/Injection"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /injections/{injectionId}:
+    x-swagger-router-controller: injection
+    get:
+      summary: Injection by id
+      tags:
+        - Injections
+      operationId: getInjectionById
+      parameters:
+        - name: injectionId
+          in: path
+          description: Injection to find
+          required: true
+          type: string
+      responses:
+        200:
+          description: The injection
+          schema:
+            $ref: "#/definitions/Injection"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - Injections
+      summary: Deletes an injection
+      description: ""
+      operationId: deleteInjection
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: injectionId
+          description: Injection id to delete
+          required: true
+          type: string
+      responses:
+        200:
+          description: The deleted injection id
+          schema:
+            $ref: "#/definitions/DeletedId"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /injections/sample/{sampleId}:
+    x-swagger-router-controller: injection
+    get:
+      summary: Injections for a sample
+      operationId: getInjectionsForSample
+      tags:
+        - Samples
+        - Injections
+      parameters:
+        - name: sampleId
+          in: path
+          description: Sample id for injection lookup
+          required: true
+          type: string
+      responses:
+        200:
+          description: An array of injections for the given sample
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Injection'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /fluorophores:
+    x-swagger-router-controller: fluorophore
+    get:
+      summary: Fluorophore definitions
+      tags:
+        - Injections
+      responses:
+        200:
+          description: An array of fluorophores
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Fluorophore'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      summary: Add a new fluorophore
+      description: ""
+      tags:
+        - Injections
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Fluorophore to add
+          required: true
+          schema:
+            $ref: "#/definitions/FluorophorePost"
+      responses:
+        200:
+          description: The mouse strain
+          schema:
+            $ref: "#/definitions/Fluorophore"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    put:
+      tags:
+        - Injections
+      summary: Update a fluorophore
+      description: ""
+      operationId: updateFluorophore
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Fluorophore object that needs to be updated
+          required: false
+          schema:
+            $ref: "#/definitions/FluorophorePost"
+      responses:
+        200:
+          description: The mouse strain
+          schema:
+            $ref: "#/definitions/Fluorophore"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /fluorophores/{fluorophoreId}:
+    x-swagger-router-controller: fluorophore
+    get:
+      summary: Fluorophore by id
+      tags:
+        - Injections
+      operationId: getFluorophoreById
+      parameters:
+        - name: fluorophoreId
+          in: path
+          description: Fluorophore to find
+          required: true
+          type: string
+      responses:
+        200:
+          description: The fluorophore
+          schema:
+            $ref: "#/definitions/Fluorophore"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - Injections
+      summary: Deletes a fluorophore
+      description: ""
+      operationId: deleteFluorophore
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: fluorophoreId
+          description: Fluorophore id to delete
+          required: true
+          type: string
+      responses:
+        200:
+          description: The deleted fluorophore id
+          schema:
+            $ref: "#/definitions/DeletedId"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /viruses:
+    x-swagger-router-controller: injectionVirus
+    get:
+      summary: Virus definitions
+      tags:
+        - Injections
+      responses:
+        200:
+          description: An array of injection viruses
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Virus'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    post:
+      summary: Add a new virus
+      description: ""
+      tags:
+        - Injections
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Virus to add
+          required: true
+          schema:
+            $ref: "#/definitions/VirusPost"
+      responses:
+        200:
+          description: The virus
+          schema:
+            $ref: "#/definitions/Virus"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    put:
+      tags:
+        - Injections
+      summary: Update a virus
+      description: ""
+      operationId: updateVirus
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Virus object that needs to be updated
+          required: false
+          schema:
+            $ref: "#/definitions/VirusPost"
+      responses:
+        200:
+          description: The virus
+          schema:
+            $ref: "#/definitions/Virus"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /viruses/{virusId}:
+    x-swagger-router-controller: injectionVirus
+    get:
+      summary: Injection virus by id
+      tags:
+        - Injections
+      operationId: getInjectionVirusById
+      parameters:
+        - name: virusId
+          in: path
+          description: Injection virus id to find
+          required: true
+          type: string
+      responses:
+        200:
+          description: The injection virus
+          schema:
+            $ref: "#/definitions/Virus"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    delete:
+      tags:
+        - Injections
+      summary: Deletes a virus
+      description: ""
+      operationId: deleteVirus
+      produces:
+        - application/json
+      parameters:
+        - in: path
+          name: virusId
+          description: Virus id to delete
+          required: true
+          type: string
+      responses:
+        200:
+          description: The deleted virus id
+          schema:
+            $ref: "#/definitions/DeletedId"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
   /neurons:
     x-swagger-router-controller: neuron
     get:
@@ -82,7 +727,7 @@ paths:
         - Neurons
       responses:
         200:
-          description: An array of files
+          description: An array of neurons
           schema:
             type: array
             items:
@@ -108,12 +753,44 @@ paths:
           schema:
             $ref: "#/definitions/NeuronPost"
       responses:
-        "405":
-          description: Invalid input
+        200:
+          description: The neuron
+          schema:
+            $ref: "#/definitions/Neuron"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+    put:
+      tags:
+        - Neurons
+      summary: Update a neuron
+      description: ""
+      operationId: updateNeuron
+      consumes:
+        - application/json
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: body
+          description: Neuron object that needs to be updated
+          required: false
+          schema:
+            $ref: "#/definitions/NeuronPost"
+      responses:
+        200:
+          description: The virus
+          schema:
+            $ref: "#/definitions/Neuron"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
   /neurons/{neuronId}:
     x-swagger-router-controller: neuron
     get:
-      summary: Get neuron definition
+      summary: Neuron by id
       tags:
         - Neurons
       operationId: getNeuronById
@@ -132,283 +809,50 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
-  /samples/{sampleId}/neurons:
-    x-swagger-router-controller: neuron
-    get:
-      summary: Neurons for a sample
-      operationId: getNeuronsForSample
+    delete:
       tags:
-        - Samples
         - Neurons
+      summary: Deletes a neuron
+      description: ""
+      operationId: deleteNeuron
+      produces:
+        - application/json
       parameters:
-        - name: sampleId
-          in: path
-          description: Sample id for neuron lookup
+        - in: path
+          name: neuronId
+          description: Neuron id to delete
           required: true
           type: string
       responses:
         200:
-          description: An array of neurons for the given sample
+          description: The deleted neuron id
+          schema:
+            $ref: "#/definitions/DeletedId"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /neurons/injection/{injectionId}:
+    x-swagger-router-controller: neuron
+    get:
+      summary: Neurons for an injection
+      operationId: getNeuronsForInjection
+      tags:
+        - Injections
+        - Neurons
+      parameters:
+        - name: injectionId
+          in: path
+          description: InjectionId id for neuron lookup
+          required: true
+          type: string
+      responses:
+        200:
+          description: An array of neurons for the given injection
           schema:
             type: array
             items:
               $ref: '#/definitions/Neuron'
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/Error"
-  /injections:
-    x-swagger-router-controller: injection
-    get:
-      summary: Injection location definitions
-      tags:
-        - Injection Locations
-      responses:
-        200:
-          description: An array of files
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/InjectionLocation'
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/Error"
-    post:
-      summary: Add a new injection location
-      description: ""
-      tags:
-        - Injection Locations
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: Injection location to add
-          required: true
-          schema:
-            $ref: "#/definitions/InjectionLocationPost"
-      responses:
-        "405":
-          description: Invalid input
-  /injections/{injectionId}:
-    x-swagger-router-controller: injection
-    get:
-      summary: Injection location by id
-      tags:
-        - Injection Locations
-      operationId: getInjectionById
-      parameters:
-        - name: injectionId
-          in: path
-          description: Injection location to find
-          required: true
-          type: string
-      responses:
-        200:
-          description: The inection location
-          schema:
-            $ref: "#/definitions/InjectionLocation"
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/Error"
-  /transforms:
-    x-swagger-router-controller: registrations
-    get:
-      summary: Registration transform definitions
-      tags:
-        - Registration Transforms
-      responses:
-        200:
-          description: An array of files
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/RegistrationTransform'
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/Error"
-    post:
-      summary: Add a new registration transform
-      description: ""
-      tags:
-        - Registration Transforms
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: Registration transform to add
-          required: true
-          schema:
-            $ref: "#/definitions/RegistrationTransformPost"
-      responses:
-        "405":
-          description: Invalid input
-  /transforms/{transformId}:
-    x-swagger-router-controller: registrations
-    get:
-      summary: Transform by id
-      tags:
-        - Registration Transforms
-      operationId: getTransformById
-      parameters:
-        - name: transformId
-          in: path
-          description: Registration transform to find
-          required: true
-          type: string
-      responses:
-        200:
-          description: The registration transform
-          schema:
-            $ref: "#/definitions/RegistrationTransform"
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/Error"
-  /viruses:
-    x-swagger-router-controller: virus
-    get:
-      summary: Virus definitions
-      tags:
-        - Viruses
-      responses:
-        200:
-          description: An array of files
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Virus'
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/Error"
-    post:
-      summary: Add a new virus
-      description: ""
-      tags:
-        - Viruses
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: Virus to add
-          required: true
-          schema:
-            $ref: "#/definitions/VirusPost"
-      responses:
-        "405":
-          description: Invalid input
-  /viruses/{virusId}:
-    x-swagger-router-controller: virus
-    get:
-      summary: Virus by id
-      tags:
-        - Viruses
-      operationId: getVirusById
-      parameters:
-        - name: virusId
-          in: path
-          description: Virus id to find
-          required: true
-          type: string
-      responses:
-        200:
-          description: The inection location
-          schema:
-            $ref: "#/definitions/Virus"
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/Error"
-  /viruses/{virusId}/strains:
-    x-swagger-router-controller: strain
-    get:
-      summary: Strain definitions for the specified virus
-      operationId: getStrainsForVirus
-      tags:
-        - Viruses
-      parameters:
-        - name: virusId
-          in: path
-          description: Virus id for strain lookup
-          required: true
-          type: string
-      responses:
-        200:
-          description: An array of strains for the specified virus
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Strain'
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/Error"
-  /strains:
-    x-swagger-router-controller: strain
-    get:
-      summary: Strain definitions
-      tags:
-        - Viruses
-      responses:
-        200:
-          description: An array of files
-          schema:
-            type: array
-            items:
-              $ref: '#/definitions/Strain'
-        default:
-          description: Error
-          schema:
-            $ref: "#/definitions/Error"
-    post:
-      summary: Add a new strain
-      description: ""
-      tags:
-        - Viruses
-      consumes:
-        - application/json
-      produces:
-        - application/json
-      parameters:
-        - in: body
-          name: body
-          description: Strain to add
-          required: true
-          schema:
-            $ref: "#/definitions/StrainPost"
-      responses:
-        "405":
-          description: Invalid input
-  /strains/{strainId}:
-    x-swagger-router-controller: strain
-    get:
-      summary: Strain by id
-      tags:
-        - Viruses
-      operationId: getStrainById
-      parameters:
-        - name: strainId
-          in: path
-          description: Strain id to find
-          required: true
-          type: string
-      responses:
-        200:
-          description: The strain
-          schema:
-            $ref: "#/definitions/Strain"
         default:
           description: Error
           schema:
@@ -418,10 +862,80 @@ paths:
     get:
       summary: Brain area definitions
       tags:
-        - Neurons
+        - Brain Areas
       responses:
         200:
           description: An array of brain area definitions
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/BrainArea'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /brainareas/{brainAreaId}:
+    x-swagger-router-controller: brainareas
+    get:
+      summary: Brain area by id
+      tags:
+        - Brain Areas
+      operationId: getBrainAreaById
+      parameters:
+        - name: brainAreaId
+          in: path
+          description: Brain area object to find
+          required: true
+          type: string
+      responses:
+        200:
+          description: The brain area
+          schema:
+            $ref: "#/definitions/BrainArea"
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /brainareas/depth/{depth}:
+    x-swagger-router-controller: brainareas
+    get:
+      summary: Brain area definitions at the specified depth
+      operationId: getBrainAreasForDepth
+      tags:
+        - Brain Areas
+      parameters:
+        - name: depth
+          in: path
+          description: Depth to search
+          required: true
+          type: string
+      responses:
+        200:
+          description: An array of brain area definitions at the specified depth
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/BrainArea'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /brainareas/parent/{parentId}:
+    x-swagger-router-controller: brainareas
+    get:
+      summary: Brain area definitions for the specified parent area
+      operationId: getBrainAreasForParent
+      tags:
+        - Brain Areas
+      parameters:
+        - name: parentId
+          in: path
+          description: Parent to search
+          required: true
+          type: string
+      responses:
+        200:
+          description: An array of brain area definitions for the specified parent area
           schema:
             type: array
             items:
@@ -447,6 +961,9 @@ definitions:
         type: string
         format: date-time
         description: Datestamp
+      tag:
+        type: string
+        description: Comments
       comment:
         type: string
         description: Comments
@@ -468,82 +985,18 @@ definitions:
         type: string
         format: date-time
         description: Datestamp
+      tag:
+        type: string
+        description: Comments
       comment:
         type: string
         description: Comments
-      injectionLocationId:
-        type: string
-        description: Injection location reference id
       registrationTransformId:
         type: string
         description: Registration tranform reference id
-      strainId:
+      mouseStrainId:
         type: string
-        description: Strain
-  Neuron:
-    type: object
-    properties:
-      id:
-        type: string
-        description: Internal id
-      sampleId:
-        type: string
-        description: Sample reference id
-      createdAt:
-        type: string
-        format: date-time
-        description: Creation time
-      updatedAt:
-        type: string
-        format: date-time
-        description: Update time
-  NeuronPost:
-    type: object
-    properties:
-      sampleId:
-        type: string
-        description: Sample reference id
-      brainAreaId:
-        type: string
-        description: Brain area reference id
-      x:
-        type: number
-        format: double
-        description: Soma X location
-      y:
-        type: number
-        format: double
-        description: Soma Y location
-      z:
-        type: number
-        format: double
-        description: Soma Z location
-  InjectionLocation:
-    type: object
-    properties:
-      id:
-        type: string
-        description: Internal id
-      name:
-        type: string
-        description: Name
-      mutable:
-        type: boolean
-        description: Mutability
-      createdAt:
-        type: string
-        format: date-time
-        description: Creation time
-      updatedAt:
-        type: string
-        format: date-time
-        description: Update time
-  InjectionLocationPost:
-    type: object
-    properties:
-      name:
-        type: string
-        description: Name
+        description: Mouse Strain
   RegistrationTransform:
     type: object
     properties:
@@ -553,9 +1006,6 @@ definitions:
       name:
         type: string
         description: Name
-      mutable:
-        type: boolean
-        description: Mutability
       createdAt:
         type: string
         format: date-time
@@ -570,6 +1020,67 @@ definitions:
       name:
         type: string
         description: Name
+  MouseStrain:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id
+      name:
+        type: string
+        description: Name
+      createdAt:
+        type: string
+        format: date-time
+        description: Creation time
+      updatedAt:
+        type: string
+        format: date-time
+        description: Update time
+  MouseStrainPost:
+    type: object
+    properties:
+      name:
+        type: string
+        description: Name
+  Injection:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id
+      injectionVirusId:
+        type: string
+        description: Virus id
+      brainAreaId:
+        type: string
+        description: Brain area id
+      fluorophoreId:
+        type: string
+        description: Fluorophore id
+      createdAt:
+        type: string
+        format: date-time
+        description: Creation time
+      updatedAt:
+        type: string
+        format: date-time
+        description: Update time
+  InjectionPost:
+    type: object
+    properties:
+      sampleId:
+        type: string
+        description: Sample id
+      injectionVirusId:
+        type: string
+        description: Virus id
+      brainAreaId:
+        type: string
+        description: Brain area id
+      fluorophoreId:
+        type: string
+        description: Fluorophore id
   Virus:
     type: object
     properties:
@@ -579,9 +1090,6 @@ definitions:
       name:
         type: string
         description: Name
-      mutable:
-        type: boolean
-        description: Mutability
       createdAt:
         type: string
         format: date-time
@@ -596,21 +1104,15 @@ definitions:
       name:
         type: string
         description: Name
-  Strain:
+  Fluorophore:
     type: object
     properties:
       id:
         type: string
         description: Internal id
-      virusId:
-        type: string
-        description: Virus reference id
       name:
         type: string
         description: Name
-      mutable:
-        type: boolean
-        description: Mutability
       createdAt:
         type: string
         format: date-time
@@ -619,15 +1121,53 @@ definitions:
         type: string
         format: date-time
         description: Update time
-  StrainPost:
+  FluorophorePost:
     type: object
     properties:
       name:
         type: string
         description: Name
-      virusId:
+  Neuron:
+    type: object
+    properties:
+      id:
         type: string
-        description: Virus reference id
+        description: Internal id
+      injectionId:
+        type: string
+        description: Injection id
+      createdAt:
+        type: string
+        format: date-time
+        description: Creation time
+      updatedAt:
+        type: string
+        format: date-time
+        description: Update time
+  NeuronPost:
+    type: object
+    properties:
+      idNumber:
+        type: integer
+        description: Public id number
+      injectionId:
+        type: string
+        description: Injection id
+      brainAreaId:
+        type: string
+        description: Brain area id
+      x:
+        type: number
+        format: double
+        description: Soma X location
+      y:
+        type: number
+        format: double
+        description: Soma Y location
+      z:
+        type: number
+        format: double
+        description: Soma Z location
   BrainArea:
     type: object
     properties:
@@ -647,6 +1187,13 @@ definitions:
         type: string
         format: date-time
         description: Update time
+  DeletedId: 
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        type: string
   Error: 
     type: object
     required:

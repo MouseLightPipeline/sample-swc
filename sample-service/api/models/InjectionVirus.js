@@ -1,7 +1,9 @@
 'use strict';
 
-module.exports = function (sequelize, DataTypes) {
-    var RegistrationTransform = sequelize.define('RegistrationTransform', {
+var models = require('./index');
+
+module.exports = function(sequelize, DataTypes) {
+    var InjectionVirus = sequelize.define('InjectionVirus', {
         id: {
             primaryKey: true,
             type: DataTypes.UUID,
@@ -10,8 +12,8 @@ module.exports = function (sequelize, DataTypes) {
         name: DataTypes.TEXT
     }, {
         classMethods: {
-            associate: function (models) {
-                RegistrationTransform.hasMany(models.Sample, {foreignKey: 'registrationTransformId', as: 'samples'});
+            associate: function(models) {
+                InjectionVirus.hasMany(models.Injection, {foreignKey: 'injectionVirusId', as: 'injections'});
             }
         }
     });
@@ -21,10 +23,10 @@ module.exports = function (sequelize, DataTypes) {
             model.count().then((count) => {
                 if (count < 2) {
                     if (count < 1) {
-                        model.create({name: 'Affine'});
+                        model.create({name: 'AAV2/1.FLEX-eGFP'});
                     }
                     if (count < 2) {
-                        model.create({name: 'B-spline'});
+                        model.create({name: 'AAV2/1.FLEX-tdTomato'});
                     }
                     resolve(true);
                 } else {
@@ -36,9 +38,9 @@ module.exports = function (sequelize, DataTypes) {
         });
     }
 
-    RegistrationTransform.populateDefault = () => {
-        return populateDefault(RegistrationTransform);
+    InjectionVirus.populateDefault = () => {
+        return populateDefault(InjectionVirus);
     };
 
-    return RegistrationTransform;
+    return InjectionVirus;
 };

@@ -3,21 +3,17 @@
 /// <reference path="../../typings/globals/angular-resource/index.d.ts" />
 /// <reference path="dataService.ts" />
 
-interface ISample extends ng.resource.IResource<ISample>, IApiItem {
-    id: string;
-    idNumber: number;
+interface ISample extends IApiNumberedResourceItem<ISample> {
     sampleDate: Date;
     tag: string;
     comment: string;
-    injectionLocationId: string;
+    mouseStrainId: string;
     registrationTransformId: string;
-    strainId: string;
-    createdAt: Date;
-    updatedAt: Date;
+    injections: Array<string>;
 }
 
 interface ISampleResource extends IDataServiceResource<ISample> {
-    neurons(obj): ISample;
+    injections(obj): ISample;
 }
 
 function lpad(n, width, z = "0"): string {
@@ -27,11 +23,12 @@ function lpad(n, width, z = "0"): string {
 
 class SampleService extends DataService<ISample> {
     public static $inject = [
-        "$resource"
+        "$resource",
+        "$rootScope"
     ];
 
-    constructor($resource: ng.resource.IResourceService) {
-        super($resource);
+    constructor($resource: ng.resource.IResourceService, protected $rootScope: ng.IScope) {
+        super($resource, $rootScope);
     }
 
     private get service(): ISampleResource {
@@ -43,17 +40,35 @@ class SampleService extends DataService<ISample> {
         obj.createdAt = new Date(<string>obj.createdAt);
         obj.updatedAt = new Date(<string>obj.updatedAt);
 
+        obj.injections = [];
+
         return obj;
     }
 
     protected createResource(location: string): ISampleResource {
         return <ISampleResource>this.$resource(location + "samples/:id", { id: "@id" }, {
-            neurons: {
+            injections: {
                 method: "GET",
-                url: location + "samples/:id/neurons/",
+                url: location + "injections/sample/:id/",
                 params: { id: "@id" },
                 isArray: true
             }
+        });
+    }
+
+
+    public mapChildren(items) {
+
+        items.forEach((item: ISample) => {
+            let injections = [];
+            this.injectionsForSample(item.id).then((objs) => {
+                objs.forEach((injection) => {
+                    injections.push(injection.id);
+                });
+                this.$rootScope.$apply(() => {
+                    item.injections = injections;
+                });
+             });
         });
     }
 
@@ -61,8 +76,15 @@ class SampleService extends DataService<ISample> {
         return this.items;
     }
 
-    public neuronsForSample(id: string) {
-        return this.service.neurons({ id: id }).$promise;
+    public injectionsForSample(id: string): Promise<any> {
+        return new Promise<any>((resolve, reject) => {
+            this.service.injections({ id: id }).$promise.then(data => {
+                resolve(data);
+            }).catch((err) => {
+                reject(err);
+                console.log(err);
+            });
+        });
     }
 
     public getDisplayName(item: ISample, defaultValue: string = ""): string {

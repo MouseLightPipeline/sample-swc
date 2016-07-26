@@ -1,4 +1,5 @@
 div(ng-controller="neuronTableController")
+  h4(class="centered") EXISTING
   table(class="table table-sm" ng-show="neuronService.resourcesAreAvailable && neuronService.neurons.length > 0")
     thead
       tr
@@ -15,6 +16,6 @@ div(ng-controller="neuronTableController")
         td {{formatBrainArea(n.brainAreaId)}}
         td ({{n.x}}, {{n.y}}, {{n.z}})
   div(class="centered" ng-show="neuronService.resourcesAreAvailable && neuronService.neurons.length == 0")
-    h5 There are no neurons in the database.  Define a neuron for an existing in sample in the "Create" section.
+    h5 There are no neurons in the database.  Define a neuron for an existing in sample below in the "Create" section.
   div(class="centered" ng-show="!neuronService.resourcesAreAvailable")
     i(class="fa fa-spinner fa-spin" style="font-size:48px")

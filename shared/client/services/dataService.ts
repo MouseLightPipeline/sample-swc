@@ -5,21 +5,35 @@
 
 interface IApiItem {
     id: string;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
-interface IApiIdNumberItem extends IApiItem {
+interface IApiIdNumberItem {
     idNumber: number;
 }
 
-interface IDataServiceResource<T extends ng.resource.IResource<T>> extends ng.resource.IResourceClass<T> {
+interface IApiNamedItem {
+    name: string;
 }
 
 interface IApiResourceItem<T> extends ng.resource.IResource<T>, IApiItem {
 }
 
+interface IApiNamedResourceItem<T> extends IApiResourceItem<T>, IApiNamedItem {
+}
+
+interface IApiNumberedResourceItem<T> extends IApiResourceItem<T>, IApiIdNumberItem {
+}
+
+
+interface IDataServiceResource<T extends IApiResourceItem<T>> extends ng.resource.IResourceClass<T> {
+}
+
 abstract class DataService<T extends IApiResourceItem<T>> {
     public static $inject = [
-        "$resource"
+        "$resource",
+        "$rootScope"
     ];
 
     public resourcesAreAvailable: boolean = false;
@@ -30,13 +44,13 @@ abstract class DataService<T extends IApiResourceItem<T>> {
 
     protected dataSource: IDataServiceResource<T>;
 
-    constructor(protected $resource: ng.resource.IResourceService) {
+    constructor(protected $resource: ng.resource.IResourceService, protected $rootScope: ng.IScope) {
     }
 
-    public setLocation(reourceLocation: string): Promise<boolean> {
+    public setLocation(resourceLocation: string): Promise<boolean> {
         this.resourcesAreAvailable = false;
 
-        this.apiLocation = reourceLocation;
+        this.apiLocation = resourceLocation;
 
         this.dataSource = this.createResource(this.apiLocation);
 
@@ -47,12 +61,18 @@ abstract class DataService<T extends IApiResourceItem<T>> {
         this.resourcesAreAvailable = false;
 
         return new Promise<boolean>((resolve) => {
-            this.dataSource.query((data) => {
-                data = data.map((obj) => {
-                    let item: IApiItem = this.mapQueriedItem(obj);
-                    this[item.id] = item;
-                    return item;
-                });
+            this.refreshDataWithCallback((data) => {
+                /*
+                 data = data.map((obj) => {
+                 let item: IApiItem = this.mapQueriedItem(obj);
+                 this[item.id] = item;
+                 return item;
+                 });
+
+                 this.mapChildren(data);
+                 */
+
+                data = this.acceptNewItems(data);
 
                 this.items = data;
 
@@ -61,6 +81,18 @@ abstract class DataService<T extends IApiResourceItem<T>> {
                 resolve(true);
             });
         });
+    }
+
+    protected acceptNewItems(items) {
+        items = items.map((obj) => {
+            let item: IApiItem = this.mapQueriedItem(obj);
+            this[item.id] = item;
+            return item;
+        });
+
+        this.mapChildren(items);
+
+        return items;
     }
 
     public createItem(data): Promise<T> {
@@ -83,16 +115,26 @@ abstract class DataService<T extends IApiResourceItem<T>> {
         });
     }
 
-    public find(id: string): T {
-        let item: T = this.items.find((obj: IApiItem) => {
-            return obj.id === id;
+    public find(id: string): Promise<T> {
+        // let item: T = this.items.find((obj: IApiItem) => {
+        //    return obj.id === id;
+        // });
+
+        return new Promise<T>((resolve, reject) => {
+            let item: T = this[id];
+
+            if (item === undefined) {
+                this.dataSource.get({ id: id }).$promise.then(data => {
+                    console.log(data);
+                    data = this.acceptNewItems(data);
+                    resolve(data);
+                }).catch((err) => {
+                    reject(err);
+                });
+            } else {
+                resolve(item);
+            }
         });
-
-        if (item === undefined) {
-            item = null;
-        }
-
-        return item;
     }
 
     public findWithIdNumber(id: number): T {
@@ -106,14 +148,28 @@ abstract class DataService<T extends IApiResourceItem<T>> {
         return item;
     }
 
-    public getDisplayName(ignore: T, defaultValue: string = ""): string {
+    public findWithName(name: string): T {
+        let item: T = this.items.find((obj: IApiNamedItem) => {
+            return obj.name.toLowerCase() === name.toLowerCase();
+        });
+
+        if (item === undefined)
+            item = null;
+
+        return item;
+    }
+
+    public getDisplayName(item: T, defaultValue: string = ""): string {
+        if ("name" in item)
+            return item["name"];
+
         return defaultValue;
     }
 
     public getDisplayNameForId(id: string, defaultValue: string = ""): string {
-        let item = this.find(id);
+        let item : T = this[id];
 
-        if (item === null) {
+        if (item === undefined) {
             return defaultValue;
         } else {
             return this.getDisplayName(item);
@@ -122,6 +178,13 @@ abstract class DataService<T extends IApiResourceItem<T>> {
 
     protected get apiUrl() {
         return this.apiLocation;
+    }
+
+    protected refreshDataWithCallback(fcn: any) {
+        this.dataSource.query(fcn);
+    }
+
+    public mapChildren(items) {
     }
 
     protected abstract mapQueriedItem(obj: any): T;

@@ -2,7 +2,10 @@
   "name": "sample-web",
   "version": "0.0.1",
   "private": true,
-  "scripts": {},
+  "scripts": {
+    "start": "node app.js",
+    "debug": "node $NODE_DEBUG_OPTION dist/server/app.js"
+  },
   "dependencies": {
     "body-parser": "^1.13.3",
     "compression": "^1.5.2",

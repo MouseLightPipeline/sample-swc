@@ -3,8 +3,8 @@
     "username": "postgres",
     "password": "pgsecret",
     "database": "swc_development",
-    "host": "192.168.6.134",
-    "port": "5432",
+    "host": "localhost",
+    "port": "5433",
     "dialect": "postgres",
     "logging": null
   },

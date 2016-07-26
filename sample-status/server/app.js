@@ -11,34 +11,20 @@ var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
+var serviceHostUrl = '';
+
 var connected = false;
-
-var serviceSocket = null;
-
-var sampleCount = 0;
-
-var neuronCount = 0;
-
-var injectionCount = 0;
-
-var registrationCount = 0;
-
-var virusCount = 0;
-
-var strainCount = 0;
-
-var db_status = false;
 
 connectToServiceIO();
 
 io.on('connection', function(socket) {
     console.log('Web client connected to status service.')
-  
-    relayAllStatus();
-  
+
     socket.on('disconnect', function(){
         console.log('Web client disconnected from status service.')
     });
+
+    socket.emit("serviceHostUrl", serviceHostUrl);
 });
 
 var env = process.env.NODE_ENV || 'development';
@@ -106,90 +92,8 @@ function connectToServiceIO() {
     serviceHost = 'localhost';
 
     if (process.env.NODE_ENV === 'production') {
-        serviceHost = 'sampleservice';
+        serviceHost = 'sample-service';
     }
-  
-    var host = 'http://' + serviceHost + ':9641';
-  
-    var client = require('socket.io-client');
- 
-    var serviceSocket = client.connect(host);
-  
-    console.log('Trying to establish socket connection to REST service at ' + host);
-  
-    serviceSocket.on('connect', function(msg) {
-        console.log('Connected to REST service');
-        connected = true;
-        io.emit('connected', connected);
-    });
-    serviceSocket.on('reconnect', function(msg) {
-        console.log('Reconnected to REST service');
-        connected = true;
-        io.emit('connected', connected);
-    });
-    serviceSocket.on('disconnect', function(msg) {
-        console.log('Disconnected from REST service');
-        connected = false;
-        sampleCount = 0;
-        neuronCount = 0;
-        injectionCount = 0
-        db_status = false;
-        relayAllStatus();
-    });
-    serviceSocket.on('error', function(msg) {
-        console.log('Error for REST service');
-        connected = false;
-        io.emit('connected', connected);
-    });
-    serviceSocket.on('db_status', function(msg) {
-        console.log('Received file count update from REST service');
-        db_status = msg;
-        io.emit('db_status', msg);
-    });
-    serviceSocket.on('sample_count', function(msg) {
-        console.log('Received sample count update from REST service');
-        sampleCount = msg;
-        io.emit('sample_count', msg);
-    });
-    serviceSocket.on('neuron_count', function(msg) {
-        console.log('Received neuron count update from REST service');
-        neuronCount = msg;
-        io.emit('neuron_count', msg);
-    });
-    serviceSocket.on('injection_count', function(msg) {
-        console.log('Received injection location count update from REST service');
-        injectionCount = msg;
-        io.emit('injection_count', msg);
-    });
-    serviceSocket.on('registration_count', function(msg) {
-        console.log('Received registration transform count update from REST service');
-        registrationCount = msg;
-        io.emit('registration_count', msg);
-    });
-    serviceSocket.on('structure_count', function(msg) {
-        console.log('Received structure identifier count update from REST service');
-        structureCount = msg;
-        io.emit('structure_count', msg);
-    });
-    serviceSocket.on('virus_count', function(msg) {
-        console.log('Received virus count update from REST service');
-        virusCount = msg;
-        io.emit('virus_count', msg);
-    });
-    serviceSocket.on('strain_count', function(msg) {
-        console.log('Received strain count update from REST service');
-        strainCount = msg;
-        io.emit('strain_count', msg);
-    });
-}
 
-function relayAllStatus() {
-    io.emit('connected', connected);
-    io.emit('db_status', db_status);
-    io.emit('sample_count', sampleCount);
-    io.emit('neuron_count', neuronCount);
-    io.emit('injection_count', injectionCount);
-    io.emit('registration_count', registrationCount);
-    io.emit('virus_count', virusCount);
-    io.emit('strain_count', strainCount);
+    serviceHostUrl = 'http://' + serviceHost + ':9641';
 }

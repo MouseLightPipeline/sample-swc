@@ -1,5 +1,5 @@
 div(class="row", ng-controller="neuronController")
-  h4(class="centered") NEURONS
+  h4(class="centered") CREATE
   div(class="row" ng-show="(lastCreateMessage.length > 0) || (lastCreateError.length > 0)")
     div(class="col-sm-12 inset")
       div(class="alert alert-success" ng-show="lastCreateMessage.length > 0")
@@ -24,9 +24,19 @@ div(class="row", ng-controller="neuronController")
             option(ng-repeat="option in sampleService.samples" value="{{option.id}}") {{sampleService.getDisplayName(option)}}
       div(class="col-sm-6")
         div(class="form-group label-floating")
-          label(class="control-label" for="brainAreaSelect") Brain Area
-          select(ng-model="model.brainAreaId" id="brainAreaSelect" class="form-control form-control-sm c-select")
-            option(ng-repeat="option in brainAreaService.brainAreas" value="{{option.id}}") ({{option.abiIdNumber}}) {{option.abiName}}
+          label(class="control-label" for="injectionSelect") Injection
+          select(ng-model="model.injectionId" id="injectionSelect" class="form-control form-control-sm c-select")
+            option(ng-repeat="option in injectionsForSample" value="{{option.id}}") {{formatInjection(option)}}
+    div(class="row")
+      div(class="col-sm-12")
+        label(class="control-label") Brain Area
+        ol(class="breadcrumb orange")
+          li(ng-repeat="depthNav in brainAreaNavigationNeuron")
+            span(uib-dropdown)
+              a(class="brain-area-nav" href uib-dropdown-toggle) {{depthNav.areas[depthNav.selectedAreaIndex].name}}
+              ul(class="dropdown-menu" uib-dropdown-menu role="menu")
+                li(role="menuitem" ng-repeat="area in depthNav.areas")
+                  a(ng-click="updateLocation($parent.$index, $index)") {{area.name}}
     div(class="row")
       div(class="col-sm-4")
         div(class="form-group")

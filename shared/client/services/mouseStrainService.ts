@@ -3,16 +3,13 @@
 /// <reference path="../../typings/globals/angular-resource/index.d.ts" />
 /// <reference path="dataService.ts" />
 
-
-interface IStructureIdentifier extends IApiNamedResourceItem<IStructureIdentifier> {
-    value: number;
+interface IMouseStrain extends IApiNamedResourceItem<IMouseStrain> {
 }
 
-interface IStructureIdentifierResource extends IDataServiceResource<IStructureIdentifier> {
+interface IMouseStrainResource extends IDataServiceResource<IMouseStrain>, IApiItem {
 }
 
-class StructureIdentifierService extends DataService<IStructureIdentifier> {
-
+class MouseStrainService extends DataService<IMouseStrain> {
     public static $inject = [
         "$resource",
         "$rootScope"
@@ -22,18 +19,18 @@ class StructureIdentifierService extends DataService<IStructureIdentifier> {
         super($resource, $rootScope);
     }
 
-    protected mapQueriedItem(obj: any): IStructureIdentifier {
+    protected mapQueriedItem(obj: any): IMouseStrain {
         obj.createdAt = new Date(<string>obj.createdAt);
         obj.updatedAt = new Date(<string>obj.updatedAt);
 
         return obj;
     }
 
-    protected createResource(location: string): IStructureIdentifierResource {
-        return <IStructureIdentifierResource>this.$resource(location + "structures/:id", { id: "@id" }, {});
+    protected createResource(location: string): IMouseStrainResource {
+        return <IMouseStrainResource>this.$resource(location + "mousestrains/:id", { id: "@id" }, {});
     }
 
-    public get structures(): any {
+    public get mouseStrains(): any {
         return this.items;
     }
 }

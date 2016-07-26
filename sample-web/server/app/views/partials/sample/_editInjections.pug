@@ -1,0 +1,68 @@
+div(class="modal fade model-wide" id="editInjectionsModal" tabindex="-1" role="dialog" aria-labelledby="editInjectionsModalLabel" aria-hidden="true" ng-controller="editInjectionsController")
+  div(class="modal-dialog" role="document")
+    div(class="modal-content")
+      div(class="modal-header")
+        button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+          span(aria-hidden="true") &times;
+        h3(class="modal-title" id="editInjectionsModalTitle") Injections for Sample: {{formatSample(sample.id)}}
+      div(class="modal-body")
+        div(class="row inset-group")
+          table(class="table table-sm")
+            thead
+              tr
+                th Virus
+                th Fluorophore
+                th Location
+            tbody
+              tr(ng-repeat="injection in injectionsForSample")
+               td {{formatInjectionVirus(injection.injectionVirusId)}}
+               td {{formatFluorophore(injection.fluorophoreId)}}
+               td {{formatBrainArea(injection.brainAreaId)}}
+
+        div(class="row centered" ng-show="injectionsForSample.length === 0")
+          p(class="text-danger") No injections are defined for this sample.  Create injections below.
+
+        h3 Add Injection
+
+        div(class="inset-group")
+          div(class="row")
+            h5 Select an existing virus from the list or enter a new name
+            div(class="form-group")
+              div(class="input-group")
+                span(class="input-group-btn")
+                  div(class="btn-group" uib-dropdown)
+                    button(type="button" id="injectionVirusButton" class="btn btn-default" uib-dropdown-toggle)
+                      span(class="caret")
+                      span(class="sr-only")
+                    ul(class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="injectionVirusButton")
+                      li(role="menuitem" ng-repeat="option in virusService.viruses")
+                        a(ng-click="setInjectionVirusName(option)") {{option.name}}
+                input(type="text", class="form-control", id="injectionVirusName" ng-model="injectionVirusName")
+
+          div(class="row")
+            h5 Select an existing fluorophore from the list or enter a new name
+            div(class="form-group")
+              div(class="input-group")
+                span(class="input-group-btn")
+                  div(class="btn-group" uib-dropdown)
+                    button(type="button" id="fluorophore-button" class="btn btn-default" uib-dropdown-toggle)
+                      span(class="caret")
+                      span(class="sr-only")
+                    ul(class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="fluorophore-button")
+                      li(role="menuitem" ng-repeat="option in fluorophoreService.fluorophores")
+                        a(ng-click="setFluorophoreName(option)") {{option.name}}
+                input(type="text", class="form-control", id="fluorophoreName" ng-model="fluorophoreName")
+
+          div(class="row")
+            h5 Choose a brain area
+            ol(class="breadcrumb blue")
+              li(ng-repeat="depthNav in brainAreaNavigation")
+                span(uib-dropdown)
+                  a(class="brain-area-nav" href uib-dropdown-toggle) {{depthNav.areas[depthNav.selectedAreaIndex].name}}
+                  ul(class="dropdown-menu" uib-dropdown-menu role="menu")
+                    li(role="menuitem" ng-repeat="area in depthNav.areas")
+                      a(ng-click="updateLocation($parent.$index, $index)") {{area.name}}
+          div(class="row")
+            button(type="button pull-right" class="btn btn-info btn-raised" ng-disabled="!canAddInjection" ng-click="addInjection()") Add Injection
+      div(class="modal-footer")
+        button(type="button" class="btn btn-default btn-raised" data-dismiss="modal") Close

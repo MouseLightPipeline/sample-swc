@@ -13,7 +13,11 @@ var Codes = {
     },
     INVALID_NAME: {
         code: 2002,
-        message: 'Id number can not be empty and must be an integer.'
+        message: 'Name can not be empty.'
+    },
+    DOES_NOT_EXIST: {
+        code: 2003,
+        message: 'An object with that id number does not exist.'
     },
     DUPLICATE_SAMPLE_ID: {
         code: 2101,
@@ -59,6 +63,10 @@ function invalidName() {
     return Codes.INVALID_NAME;
 }
 
+function idDoesNotExit() {
+    return Codes.DOES_NOT_EXIST;
+}
+
 function duplicateSample() {
     return Codes.DUPLICATE_SAMPLE_ID;
 }
@@ -88,6 +96,7 @@ module.exports = {
     sequelizeError: sequelizeError,
     invalidIdNumber: invalidIdNumber,
     invalidName: invalidName,
+    idDoesNotExit: idDoesNotExit,
     duplicateSample: duplicateSample,
     duplicateNeuron: duplicateNeuron,
     duplicateInjection: duplicateInjection,

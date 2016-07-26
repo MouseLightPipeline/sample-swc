@@ -8,7 +8,7 @@ var tslint = require("gulp-tslint");
 
 gulp.task('default', ['watch']);
 
-gulp.task('build', ['tslint, ts']);
+gulp.task('build', ['tslint', 'ts']);
 
 gulp.task('deploy', ['ts']);
 

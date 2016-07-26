@@ -3,11 +3,8 @@
 /// <reference path="../../typings/globals/angular-resource/index.d.ts" />
 /// <reference path="dataService.ts" />
 
-interface INeuron extends ng.resource.IResource<INeuron>, IApiItem {
-    id: string;
+interface INeuron extends IApiNumberedResourceItem<INeuron> {
     sampleId: string;
-    createdAt: Date;
-    updatedAt: Date;
 }
 
 interface INeuronResource extends IDataServiceResource<INeuron> {
@@ -15,11 +12,12 @@ interface INeuronResource extends IDataServiceResource<INeuron> {
 
 class NeuronService extends DataService<INeuron> {
     public static $inject = [
-        "$resource"
+        "$resource",
+        "$rootScope"
     ];
 
-    constructor($resource: ng.resource.IResourceService) {
-        super($resource);
+    constructor($resource: ng.resource.IResourceService, protected $rootScope: ng.IScope) {
+        super($resource, $rootScope);
     }
 
     protected mapQueriedItem(obj: any): INeuron {

@@ -1,9 +1,7 @@
 div(class="row", ng-controller="createSampleController")
-  include ./_createInjectionModal
   include ./_createRegistrationModal
-  include ./_createVirusModal
-  include ./_createStrainModal
-  h4(class="centered") SAMPLES
+  include ./_createMouseStrainModal
+  h4(class="centered") CREATE
   div(class="row" ng-show="(lastCreateMessage.length > 0) || (lastCreateError.length > 0)")
     div(class="col-sm-12 inset")
       div(class="alert alert-success" ng-show="lastCreateMessage.length > 0")
@@ -23,13 +21,13 @@ div(class="row", ng-controller="createSampleController")
     div(class="row")
       div(class="col-sm-6")
         div(class="form-group label-floating")
-          label(class="control-label" for="injectionSelect") Injection Location
+          label(class="control-label" for="mouseStrainSelect") Strain
           div(class="input-group")
-            select(ng-model="model.injectionLocation" id="injectionSelect" class="form-control form-control-sm c-select btn-raised" ng-disabled="!injectionService.resourcesAreAvailable")
-              option(ng-repeat="option in injectionService.injectionLocations" value="{{option.id}}") {{option.name}}
+            select(ng-model="model.strain" id="mouseStrainSelect" class="form-control form-control-sm c-select btn-raised" ng-disabled="!mouseStrainService.resourcesAreAvailable")
+              option(ng-repeat="option in mouseStrainService.mouseStrains" value="{{option.id}}") {{option.name}}
             span(class="input-group-btn")
-              button(class="btn btn-info btm-sm]', " type="button" data-toggle="modal" data-target="#createInjectionModal")
-                i(ng-class="['fa', {'fa-spinner': !injectionService.resourcesAreAvailable, 'fa-spin': !injectionService.resourcesAreAvailable, 'fa-plus': injectionService.resourcesAreAvailable}]")
+              button(class="btn btn-info btm-sm]', " type="button" data-toggle="modal" data-target="#createMouseStrainModal")
+                i(ng-class="['fa', {'fa-spinner': !mouseStrainService.resourcesAreAvailable, 'fa-spin': !mouseStrainService.resourcesAreAvailable, 'fa-plus': mouseStrainService.resourcesAreAvailable}]")
       div(class="col-sm-6")
         div(class="form-group label-floating")
           label(class="control-label" for="transformSelect") Registration Transform
@@ -39,25 +37,6 @@ div(class="row", ng-controller="createSampleController")
             span(class="input-group-btn")
               button(class="btn btn-info btm-sm" type="button" data-toggle="modal" data-target="#createRegistrationModal")
                 i(ng-class="['fa', {'fa-spinner': !transformService.resourcesAreAvailable, 'fa-spin': !transformService.resourcesAreAvailable, 'fa-plus': transformService.resourcesAreAvailable}]")
-    div(class="row")
-      div(class="col-sm-6")
-        div(class="form-group label-floating")
-          label(class="control-label" for="virusSelect") Virus
-          div(class="input-group")
-            select(ng-model="model.virus" id="virusSelect" class="form-control form-control-sm c-select" ng-disabled="!virusService.resourcesAreAvailable")
-              option(ng-repeat="option in virusService.viruses" value="{{option.id}}") {{option.name}}
-            span(class="input-group-btn")
-              button(class="btn btn-info btm-sm" type="button" data-toggle="modal" data-target="#createVirusModal")
-                i(ng-class="['fa', {'fa-spinner': !virusService.resourcesAreAvailable, 'fa-spin': !virusService.resourcesAreAvailable, 'fa-plus': virusService.resourcesAreAvailable}]")
-      div(class="col-sm-6")
-        div(class="form-group label-floating")
-          label(class="control-label" for="strainSelect") Strains for {{nameForVirus(model.virus)}}
-          div(class="input-group")
-            select(ng-model="model.strain" id="strainSelect" class="form-control form-control-sm c-select" ng-disabled="(model.virus.length) === 0 || (strainsForVirus.length === 0) ||  !strainService.resourcesAreAvailable")
-              option(ng-repeat="option in strainsForVirus" value="{{option.id}}") {{option.name}}
-            span(class="input-group-btn")
-              button(class="btn btn-info btm-sm" type="button" data-toggle="modal" data-target="#createStrainModal")
-                i(ng-class="['fa', {'fa-spinner': !strainService.resourcesAreAvailable, 'fa-spin': !strainService.resourcesAreAvailable, 'fa-plus': strainService.resourcesAreAvailable}]")
     div(class="row")
       div(class="col-sm-3")
         div(class="form-group label-floating")
