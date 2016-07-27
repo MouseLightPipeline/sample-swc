@@ -12,8 +12,6 @@ interface IAppScope extends ng.IScope {
     apiUrl: string;
     apiDocUrl: string;
     statusUrl: string;
-
-    formatSample(sampleId: string): string;
 }
 
 class AppController {

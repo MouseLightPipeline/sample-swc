@@ -15,7 +15,7 @@ interface IEditInjectionsScope extends IAppScope {
     formatInjectionVirus(injectionVirusId: string);
     formatFluorophore(fluorophoreId: string);
     formatBrainArea(brainAreaId: string);
-
+    formatSample(sample: ISample);
     updateLocation(depth: number, index: number);
 
     addInjection();
@@ -58,6 +58,10 @@ class EditInjectionsController {
             return this.formatBrainArea(brainAreaId);
         };
 
+        this.$scope.formatSample = (sample: ISample) => {
+            return this.$scope.sampleService.getDisplayName(sample);
+        };
+
         $scope.addInjection = () => this.addInjection();
 
         $scope.updateLocation = (depth: number, index: number) => {
@@ -92,12 +96,7 @@ class EditInjectionsController {
         if (sample === null) {
             this.$scope.injectionsForSample = [];
         } else {
-            this.$scope.injectionService.injectionsForSample(sample.id).then((data) => {
-                this.$scope.injectionsForSample = data;
-            }).catch((err) => {
-                console.log(err);
-                this.$scope.injectionsForSample = [];
-            });
+            this.$scope.injectionsForSample = this.$scope.injectionService.injectionsForSample(sample.id);
         }
 
         if (this.$scope.injectionVirusService.injectionViruses.length > 0) {
@@ -184,8 +183,6 @@ class EditInjectionsController {
             this.$scope.setFluorophoreName(fluorophore);
             return this.createInjection(virus, fluorophore);
         }).then((injection) => {
-            this.$scope.injectionsForSample.push(injection);
-            this.$scope.sample.injections.push(injection.id);
             this.$scope.$emit("injectionAdded", this.$scope.sample, injection);
         }).catch((err) => {
             console.log(err);

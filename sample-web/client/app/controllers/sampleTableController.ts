@@ -54,18 +54,19 @@ class SampleTableController {
         }
     }
 
-    private formatInjections(injections) {
+    private formatInjections(sample: ISample): string {
+        let injections = this.$scope.injectionService.injectionsForSample(sample.id);
+
         if (injections.length === 0) {
             return "(click to add)";
+        } else if (injections.length < 3) {
+            let str: string = "";
+            injections.forEach((injection) => {
+                str = str + ", " + this.$scope.injectionService.getDisplayName(injection);
+            });
+            return str.slice(2);
         } else {
-            // let str = "";
-            // injections.forEach((obj: string) => {
-            //     let injection = this.$scope.injectionService.find(obj);
-            //     str = str + ", " + this.$scope.injectionService.getDisplayName(injection);
-            // })
-
-            // return str.slice(2);
-            return injections.length;
+            return injections.length + " injections";
         }
     }
 }

@@ -61,7 +61,7 @@ class CreateNeuronController {
 
         this.$scope.$watchCollection("sampleService.samples", (newValues) => this.onSampleCollectionChanged());
 
-        this.$scope.$watchCollection("injectionService.injections", (newValues) => this.onInjectionsChanged());
+        this.$scope.$watchCollection("injectionsForSample", (newValues) => this.onInjectionsChanged());
 
         this.$scope.$watch("sampleId", (newValue, oldValue) => this.onSampleIdChanged(newValue, oldValue));
 
@@ -123,9 +123,9 @@ class CreateNeuronController {
     }
 
     private onInjectionsChanged() {
-        //if ((this.$scope.sampleId.length == 0) && (this.$scope.sampleService.samples.length > 0)) {
-        //     this.$scope.sampleId = this.$scope.sampleService.samples.slice(-1).pop().id;
-        // }
+        if (this.$scope.model.injectionId === "" && this.$scope.injectionsForSample.length > 0) {
+            this.$scope.model.injectionId = this.$scope.injectionsForSample[0].id;
+        }
     }
 
     private onSampleIdChanged(newValue, oldValue) {
@@ -135,16 +135,10 @@ class CreateNeuronController {
 
         this.$scope.injectionsForSample = [];
 
-        if (this.$scope.sampleId.length > 0) {
-            this.$scope.injectionService.injectionsForSample(this.$scope.sampleId).then((data) => {
-                this.$scope.$apply(() => {
-                    this.$scope.injectionsForSample = data;
+        this.$scope.model.injectionId = "";
 
-                    if (data.length > 0) {
-                        this.$scope.model.injectionId = data[0].id;
-                    }
-                });
-            });
+        if (this.$scope.sampleId.length > 0) {
+            this.$scope.injectionsForSample = this.$scope.injectionService.injectionsForSample(this.$scope.sampleId);
         }
     }
 

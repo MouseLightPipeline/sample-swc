@@ -19,9 +19,9 @@ div(ng-controller="sampleTableController")
         td {{formatRegistrationTransform(s.registrationTransformId)}}
         td
           a(data-toggle="modal" data-target="#editInjectionsModal" data-sample="{{s}}")
-            span(class="right-edge") {{1}}
-            i(class="fa fa-plus-circle")
+            i(class="fa fa-plus-circle right-edge")
+            span(class="") {{formatInjections(s)}}
   div(class="centered" ng-show="sampleService.resourcesAreAvailable && sampleService.samples.length == 0")
     h5 There are no samples in the database.  Define samples below in the "Create" section.
   div(class="centered" ng-show="!sampleService.resourcesAreAvailable")
-    i(class="fa fa-spinner fa-spin" style="font-size:48px")
+   i(class="fa fa-spinner fa-spin" style="font-size:48px")

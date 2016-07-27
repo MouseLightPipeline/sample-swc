@@ -47,6 +47,10 @@ class SampleService extends DataService<ISample> {
     }
 
     public getDisplayName(item: ISample, defaultValue: string = ""): string {
+        if (item === null || item.sampleDate === null) {
+            return "";
+        }
+
         let date: string = item.sampleDate.getFullYear() + "-" + lpad(item.sampleDate.getMonth() + 1, 2) + "-" + lpad(item.sampleDate.getDate(), 2);
 
         if (item.tag.length > 0) {

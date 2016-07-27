@@ -1049,6 +1049,9 @@ definitions:
       id:
         type: string
         description: Internal id
+      sampleId:
+        type: string
+        description: Sample id
       injectionVirusId:
         type: string
         description: Virus id

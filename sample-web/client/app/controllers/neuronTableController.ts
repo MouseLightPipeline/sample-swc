@@ -15,8 +15,14 @@ class NeuronTableController {
     };
   }
 
-  private formatSample(sampleId: string): string {
-    return this.$scope.sampleService.getDisplayNameForId(sampleId);
+  private formatSample(neuron: INeuron): string {
+    let injection: IInjection = this.$scope.injectionService.find(neuron.injectionId);
+
+    if (injection === null) {
+      return "(unknown)";
+    }
+
+    return this.$scope.sampleService.getDisplayNameForId(injection.sampleId);
   }
 
   private formatBrainArea(brainAreaId: string): string {

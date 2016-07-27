@@ -63,14 +63,14 @@ abstract class DataService<T extends IApiResourceItem<T>> {
         return this.refreshData();
     }
 
-    protected mapQueriedItem(obj: any): T {
+    protected mapQueriedItem(obj: any): IApiItem {
         obj.createdAt = new Date(<string>obj.createdAt);
         obj.updatedAt = new Date(<string>obj.updatedAt);
 
         return obj;
     }
 
-    protected registerNewItem(obj) {
+    protected registerNewItem(obj: IApiItem): IApiItem {
         let item: IApiItem = this.mapQueriedItem(obj);
 
         this[item.id] = item;
@@ -89,7 +89,7 @@ abstract class DataService<T extends IApiResourceItem<T>> {
     }
 
     protected registerNewItems(items) {
-        items = items.map((obj) => {
+        items = items.map((obj: IApiItem) => {
             return this.registerNewItem(obj);
         });
 

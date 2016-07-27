@@ -6,13 +6,13 @@ div(ng-controller="neuronTableController")
         th Id
         th Tag
         th Sample
-        th Brain Area
-        th Sample Location
+        th Soma Brain Area
+        th Soma Sample Location
     tbody
       tr(ng-repeat="n in neuronService.neurons")
         td {{n.idNumber}}
         td {{n.tag || '(none)'}}
-        td {{formatSample(n.sampleId)}}
+        td {{formatSample(n)}}
         td {{formatBrainArea(n.brainAreaId)}}
         td ({{n.x}}, {{n.y}}, {{n.z}})
   div(class="centered" ng-show="neuronService.resourcesAreAvailable && neuronService.neurons.length == 0")
