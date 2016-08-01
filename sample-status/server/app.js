@@ -92,7 +92,7 @@ function connectToServiceIO() {
     serviceHost = 'localhost';
 
     if (process.env.NODE_ENV === 'production') {
-        serviceHost = 'sample-service';
+        serviceHost = 'sampleservice';
     }
 
     serviceHostUrl = 'http://' + serviceHost + ':9641';

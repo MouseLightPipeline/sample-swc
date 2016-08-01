@@ -129,7 +129,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
   /mousestrains:
-    x-swagger-router-controller: mousestrain
+    x-swagger-router-controller: mouseStrain
     get:
       summary: Mouse strain definitions
       tags:
@@ -197,7 +197,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
   /mousestrains/{strainId}:
-    x-swagger-router-controller: mousestrain
+    x-swagger-router-controller: mouseStrain
     get:
       summary: Mouse strain by id
       tags:
