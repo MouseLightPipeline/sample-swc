@@ -12,6 +12,8 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 var serviceHostUrl = '';
+var servicePort = null;
+
 
 var connected = false;
 
@@ -24,7 +26,7 @@ io.on('connection', function(socket) {
         console.log('Web client disconnected from status service.')
     });
 
-    socket.emit("serviceHostUrl", serviceHostUrl);
+    socket.emit("servicePort", servicePort);
 });
 
 var env = process.env.NODE_ENV || 'development';
@@ -89,6 +91,7 @@ var server = http.listen(app.get('port'), function() {
 
 
 function connectToServiceIO() {
+    /*
     serviceHost = 'localhost';
 
     if (process.env.NODE_ENV === 'production') {
@@ -96,4 +99,7 @@ function connectToServiceIO() {
     }
 
     serviceHostUrl = 'http://' + serviceHost + ':9641';
+    */
+
+    servicePort = 9641;
 }

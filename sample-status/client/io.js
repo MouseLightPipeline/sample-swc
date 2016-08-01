@@ -16,12 +16,15 @@ socket.on('error', function (msg) {
     $('#server_status').text('throwing errors');
 });
 
-socket.on('serviceHostUrl', function (msg) {
+socket.on('servicePort', function (msg) {
     if (msg.length == 0) {
         return;
     }
 
-    var serviceSocket = io(msg);
+    var serviceURL = 'http://' + location.hostname + ':' +  msg;
+    console.log(serviceURL);
+
+    var serviceSocket = io(serviceURL);
 
     serviceSocket.on('connect', function (msg) {
         $('#service_status').text('up');
