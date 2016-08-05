@@ -1,7 +1,7 @@
-module TracingManager {
+
     'use strict';
 
-    export class TracingTableController {
+    class TracingTableController {
         public static $inject = [
             '$scope'
         ];
@@ -34,4 +34,4 @@ module TracingManager {
     }
 
     angular.module('tracingManager').controller('tracingTableController', TracingTableController);
-}
+

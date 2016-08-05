@@ -186,16 +186,27 @@ definitions:
       filename:
         type: string
         description: Original filename
+      fileComments:
+        type: string
+        description: Comments directly in file header
       annotator:
         type: string
         description: Annotator name
       neuronId:
         type: string
         description: Id of neuron in sample database
-      lengthMicrometers:
+      xOffset:
         type: number
         format: double
-        description: Length
+        description: Janelia x offset from SWC file
+      yOffset:
+        type: number
+        format: double
+        description: Janelia y offset from SWC file
+      zOffset:
+        type: number
+        format: double
+        description: Janelia z offset from SWC file
       createdAt:
         type: string
         format: date-time

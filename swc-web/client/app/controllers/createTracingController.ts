@@ -1,7 +1,7 @@
-module TracingManager {
+
     'use strict';
 
-    export class CreateTracingController {
+    class CreateTracingController {
         public static $inject = [
             '$scope',
             '$http'
@@ -12,13 +12,15 @@ module TracingManager {
             this.$scope.annotator = '';
             this.$scope.lengthMicrometers = '0';
             this.$scope.neuronId = '';
+            this.$scope.injectionId = '';
             this.$scope.sampleId = '';
-            this.$scope.neuronsForSample = [];
+            this.$scope.neuronsForInjection = [];
+            this.$scope.injectionsForSample = [];
             this.$scope.isInCreatePost = false;
             this.$scope.lastCreateMessage = '';
 
             this.$scope.$watch('sampleId', (newValue, oldValue) => {
-                if (newValue !== oldValue) this.updateNeurons(newValue);
+                if (newValue !== oldValue) this.updateInjections(newValue);
             });
 
             this.$scope.send = () => { this.send() };
@@ -50,18 +52,19 @@ module TracingManager {
             return (this.$scope.theFile != null) && (this.$scope.theFile.name.length > 0);
         }
 
-        private updateNeurons(sampleId) {
-            this.$scope.neuronId = '';
+        private updateInjections(sampleId) {
+            this.$scope.injectionId = '';
             if (!sampleId || sampleId.length == 0) {
-                this.$scope.neuronsForSample = [];
+                this.$scope.injectionsForsample = [];
             } else {
-                this.$scope.neuronsForSample = this.$scope.sampleService.neuronsForSample(sampleId).then((response) => {
-                    this.$scope.neuronsForSample = response;
+                this.$scope.injectionsForsample = this.$scope.injectionService.injectionsForsample(sampleId).then((response) => {
+                    this.$scope.injectionsForsample = response;
                     if (response.length > 0) {
-                        this.$scope.neuronId = response[0].id;
+                        this.$scope.injectionId = response[0].id;
                     }
-                }).catch((response) => {
-                    this.$scope.neuronsForSample = [];
+                }).catch((err) => {
+                    console.log(err);
+                    this.$scope.injectionsForsample = [];
                 });
             }
         }
@@ -92,4 +95,3 @@ module TracingManager {
     }
 
     angular.module('tracingManager').controller('createTracingController', CreateTracingController);
-}

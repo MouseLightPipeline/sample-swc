@@ -9,93 +9,90 @@ var errors = require('../helpers/errors');
 var models = require('../models/index');
 
 /*
-For a controller you should export the functions referenced in your Swagger document by name.
+ For a controller you should export the functions referenced in your Swagger document by name.
 
-Either:
-- The HTTP Verb of the corresponding operation (get, put, post, delete, etc)
-- Or the operationId associated with the operation in your Swagger document
-*/
+ Either:
+ - The HTTP Verb of the corresponding operation (get, put, post, delete, etc)
+ - Or the operationId associated with the operation in your Swagger document
+ */
 module.exports = {
     post: post,
 };
 
 var currentStructureMap = {};
 
-function post(req, res) {  
-    //console.log('start post');
-    //console.log(req.file);
+function post(req, res) {
     if (!req.app.locals.dbready) {
         return res.status(503).send({code: 503, message: 'Database service unavailable'});
     }
-  /*
-    req.file('contents').upload(function (err, uploadedFiles) {
-        if (err) {
-            console.log(err);
-            return res.status(503).send({code: 500, message: 'File upload error', details: err});
-        }
-        
-        if (!uploadedFiles[0]) {
-            return res.status(503).send({code: 500, message: 'File upload error', details: 'no file attached'});
-        }
-    
-        var tmpFile = uploadedFiles[0];
-    */
+
     var tmpFile = req.file.path;
     var originalName = req.file.originalname;
-    
-    //console.log('rec ' + tmpFile)
-        var stream = byline(fs.createReadStream(tmpFile, { encoding: 'utf8' }));
 
-        var comments = '';
-    
-        var annotator = req.swagger.params.annotator.value || '';
+    var stream = byline(fs.createReadStream(tmpFile, {encoding: 'utf8'}));
 
-        var neuronId = req.swagger.params.neuronId.value || '';
-    
-        var tracing = {
-            filename: originalName,
-            annotator: annotator,
-            neuronId: neuronId,
-            comments: comments,
-            offsetX: 0,
-            offsetY: 0,
-            offsetZ: 0
-        };
-        
-        //console.log(tracing);
+    var comments = '';
 
-        currentStructureMap = {};
- 
-        models.StructureIdentifier.findAll().then((structures) => {
-            structures.forEach((obj) => {
-                currentStructureMap[obj.value] = obj.id;
-            });
+    var annotator = req.swagger.params.annotator.value || '';
 
-            var samples = [];
-  
-            stream.on('data', function(line) {
-                onData(line, samples, comments)
-            });
-    
-            stream.on('end', function() {
-                tracing.comments = comments;
-                onComplete(res, tracing, samples, tmpFile);
-            });
-        }).catch(function(err){
-            res.status(500).json(errors.sequelizeError(err));
-        });        
-        //});
+    var neuronId = req.swagger.params.neuronId.value || '';
+
+    var tracing = {
+        filename: originalName,
+        annotator: annotator,
+        neuronId: neuronId,
+        comments: comments,
+        offsetX: 0,
+        offsetY: 0,
+        offsetZ: 0
+    };
+
+    currentStructureMap = {};
+
+    models.StructureIdentifier.findAll().then((structures) => {
+        structures.forEach((obj) => {
+            currentStructureMap[obj.value] = obj.id;
+        });
+
+        var samples = [];
+
+        stream.on('data', function (line) {
+            onData(line, samples, tracing)
+        });
+
+        stream.on('end', function () {
+            onComplete(res, tracing, samples, tmpFile);
+        });
+    }).catch(function (err) {
+        res.status(500).json(errors.sequelizeError(err));
+    });
 }
 
-function onData(line, samples, comments) {
+function onData(line, samples, tracing) {
     //console.log('data');
     var data = line.trim();
 
-    if (data.length > 0 ) {
+    if (data.length > 0) {
         if (data[0] == '#') {
-            comments += data + '\n';
+            tracing.comments += data + '\n';
+
+            if (data.startsWith('# OFFSET')) {
+                var sub = data.substring(9);
+                var points = sub.split(/\s/);
+                if (points.length === 3) {
+                    var x = parseFloat(points[0]);
+                    var y = parseFloat(points[1]);
+                    var z = parseFloat(points[2]);
+
+                    if (!Number.isNaN(x) && !Number.isNaN(y) && !Number.isNaN(z)) {
+                        tracing.offsetX = x;
+                        tracing.offsetY = y;
+                        tracing.offsetZ = z;
+                    }
+                }
+            }
         } else {
-            data = data.split(' ');
+            data = data.split(/\s/);
             if (data.length == 7) {
                 var sample = {
                     sampleNumber: parseInt(data[0]),
@@ -117,31 +114,32 @@ function onData(line, samples, comments) {
 }
 
 function onComplete(res, tracingData, samples, tmpFile) {
-  
-    console.log('complete');
-    
-    // remove temporary upload
+    // Remove temporary upload
     fs.unlink(tmpFile);
-    
+
     if (samples.length == 0) {
         res.status(500).json(errors.noSamplesInSwcFile(tracingData.filename));
         return;
     }
-    
+
+    console.log(tracingData);
+
     var tracing = null;
-    
-    models.sequelize.transaction(function(t) {
-        return models.Tracing.create(tracingData, {transaction: t}).then(function(createdTracing) {
+
+    models.sequelize.transaction(function (t) {
+        return models.Tracing.create(tracingData, {transaction: t}).then(function (createdTracing) {
             tracing = createdTracing;
-            samples.forEach(function(sample) {
+
+            samples.forEach(function (sample) {
                 sample.tracingId = tracing.id;
             });
+
             models.TracingNode.bulkCreate(samples);
         })
-    }).then(function(result) {
+    }).then(function (result) {
         app.broadcast();
         return res.status(200).send(tracing);
-    }).catch(function(err) {
+    }).catch(function (err) {
         res.status(500).json(errors.sequelizeError(err));
-    });      
+    });
 }

@@ -26,7 +26,20 @@ class EditInjectionsController {
         "$scope"
     ];
 
+    private noBrainAreaSelection;
+
     constructor(protected $scope: IEditInjectionsScope) {
+        this.noBrainAreaSelection = {
+            id: "",
+            name: "(any subregion)",
+            structureId: -1,
+            depth: -1,
+            parentStructureId: -1,
+            structureIdPath: "",
+            safeName: "",
+            acronym: "'"
+        };
+
         $scope.sample = null;
 
         $scope.injectionVirusName = '';
@@ -69,7 +82,9 @@ class EditInjectionsController {
                 if (this.$scope.brainAreaNavigation[depth].selectedAreaIndex != index) {
                     this.$scope.brainAreaNavigation.splice(depth + 1);
                     this.$scope.brainAreaNavigation[depth].selectedAreaIndex = index;
-                    this.moveToNextDepthForParent(depth + 1, this.$scope.brainAreaNavigation[depth].areas[this.$scope.brainAreaNavigation[depth].selectedAreaIndex].structureId);
+                    if (depth < 2 || index > 0) {
+                        this.moveToNextDepthForParent(depth + 1, this.$scope.brainAreaNavigation[depth].areas[this.$scope.brainAreaNavigation[depth].selectedAreaIndex].structureId);
+                    }
                 }
             }
         };
@@ -136,20 +151,29 @@ class EditInjectionsController {
 
     private resetBrainAreaPath() {
         this.$scope.brainAreaNavigation = [];
-        this.moveToNextDepth(0);
+        this.moveToNextDepth(1);
+    }
+
+    private onBrainAreasForDepth(depth: number, data) {
+        let nextIndex = 0;
+
+        if (data !== null && data.length > 0) {
+            if (depth > 1) {
+                data.splice(0, 0, this.noBrainAreaSelection);
+                nextIndex = 1;
+            }
+            this.$scope.brainAreaNavigation[depth] = new BrainAreaDepthEntry();
+            this.$scope.brainAreaNavigation[depth].depth = depth;
+            this.$scope.brainAreaNavigation[depth].areas = data;
+            this.$scope.brainAreaNavigation[depth].selectedAreaIndex = nextIndex;
+            this.moveToNextDepthForParent(depth + 1, data[nextIndex].structureId);
+        }
     }
 
     private moveToNextDepthForParent(depth: number, parentId: number) {
         this.$scope.brainAreaService.brainAreasForParent(parentId).then((data) => {
             this.$scope.$apply(() => {
-                if (data !== null && data.length > 0) {
-                    this.$scope.brainAreaNavigation[depth] = new BrainAreaDepthEntry();
-                    this.$scope.brainAreaNavigation[depth].depth = depth;
-                    this.$scope.brainAreaNavigation[depth].areas = data;
-
-                    this.$scope.brainAreaNavigation[depth].selectedAreaIndex = 0;
-                    this.moveToNextDepthForParent(depth + 1, data[0].structureId);
-                }
+                this.onBrainAreasForDepth(depth, data);
             });
         }).catch((err) => {
             console.log(err);
@@ -159,14 +183,7 @@ class EditInjectionsController {
     private moveToNextDepth(depth: number) {
         this.$scope.brainAreaService.brainAreasForDepth(depth).then((data) => {
             this.$scope.$apply(() => {
-                if (data !== null && data.length > 0) {
-                    this.$scope.brainAreaNavigation[depth] = new BrainAreaDepthEntry();
-                    this.$scope.brainAreaNavigation[depth].depth = depth;
-                    this.$scope.brainAreaNavigation[depth].areas = data;
-
-                    this.$scope.brainAreaNavigation[depth].selectedAreaIndex = 0;
-                    this.moveToNextDepthForParent(depth + 1, data[0].structureId);
-                }
+                this.onBrainAreasForDepth(depth, data);
             });
         }).catch((err) => {
             console.log(err);
@@ -227,8 +244,19 @@ class EditInjectionsController {
 
     private createInjection(virus, fluorophore) {
         return new Promise<IInjection>((resolve, reject) => {
-            let areaEntry: BrainAreaDepthEntry = this.$scope.brainAreaNavigation[this.$scope.brainAreaNavigation.length - 1];
-            let area: IBrainArea = areaEntry.areas[areaEntry.selectedAreaIndex];
+            let index = this.$scope.brainAreaNavigation.length - 1;
+            let area: IBrainArea = null;
+
+            while (area === null && index > 0) {
+                let areaEntry: BrainAreaDepthEntry = this.$scope.brainAreaNavigation[index];
+                area = areaEntry.areas[areaEntry.selectedAreaIndex];
+
+                if (area.depth < 0) {
+                    area = null;
+                    index--;
+                }
+            }
+
             this.$scope.injectionService.createItem({
                 sampleId: this.$scope.sample.id,
                 injectionVirusId: virus.id,

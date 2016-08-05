@@ -41,6 +41,12 @@ function populateDefault(model) {
             if (count < 5) {
                 model.create({name: 'apical dendrite', value: 4, mutable: false});
             }
+            if (count < 6) {
+                model.create({name: 'fork point', value: 5, mutable: false});
+            }
+            if (count < 7) {
+                model.create({name: 'end point', value: 6, mutable: false});
+            }
             resolve();
          });
     });

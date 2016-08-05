@@ -25,8 +25,8 @@ html(lang='en', ng-app= appName)
     script(src='/lib/angular-animate.min.js')
     script(src='/lib/ui-bootstrap-tpls.min.js')
     script(src='/lib/ui-bootstrap.min.js')
-  block js
-    if ENV_DEVELOPMENT
-      script(src='http://localhost:34729/livereload.js')
+    block js
+      if ENV_DEVELOPMENT
+        script(src='http://localhost:34729/livereload.js')
   body(ng-controller= appController)
     block content

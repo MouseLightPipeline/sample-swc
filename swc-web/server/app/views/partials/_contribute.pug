@@ -1,42 +1,35 @@
 div(class="row", ng-controller="createTracingController")
-  include ./_createSampleModal
   form
     div(class="row")
       div(class="col-sm-12 form-group")
-        label(class="file" id="selectfile")
-          input(type="file", class="form-control-file small", name="contents", file-model="theFile")
-          span(class="file-custom")
+        label(class="control-label" for="selectfile") File
+          input(type="text" readonly="" class="col-sm-10 form-control" placeholder="Browse..." ng-model="theFile.name")
+          input(type="file" id="selectfile" class="form-control-file" name="contents", file-model="theFile")
       div(class="col-sm-12 form-group")
         label(class="label label-primary") {{theFile.name}}
     div(class="row")
       div(class="col-sm-6 form-group")
-        label(for="annotator") Annotator
-        input(type="text", class="form-control form-control-sm", id="annotator", placeholder="e.g., name or email", ng-model="annotator")
-      //
-        div(class="col-sm-2 form-group")
-          label(for="length") Length
-          div(class="input-group")
-            input(type="text", class="form-control", id="length", placeholder="", ng-model="lengthMicrometers")
-            div(class="input-group-addon form-control-sm") µm
+        label(class="control-label" for="annotator") Annotator
+        input(type="text" class="form-control form-control-sm", id="annotator" ng-model="annotator")
     div(class="row")
-      div(class="col-sm-6 form-group")
-        label(for="sampleSelect") Add to sample
+      div(class="col-sm-4 form-group")
+        label(class="control-label" for="sampleSelect") Add to sample
         div(class="input-group input-group-sm")
           select(ng-model="sampleId" id="sampleSelect" class="form-control form-control-sm c-select" ng-disabled="sampleService.samples.length == 0" )
             option(ng-repeat="option in sampleService.samples" value="{{option.id}}") {{option.idNumber}} ({{option.sampleDate | date: 'yyyy-MM-dd'}})
-          span(class="input-group-btn input-group-btn-sm")
-            button(class="btn btn-success btm-sm]', " type="button" ng-disabled="sampleService.samples.length == 0" data-toggle="modal" data-target="#createSampleModal")
-              i(ng-class="['fa', {'fa-spinner': !sampleService.resourcesAreAvailable, 'fa-spin': !sampleService.resourcesAreAvailable, 'fa-plus': sampleService.resourcesAreAvailable}]")
-        small(class="text-muted") Select or create a sample for the tracing
-      div(class="col-sm-6 form-group")
-        label(for="neuronSelect") {{sampleId.length > 0 ? ('Neurons for ' + sampleId) : 'Neurons'}}
+        small(class="text-muted") Select a sample for the tracing
+      div(class="col-sm-4 form-group")
+        label(class="control-label" for="injectionSelect") {{sampleId.length > 0 ? ('Injections for ' + sampleId) : 'Injections'}}
         div(class="input-group input-group-sm")
-          select(ng-model="neuronId" id="neuronSelect" class="form-control form-control-sm c-select" ng-disabled="neuronsForSample.length == 0" )
+          select(ng-model="injectionId" id="injectionSelect" class="form-control form-control-sm c-select" ng-disabled="injectionsForSample.length == 0" )
+            option(ng-repeat="option in injectionsForNeuron" value="{{option.id}}") {{option.id}}
+          small(class="text-muted") {{sampleId.length > 0 ? '': ('Select a sample to choose an injection')}}
+      div(class="col-sm-4 form-group")
+        label(class="control-label" for="neuronSelect") {{injectionId.length > 0 ? ('Neurons for ' + injectionId) : 'Neurons'}}
+        div(class="input-group input-group-sm")
+          select(ng-model="neuronId" id="neuronSelect" class="form-control form-control-sm c-select" ng-disabled="neuronsForInjection.length == 0" )
             option(ng-repeat="option in neuronsForSample" value="{{option.id}}") {{option.idNumber}}
-          span(class="input-group-btn input-group-btn-sm")
-            button(class="btn btn-success btm-sm]', " type="button" data-toggle="modal" data-target="#createNeuronModal")
-              i(ng-class="['fa', {'fa-spinner': !neuronService.resourcesAreAvailable, 'fa-spin': !neuronService.resourcesAreAvailable, 'fa-plus': neuronService.resourcesAreAvailable}]")
-        small(class="text-muted") {{sampleId.length > 0 ? '': ('Select a sample to choose or create a neuron')}}
+          small(class="text-muted") {{injectionId.length > 0 ? '': ('Select an injection to choose a neuron')}}
     div(class="row")
       div(class="col-sm-1")
         button(type="submit" class="btn btn-primary btn-sm", ng-click="send()" ng-disabled="!canCreateTracing()") Upload

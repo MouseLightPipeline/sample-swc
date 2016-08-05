@@ -7,13 +7,10 @@
 "use strict";
 
 interface ITracing extends ng.resource.IResource<ITracing>, IApiItem {
-    id: string;
     filename: string;
     annotator: string;
     lengthMicrometers: number;
     neuronId: string;
-    createdAt: Date;
-    updatedAt: Date;
 }
 
 interface ITracingResource extends IDataServiceResource<ITracing> {

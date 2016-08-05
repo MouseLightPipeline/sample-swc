@@ -8,7 +8,6 @@ interface IBrainArea extends IApiNamedResourceItem<IBrainArea> {
     depth: number;
     parentStructureId: number;
     structureIdPath: string;
-    name: string;
     safeName: string;
     acronym: string;
 }

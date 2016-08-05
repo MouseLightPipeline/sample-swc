@@ -20,7 +20,7 @@ gulp.task('nodemon', ['build'], () => {
   nodemon({
     script: 'dist/server/app.js',
     ext: 'js pug html css',
-    ignore: ['client/**/*.*', 'server/**/*.*', 'gulpfile.js', './*.json'],
+    ignore: ['client/**/*.*', 'server/**/*.*', './*.json'],
     debug: true,
     stdout: false,
     delay: 3

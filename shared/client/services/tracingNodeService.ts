@@ -4,9 +4,6 @@
 /// <reference path="dataService.ts" />
 
 interface ITracingNode extends ng.resource.IResource<ITracingNode>, IApiItem {
-    id: string;
-    createdAt: Date;
-    updatedAt: Date;
 }
 
 interface ITracingNodeResource extends IDataServiceResource<ITracingNode> {

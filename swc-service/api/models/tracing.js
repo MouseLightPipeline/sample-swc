@@ -18,7 +18,7 @@ module.exports = function(sequelize, DataTypes) {
             defaultValue: ''
         },
         // comment lines found in SWC file
-        comments: {
+        fileComments: {
             type: DataTypes.TEXT,
             defaultValue: ''
         },
