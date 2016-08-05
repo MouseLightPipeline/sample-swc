@@ -1144,7 +1144,10 @@ definitions:
         description: Brain area id
       tag:
         type: string
-        description: tag
+        description: Tag
+      keywords:
+        type: string
+        description: Keywords
       createdAt:
         type: string
         format: date-time
@@ -1162,6 +1165,9 @@ definitions:
       tag:
         type: string
         description: tag
+      keywords:
+        type: string
+        description: Keywords
       injectionId:
         type: string
         description: Injection id

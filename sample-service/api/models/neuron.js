@@ -15,6 +15,10 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.TEXT,
             defaultValue: ''
         },
+        keywords: {
+            type: DataTypes.TEXT,
+            defaultValue: ''
+        },
         x: {
             type: DataTypes.DOUBLE,
             defaultValue: 0

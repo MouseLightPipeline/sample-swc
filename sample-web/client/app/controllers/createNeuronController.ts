@@ -43,6 +43,7 @@ class CreateNeuronController {
         this.$scope.model = {};
         this.$scope.model.idNumber = "";
         this.$scope.model.tag = "";
+        this.$scope.model.keywords = "";
         this.$scope.model.injectionId = "";
         this.$scope.sampleId = "";
 
@@ -178,6 +179,7 @@ class CreateNeuronController {
         let item = {
             idNumber: parseInt(this.$scope.model.idNumber),
             tag: this.$scope.model.tag,
+            keywords: this.$scope.model.keywords,
             injectionId: this.$scope.model.injectionId,
             brainAreaId: area.id,
             x: parseFloat(this.$scope.model.x),

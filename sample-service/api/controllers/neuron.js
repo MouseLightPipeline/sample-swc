@@ -17,7 +17,7 @@ module.exports = {
 function get(req, res) {
     models.Neuron.findAll().then(function (neurons) {
         res.json(neurons);
-    }).catch(function(err){
+    }).catch(function (err) {
         res.status(500).json(errors.sequelizeError(err));
     });
 }
@@ -28,7 +28,7 @@ function getNeuronById(req, res) {
             res.json(neurons[0]);
         else
             res.status(500).json(errors.idDoesNotExit());
-    }).catch(function(err){
+    }).catch(function (err) {
         res.status(500).json(errors.sequelizeError(err));
     });
 }
@@ -36,7 +36,7 @@ function getNeuronById(req, res) {
 function getNeuronsForInjection(req, res) {
     models.Neuron.findAll({where: {injectionId: req.swagger.params.injectionId.originalValue}}).then(function (neurons) {
         res.json(neurons);
-    }).catch(function(err) {
+    }).catch(function (err) {
         res.status(500).json(errors.sequelizeError(err));
     });
 }
@@ -46,38 +46,40 @@ function post(req, res) {
         res.status(500).json(errors.invalidIdNumber());
         return;
     }
-    
-    models.Neuron.findAll({where:{idNumber: req.body.idNumber}}).then(function (neurons) {
+
+    models.Neuron.findAll({where: {idNumber: req.body.idNumber}}).then(function (neurons) {
         if (neurons != null && neurons.length > 0) {
             res.status(500).json(errors.duplicateNeuron());
         } else {
             create(req.body, res);
         }
-    }).catch(function(err){
+    }).catch(function (err) {
         res.status(500).json(errors.sequelizeError(err));
-    });    
+    });
 }
 
 function create(body, res) {
     var injectionId = body.injectionId || null;
     var brainAreaId = body.brainAreaId || null;
     var tag = body.tag || '';
+    var keywords = body.keywords || '';
     var x = body.x || 0;
     var y = body.y || 0;
     var z = body.z || 0;
-    
+
     models.Neuron.create({
-            idNumber: body.idNumber,
-            tag: tag,
-            injectionId: injectionId,
-            brainAreaId: brainAreaId,
-            x: x,
-            y: y,
-            z: z
-        }).then(function (neuron) {
+        idNumber: body.idNumber,
+        tag: tag,
+        keywords: keywords,
+        injectionId: injectionId,
+        brainAreaId: brainAreaId,
+        x: x,
+        y: y,
+        z: z
+    }).then(function (neuron) {
         res.json(neuron);
         app.broadcast();
-    }).catch(function(err){
+    }).catch(function (err) {
         res.status(500).json(errors.sequelizeError(err));
     });
 }
@@ -88,7 +90,7 @@ function updateNeuron(req, res) {
         return;
     }
 
-    models.Neuron.findAll({where:{id: req.body.id}}).then(function (neurons) {
+    models.Neuron.findAll({where: {id: req.body.id}}).then(function (neurons) {
         if (neurons === null || neurons.length === 0) {
             res.status(500).json(errors.idDoesNotExit());
         } else {
@@ -103,11 +105,11 @@ function updateNeuron(req, res) {
                 z: req.body.z
             }).then(function (updated) {
                 res.json(updated);
-            }).catch(function(err){
+            }).catch(function (err) {
                 res.status(500).json(errors.sequelizeError(err));
             });
         }
-    }).catch(function(err){
+    }).catch(function (err) {
         res.status(500).json(errors.sequelizeError(err));
     });
 }
@@ -122,7 +124,7 @@ function deleteNeuron(req, res) {
 
     var neuronId = neuronParam.value;
 
-    models.Neuron.findAll({where:{id: neuronId}}).then(function (neurons) {
+    models.Neuron.findAll({where: {id: neuronId}}).then(function (neurons) {
         if (neurons === null || neurons.length === 0) {
             res.status(500).json(errors.idDoesNotExit());
         } else {
@@ -131,11 +133,11 @@ function deleteNeuron(req, res) {
             neuron.destroy().then(function () {
                 res.json({id: neuronId});
                 app.broadcast();
-            }).catch(function(err){
+            }).catch(function (err) {
                 res.status(500).json(errors.sequelizeError(err));
             });
         }
-    }).catch(function(err){
+    }).catch(function (err) {
         res.status(500).json(errors.sequelizeError(err));
     });
 }

@@ -6,6 +6,11 @@
 interface INeuron extends IApiNumberedResourceItem<INeuron> {
     injectionId: string;
     brainAreaId: string;
+    tag: string;
+    keywords: string;
+    x: number;
+    y: number;
+    z: number;
 }
 
 interface INeuronResource extends IDataServiceResource<INeuron> {

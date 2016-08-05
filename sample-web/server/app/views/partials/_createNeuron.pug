@@ -18,6 +18,12 @@ div(class="row", ng-controller="createNeuronController")
           input(type="text", class="form-control form-control-sm", id="neuronTag", ng-model="model.tag")
 
     div(class="row")
+      div(class="col-sm-12")
+        div(class="form-group label-floating")
+          label(class="control-label" for="neuronKeywords") Keywords (optional)
+          input(type="text", class="form-control form-control-sm", id="neuronKeywords", ng-model="model.keywords")
+
+    div(class="row")
       div(class="col-sm-6")
         div(ng-class="['form-group', 'label-floating', {'has-warning': sampleId.length === 0}]")
           label(class="control-label" for="sampleSelect") Add to sample
