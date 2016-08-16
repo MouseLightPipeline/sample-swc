@@ -40,7 +40,13 @@ class TracingNodeService extends DataService<ITracingNode> {
         return this.items;
     }
 
-    public nodesForStructure(structureId: string) {
-        return this.service.nodesForStructure({ id: structureId }).$promise;
+    public nodesForStructure(structureId: string): Promise<Array> {
+        return new Promise<Array>((resolve, reject) => {
+            this.service.nodesForStructure({ id: structureId }).$promise.then((data) => {
+                resolve(data);
+            }).catch((err) => {
+                reject(err);
+            });
+        });
     }
 }

@@ -2,11 +2,13 @@ div(class="row", ng-controller="createTracingController")
   form
     div(class="row")
       div(class="col-sm-12 form-group")
-        label(class="control-label" for="selectfile") File
-          input(type="text" readonly="" class="col-sm-10 form-control" placeholder="Browse..." ng-model="theFile.name")
+        label(class="control-label" for="selectfile") Browse for File
+          div(class="input-group")
+            input(type="text" readonly="" class="col-sm-10 form-control" ng-model="theFile.name")
+            span(class="input-group-btn")
+              button(class="btn btn-info btm-sm]', " type="button")
+                i(class="fa fa-color fa-plus")
           input(type="file" id="selectfile" class="form-control-file" name="contents", file-model="theFile")
-      div(class="col-sm-12 form-group")
-        label(class="label label-primary") {{theFile.name}}
     div(class="row")
       div(class="col-sm-6 form-group")
         label(class="control-label" for="annotator") Annotator
@@ -17,22 +19,22 @@ div(class="row", ng-controller="createTracingController")
         div(class="input-group input-group-sm")
           select(ng-model="sampleId" id="sampleSelect" class="form-control form-control-sm c-select" ng-disabled="sampleService.samples.length == 0" )
             option(ng-repeat="option in sampleService.samples" value="{{option.id}}") {{option.idNumber}} ({{option.sampleDate | date: 'yyyy-MM-dd'}})
-        small(class="text-muted") Select a sample for the tracing
+        small(class="text-muted") {{sampleId.length > 0 ? '': ('Select a sample for the tracing')}}
       div(class="col-sm-4 form-group")
-        label(class="control-label" for="injectionSelect") {{sampleId.length > 0 ? ('Injections for ' + sampleId) : 'Injections'}}
+        label(class="control-label" for="injectionSelect") {{sampleId.length > 0 ? ( 'Injections for ' + sampleService.getDisplayNameForId(sampleId) ) : 'Injections'}}
         div(class="input-group input-group-sm")
           select(ng-model="injectionId" id="injectionSelect" class="form-control form-control-sm c-select" ng-disabled="injectionsForSample.length == 0" )
-            option(ng-repeat="option in injectionsForNeuron" value="{{option.id}}") {{option.id}}
+            option(ng-repeat="option in injectionsForSample" value="{{option.id}}") {{injectionService.getDisplayName(option)}}
           small(class="text-muted") {{sampleId.length > 0 ? '': ('Select a sample to choose an injection')}}
       div(class="col-sm-4 form-group")
-        label(class="control-label" for="neuronSelect") {{injectionId.length > 0 ? ('Neurons for ' + injectionId) : 'Neurons'}}
+        label(class="control-label" for="neuronSelect") {{injectionId.length > 0 ? ( 'Neurons for ' + injectionService.getDisplayNameForId(injectionId) ) : 'Neurons'}}
         div(class="input-group input-group-sm")
           select(ng-model="neuronId" id="neuronSelect" class="form-control form-control-sm c-select" ng-disabled="neuronsForInjection.length == 0" )
-            option(ng-repeat="option in neuronsForSample" value="{{option.id}}") {{option.idNumber}}
+            option(ng-repeat="option in neuronsForInjection" value="{{option.id}}") {{neuronService.getDisplayName(option)}}
           small(class="text-muted") {{injectionId.length > 0 ? '': ('Select an injection to choose a neuron')}}
     div(class="row")
       div(class="col-sm-1")
-        button(type="submit" class="btn btn-primary btn-sm", ng-click="send()" ng-disabled="!canCreateTracing()") Upload
+        button(type="submit" class="btn btn-info btn-sm btn-raised", ng-click="send()" ng-disabled="!canCreateTracing()") Upload
           i(class="fa fa-spinner fa-spin" ng-show="isInCreatePost")
       div(class="col-sm-11")
         span {{lastCreateMessage}}

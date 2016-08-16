@@ -16,6 +16,7 @@ class ApiAccessService {
     public static $inject = [
         '$resource',
         '$location',
+        'brainAreaService',
         'injectionVirusService',
         'injectionService',
         'sampleService',
@@ -33,8 +34,9 @@ class ApiAccessService {
 
     private apiLocation: any;
 
-    constructor(private $resource: any, private $location: any, private injectionVirusService: InjectionVirusService, private injectionService: InjectionService, private sampleService: SampleService,
-                private neuronService: NeuronService, private tracingService: TracingService,
+    constructor(private $resource: any, private $location: any, private brainAreaService: BrainAreaService,
+                private injectionVirusService: InjectionVirusService, private injectionService: InjectionService,
+                private sampleService: SampleService, private neuronService: NeuronService, private tracingService: TracingService,
                 private tracingNodeService: TracingNodeService, private structureIdentifierService: StructureIdentifierService) {
         this.haveService = false;
         this.serviceUrl = '';
@@ -55,6 +57,7 @@ class ApiAccessService {
 
         this.haveService = true;
 
+        this.brainAreaService.setLocation(this.sampleServiceUrl);
         this.injectionService.setLocation(this.sampleServiceUrl);
         this.injectionVirusService.setLocation(this.sampleServiceUrl);
         this.sampleService.setLocation(this.sampleServiceUrl);

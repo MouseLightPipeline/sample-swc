@@ -7,7 +7,7 @@
         ];
 
         constructor(private $scope: any) {
-            this.$scope.itemsPerPage = 5;
+            this.$scope.itemsPerPage = 10;
             this.$scope.currentPage = 1;
             
             this.$scope.$on('createdTracingIndex', (evt, val) => this.onCreatedTracingIndex(val))
@@ -17,14 +17,8 @@
             };
         }
         
-        private neuronDisplayForId(id: string): any {
-            var obj = this.$scope.neuronService[id];
-            
-            if (obj == null) {
-                return '(not found)';
-            } else {
-                return obj.idNumber + ' (' + obj.id + ')';
-            }
+        private neuronDisplayForId(id: string): string {
+            return this.$scope.neuronService.getDisplayNameForId(id);
         }        
         
         private onCreatedTracingIndex(val) {

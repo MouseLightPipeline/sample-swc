@@ -9,64 +9,85 @@
 /// <reference path="../../../../shared/client/services/registrationTransformService.ts"/>
 /// <reference path="../../../../shared/client/services/injectionVirusService.ts"/>
 
-    'use strict';
+'use strict';
 
-    class AppController {
-        public static $inject = [
-            '$scope',
-            '$resource',
-            'apiAccessService',
-            'sampleService',
-            'neuronService',
-            'tracingService',
-            'tracingNodeService',
-            'structureIdentifierService',
-            'injectionService',
-            'injectionVirusService'
-        ];
+interface IAppScope extends ng.IScope {
+    service: ApiAccessService;
+    brainAreaService: BrainAreaService;
+    injectionVirusService: InjectionVirusService;
+    fluorophoreService: FluorophoreService;
+    injectionService: InjectionService;
+    mouseStrainService: MouseStrainService;
+    sampleService: SampleService;
+    neuronService: NeuronService;
+    structureIdentifierService: StructureIdentifierService;
+    tracingNodeService: TracingNodeService;
+    tracingService: TracingService;
 
-        constructor(private $scope: any, private $resource: any, private serviceApi: ApiAccessService,
-            private sampleService: SampleService, private neuronService: NeuronService,
-            private tracingService: TracingService, private tracingNodeService: TracingNodeService,
-            private structureIdentifierService: StructureIdentifierService, private injectionService: InjectionService,
-            private injectionVirusService: InjectionVirusService) {
+    apiUrl: string;
+    apiDocUrl: string;
+    statusUrl: string;
+}
 
-            $scope.service = serviceApi;
-            $scope.sampleService = sampleService;
-            $scope.neuronService = neuronService;
-            $scope.tracingService = tracingService;
-            $scope.tracingNodeService = tracingNodeService;
-            $scope.structureIdentifierService = structureIdentifierService;
-            $scope.injectionService = injectionService;
-            $scope.injectionVirusService = injectionVirusService;
+class AppController {
+    public static $inject = [
+        '$scope',
+        '$resource',
+        'apiAccessService',
+        'brainAreaService',
+        'injectionVirusService',
+        'injectionService',
+        'sampleService',
+        'neuronService',
+        'structureIdentifierService',
+        'tracingNodeService',
+        'tracingService'
+    ];
 
-            $scope.$watch('service.serviceUrl', (val) => this.updateService(val));
-            $scope.$watch('service.serviceDocUrl', (val) => this.updateServiceDoc(val));
-            $scope.$watch('service.statusUrl', (val) => this.updateStatus(val));
-            
-            $scope.$on('createdTracingIndex', (evt, val) => this.onCreatedTracingIndex(val));
+    constructor(private $scope: IAppScope, private $resource: any, private serviceApi: ApiAccessService,
+                private brainAreaService: BrainAreaService,
+                private injectionVirusService: InjectionVirusService, private injectionService: InjectionService,
+                private sampleService: SampleService, private neuronService: NeuronService,
+                private structureIdentifierService: StructureIdentifierService,
+                private tracingNodeService: TracingNodeService, private tracingService: TracingService) {
 
-            this.updateService(serviceApi.serviceUrl);
-            this.updateServiceDoc(serviceApi.serviceDocUrl);
-            this.updateStatus(serviceApi.statusUrl);
-        }
+        $scope.service = serviceApi;
+        $scope.brainAreaService = brainAreaService;
+        $scope.injectionVirusService = injectionVirusService;
+        $scope.injectionService = injectionService;
+        $scope.sampleService = sampleService;
+        $scope.neuronService = neuronService;
+        $scope.structureIdentifierService = structureIdentifierService;
+        $scope.tracingNodeService = tracingNodeService;
+        $scope.tracingService = tracingService;
 
-        private updateService(val) {
-            this.$scope.apiUrl = val;
-        }
+        $scope.$watch('service.serviceUrl', (val) => this.updateService(val));
+        $scope.$watch('service.serviceDocUrl', (val) => this.updateServiceDoc(val));
+        $scope.$watch('service.statusUrl', (val) => this.updateStatus(val));
 
-        private updateServiceDoc(val) {
-            this.$scope.apiDocUrl = val;
-        }
+        $scope.$on('createdTracingIndex', (evt, val) => this.onCreatedTracingIndex(val));
 
-        private updateStatus(val) {
-            this.$scope.statusUrl = val;
-        }
-        
-        private onCreatedTracingIndex(val) {
-             this.$scope.$broadcast('createdTracingIndex', val);
-        }
+        this.updateService(serviceApi.serviceUrl);
+        this.updateServiceDoc(serviceApi.serviceDocUrl);
+        this.updateStatus(serviceApi.statusUrl);
     }
 
-    angular.module('tracingManager').controller('appController', AppController);
+    private updateService(val) {
+        this.$scope.apiUrl = val;
+    }
+
+    private updateServiceDoc(val) {
+        this.$scope.apiDocUrl = val;
+    }
+
+    private updateStatus(val) {
+        this.$scope.statusUrl = val;
+    }
+
+    private onCreatedTracingIndex(val) {
+        this.$scope.$broadcast('createdTracingIndex', val);
+    }
+}
+
+angular.module('tracingManager').controller('appController', AppController);
 
