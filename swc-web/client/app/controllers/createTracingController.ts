@@ -1,5 +1,3 @@
-'use strict';
-
 class CreateTracingController {
     public static $inject = [
         '$scope',

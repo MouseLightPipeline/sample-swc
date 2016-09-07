@@ -1,5 +1,3 @@
-/// <reference path="../../../../shared/client/services/mouseStrainService.ts"/>
-
 class CreateMouseStrainController extends AbstractCreateItemController<IMouseStrain> {
   public static $inject = [
     "$scope"

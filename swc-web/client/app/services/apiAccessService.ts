@@ -1,17 +1,3 @@
-/// <reference path="../../../../shared/client/services/brainAreaService.ts"/>
-/// <reference path="../../../../shared/client/services/injectionService.ts"/>
-/// <reference path="../../../../shared/client/services/neuronService.ts"/>
-/// <reference path="../../../../shared/client/services/sampleService.ts"/>
-/// <reference path="../../../../shared/client/services/mouseStrainService.ts"/>
-/// <reference path="../../../../shared/client/services/structureIdentifierService.ts"/>
-/// <reference path="../../../../shared/client/services/tracingNodeService.ts"/>
-/// <reference path="../../../../shared/client/services/tracingService.ts"/>
-/// <reference path="../../../../shared/client/services/registrationTransformService.ts"/>
-/// <reference path="../../../../shared/client/services/injectionVirusService.ts"/>
-
-
-'use strict';
-
 class ApiAccessService {
     public static $inject = [
         '$resource',

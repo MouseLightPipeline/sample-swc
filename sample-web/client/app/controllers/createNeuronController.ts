@@ -1,4 +1,3 @@
-/// <reference path="../../../../shared/client/services/neuronService.ts"/>
 /// <reference path="../helpers/validation.ts"/>
 
 interface ICreateNeuronScope extends IAppScope {

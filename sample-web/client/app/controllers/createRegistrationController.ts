@@ -1,6 +1,3 @@
-/// <reference path="../../../typings/globals/bootstrap/index.d.ts"/>
-/// <reference path="../../../../shared/client/services/registrationTransformService.ts"/>
-
 class CreateRegistrationController extends AbstractCreateItemController<IRegistrationTransform> {
   public static $inject = [
     "$scope"
