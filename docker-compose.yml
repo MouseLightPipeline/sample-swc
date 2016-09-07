@@ -1,3 +1,6 @@
+### Note: Alot of ports hard-coded as env that could all be determined by something like
+### Consul + Registrar containers, but for the moment, all on the same host, explicitly
+### managed, so keep it fixed for dev/deploy.
 version: '2'
 services:
 ### Janelia sample/neuron entries and constants
@@ -32,7 +35,7 @@ services:
       NODE_ENV: production
       SAMPLE_SERVICE_PORT: 9641
     command: node /app/dist/server/app.js
-    ports:
+    ports:a
       - 9642:9642
     links:
       - "sample-service:sampleservice"

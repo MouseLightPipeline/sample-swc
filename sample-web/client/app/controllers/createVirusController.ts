@@ -1,5 +1,3 @@
-/// <reference path="../../../../shared/client/services/injectionVirusService.ts"/>
-
 class CreateVirusController extends AbstractCreateItemController<IInjectionVirus> {
   public static $inject = [
     "$scope"

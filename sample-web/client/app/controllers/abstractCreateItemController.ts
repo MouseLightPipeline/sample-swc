@@ -1,5 +1,3 @@
-/// <reference path="../../../../shared/client/services/dataService.ts"/>
-
 abstract class AbstractCreateItemController<T extends IApiResourceItem<T>> {
   constructor(protected $scope: any, protected service: DataService<T>, protected modalElementId: string, protected eventName: string) {
     this.$scope.item = {};

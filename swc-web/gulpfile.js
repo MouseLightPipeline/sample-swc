@@ -94,7 +94,7 @@ gulp.task('lib:css', ['clean'], function () {
 gulp.task('ts', ['typings'], function () {
     var tsconfig = require('./tsconfig.json');
 
-    return gulp.src('client/**/*.ts').pipe(typescript(tsconfig.compilerOptions)).pipe(gulp.dest('dist/public'));
+    return gulp.src(['client/**/*.ts', 'typings/**/*.d.ts']).pipe(typescript(tsconfig.compilerOptions)).pipe(gulp.dest('dist/public'));
 });
 
 gulp.task('lib:fonts:1', ['clean'], function () {
@@ -130,5 +130,5 @@ gulp.task('css', ['clean'], function () {
 
 // move shared
 gulp.task('client:shared', ['clean'], function () {
-    return gulp.src('../shared/dist/client/services/*.js').pipe(gulp.dest('dist/public/lib'))
+    return gulp.src('bower_components/ndb-client-db/dist/client/services/*.js').pipe(gulp.dest('dist/public/lib'))
 });

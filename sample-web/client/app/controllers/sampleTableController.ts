@@ -1,5 +1,3 @@
-/// <reference path="../../../../shared/client/services/sampleService.ts"/>
-
 class SampleTableController {
     public static $inject = [
         "$scope"

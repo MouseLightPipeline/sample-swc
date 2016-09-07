@@ -1,6 +1,3 @@
-/// <reference path="../../../../shared/client/services/neuronService.ts"/>
-/// <reference path="../../../../shared/client/services/sampleService.ts"/>
-
 class NeuronTableController {
   public static $inject = [
     "$scope"

@@ -1,4 +1,3 @@
-/// <reference path="../../../../shared/client/services/sampleService.ts"/>
 /// <reference path="../helpers/validation.ts"/>
 
 class CreateSampleController {

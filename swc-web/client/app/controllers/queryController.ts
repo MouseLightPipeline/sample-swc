@@ -1,5 +1,3 @@
-'use strict';
-
 interface IQueryScope extends IAppScope {
     structureId: string;
     samples: any;
@@ -38,7 +36,7 @@ class QueryController {
 
         this.$scope.isInQuery = true;
 
-        this.$scope.tracingNodeService.nodesForStructure(this.$scope.structureId).then((nodes: Array) => {
+        this.$scope.tracingNodeService.nodesForStructure(this.$scope.structureId).then((nodes: Array<ITracingNode>) => {
             this.$scope.$apply(() => {
                 this.$scope.samples = nodes;
                 this.$scope.isInQuery = false;

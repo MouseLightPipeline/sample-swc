@@ -1,5 +1,3 @@
-/// <reference path="../../../../shared/client/services/mouseStrainService.ts"/>
-
 class MouseStrainController {
     public static $inject = [
         "$scope"
