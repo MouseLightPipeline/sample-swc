@@ -1,13 +1,12 @@
 div(class="row" id="search" ng-controller="queryController")
   form(class="inset")
     fieldset(class="form-group")
-      label(for="structure") Structure Id
+      label(class="control-label" for="structure") Structure Id
       br
-      select(class="c-select", id="structure", ng-model="structureId")
+      select(class="form-control form-control-sm c-select", id="structure", ng-model="structureId")
         option(ng-repeat="option in structureIdentifierService.structures" value="{{option.id}}") {{option.name}}
       button(type="submit" class="btn btn-primary left", ng-click="query()" ng-disabled="isInQuery || structureId.length == 0")
-        i(class="fa fa-search" ng-show="!isInQuery")
-        i(class="fa fa-spinner fa-spin" ng-show="isInQuery")
+        i(ng-class="['fa', {'fa-spinner': isInQuery, 'fa-spin': isInQuery, 'fa-search':!isInQuery}]")
         span(class="left")   Search
       span(class="left" ng-show="!isInQuery") {{queryResults}}
   div

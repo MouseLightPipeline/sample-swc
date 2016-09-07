@@ -34,13 +34,14 @@ class QueryController {
         if (this.$scope.isInQuery)
             return;
 
+        this.$scope.queryResults = "searching..."
         this.$scope.isInQuery = true;
 
         this.$scope.tracingNodeService.nodesForStructure(this.$scope.structureId).then((nodes: Array<ITracingNode>) => {
             this.$scope.$apply(() => {
                 this.$scope.samples = nodes;
                 this.$scope.isInQuery = false;
-                this.$scope.queryResults = nodes.length + ((nodes.length == 1) ? ' match' : ' matches');
+                this.$scope.queryResults = nodes.length + ((nodes.length == 1) ? " match" : " matches");
             })
         }).catch((err) => {
             this.$scope.$apply(() => {
