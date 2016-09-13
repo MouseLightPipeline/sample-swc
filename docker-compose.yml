@@ -35,7 +35,7 @@ services:
       NODE_ENV: production
       SAMPLE_SERVICE_PORT: 9641
     command: node /app/dist/server/app.js
-    ports:a
+    ports:
       - 9642:9642
     links:
       - "sample-service:sampleservice"
