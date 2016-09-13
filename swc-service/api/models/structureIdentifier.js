@@ -15,7 +15,9 @@ module.exports = function(sequelize, DataTypes) {
             associate: function(models) {
                 StructureIdentifier.hasMany(models.TracingNode, {foreignKey: 'structureIdentifierId', as: 'nodes'});
             }
-        }
+        },
+        timestamps: true,
+        paranoid: true
     });
     
     StructureIdentifier.populateDefault = function() { return populateDefault(StructureIdentifier); };

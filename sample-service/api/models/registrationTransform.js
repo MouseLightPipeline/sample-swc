@@ -13,7 +13,9 @@ module.exports = function (sequelize, DataTypes) {
             associate: function (models) {
                 RegistrationTransform.hasMany(models.Sample, {foreignKey: 'registrationTransformId', as: 'samples'});
             }
-        }
+        },
+        timestamps: true,
+        paranoid: true
     });
 
     function populateDefault(model) {

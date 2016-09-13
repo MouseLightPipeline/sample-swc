@@ -8,6 +8,9 @@ module.exports = function(sequelize, DataTypes) {
             defaultValue: DataTypes.UUIDV4
         },
         name: DataTypes.TEXT
+    }, {
+        timestamps: true,
+        paranoid: true
     });
 
     function populateDefault(model) {

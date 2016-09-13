@@ -40,7 +40,9 @@ module.exports = function(sequelize, DataTypes) {
             associate: function(models) {
                 Tracing.hasMany(models.TracingNode, {foreignKey: 'tracingId', as: 'nodes'});
             }
-        }
+        },
+        timestamps: true,
+        paranoid: true
     });
     
     return Tracing;

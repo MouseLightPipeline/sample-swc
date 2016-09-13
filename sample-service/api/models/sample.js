@@ -26,7 +26,10 @@ module.exports = function(sequelize, DataTypes) {
                 Sample.belongsTo(models.RegistrationTransform, {foreignKey: 'registrationTransformId', as: 'registrationTransform'});
                 Sample.belongsTo(models.MouseStrain, {foreignKey: 'mouseStrainId', as: 'mouseStrain'});
             }
-        }
+        },
+        timestamps: true,
+        paranoid: true
     });
+
     return Sample;
 };

@@ -13,7 +13,9 @@ module.exports = function(sequelize, DataTypes) {
             associate: function(models) {
                 Fluorophore.hasMany(models.Injection, {foreignKey: 'fluorophoreId', as: 'injections'});
             }
-        }
+        },
+        timestamps: true,
+        paranoid: true
     });
 
     function populateDefault(model) {

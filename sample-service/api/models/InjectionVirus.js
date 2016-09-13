@@ -15,7 +15,9 @@ module.exports = function(sequelize, DataTypes) {
             associate: function(models) {
                 InjectionVirus.hasMany(models.Injection, {foreignKey: 'injectionVirusId', as: 'injections'});
             }
-        }
+        },
+        timestamps: true,
+        paranoid: true
     });
 
     function populateDefault(model) {
