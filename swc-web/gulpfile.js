@@ -130,5 +130,5 @@ gulp.task('css', ['clean'], function () {
 
 // move shared
 gulp.task('client:shared', ['clean'], function () {
-    return gulp.src('bower_components/ndb-client-db/dist/client/services/*.js').pipe(gulp.dest('dist/public/lib'))
+    return gulp.src('bower_components/ndb-client-db/dist/**/*.js').pipe(gulp.dest('dist/public/lib'))
 });
