@@ -16,7 +16,9 @@ module.exports = function(sequelize, DataTypes) {
                 Injection.belongsTo(models.Sample, {foreignKey: 'sampleId', as: 'sample'});
                 Injection.hasMany(models.Neuron, {foreignKey: 'injectionId', as: 'neurons'});
             }
-        }
+        },
+        timestamps: true,
+        paranoid: true
     });
 
     return Injection;

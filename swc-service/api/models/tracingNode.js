@@ -19,7 +19,9 @@ module.exports = function(sequelize, DataTypes) {
                 TracingNode.belongsTo(models.StructureIdentifier, {foreignKey: 'structureIdentifierId'});
                 TracingNode.belongsTo(models.Tracing, {foreignKey: 'tracingId'});
             }
-        }
+        },
+        timestamps: true,
+        paranoid: true
     });
     
     return TracingNode;

@@ -23,7 +23,9 @@ module.exports = function(sequelize, DataTypes) {
                 BrainArea.hasMany(models.Injection, {foreignKey: 'brainAreaId', as: 'injections'});
                 BrainArea.hasMany(models.Neuron, {foreignKey: 'brainAreaId', as: 'neurons'});
             }
-        }
+        },
+        timestamps: true,
+        paranoid: true
     });
 
     function populateDefault(model) {

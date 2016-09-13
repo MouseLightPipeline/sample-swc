@@ -37,7 +37,9 @@ module.exports = function(sequelize, DataTypes) {
                 Neuron.belongsTo(models.Injection, {foreignKey: 'injectionId', as: 'injection'});
                 Neuron.belongsTo(models.BrainArea, {foreignKey: 'brainAreaId', as: 'brainArea'});
             }
-        }
+        },
+        timestamps: true,
+        paranoid: true
     });
     
     return Neuron;

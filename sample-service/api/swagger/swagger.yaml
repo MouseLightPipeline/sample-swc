@@ -242,7 +242,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
   /registrationtransforms:
-    x-swagger-router-controller: registrationtransform
+    x-swagger-router-controller: registrationTransform
     get:
       summary: Registration transform definitions
       tags:
