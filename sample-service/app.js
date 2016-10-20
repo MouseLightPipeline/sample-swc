@@ -36,8 +36,9 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(compress());
-app.use('/script/socket.io', express.static(__dirname + '/node_modules/socket.io-client'));
 app.use(methodOverride());
+
+app.use('/script/socket.io', express.static(__dirname + '/node_modules/socket.io-client'));
 
 SwaggerExpress.create(config, function (err, swaggerExpress) {
     if (err) {

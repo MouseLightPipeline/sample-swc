@@ -1,5 +1,5 @@
-abstract class AbstractCreateItemController<T extends IApiResourceItem<T>> {
-  constructor(protected $scope: any, protected service: DataService<T>, protected modalElementId: string, protected eventName: string) {
+abstract class AbstractCreateItemController<T extends IApiItem> {
+  constructor(protected $scope: any, protected service: DataService<T >, protected modalElementId: string, protected eventName: string) {
     this.$scope.item = {};
     this.$scope.item.name = "";
     this.$scope.errorMessage = "";

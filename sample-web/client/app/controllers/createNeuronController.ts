@@ -44,6 +44,8 @@ class CreateNeuronController {
         this.$scope.model.tag = "";
         this.$scope.model.keywords = "";
         this.$scope.model.injectionId = "";
+        this.$scope.model.somaLocation = "";
+
         this.$scope.sampleId = "";
 
         this.$scope.isValidIdNumber = false;
@@ -79,6 +81,8 @@ class CreateNeuronController {
 
         this.$scope.$watch("sampleId", (newValue, oldValue) => this.onSampleIdChanged(newValue, oldValue));
 
+        this.$scope.$watch("model.injectionId", (newValue, oldValue) => this.onInjectionIdChanged(newValue, oldValue));
+
         this.$scope.model.x = "0";
         this.$scope.model.y = "0";
         this.$scope.model.z = "0";
@@ -98,13 +102,13 @@ class CreateNeuronController {
         this.$scope.$watch("brainAreaService.resourcesAreAvailable", () => {
             if (this.$scope.brainAreaService.resourcesAreAvailable && !this.$scope.initialBrainAreaReset) {
                 this.$scope.initialBrainAreaReset = true;
-                this.resetBrainAreaPath();
+                this.resetBrainAreaPath(null);
             }
         });
 
         if (this.$scope.brainAreaService.resourcesAreAvailable && !this.$scope.initialBrainAreaReset) {
             this.$scope.initialBrainAreaReset = true;
-            this.resetBrainAreaPath();
+            this.resetBrainAreaPath(null);
         }
 
         this.onSampleCollectionChanged();
@@ -158,6 +162,26 @@ class CreateNeuronController {
         }
     }
 
+    private onInjectionIdChanged(newValue, oldValue) {
+        if (newValue === oldValue) {
+            return;
+        }
+
+        let injection = this.$scope.injectionService.find(this.$scope.model.injectionId);
+
+        if (!this.$scope.brainAreaService.resourcesAreAvailable) {
+            setTimeout(() => this.onInjectionIdChanged(newValue, oldValue), 250)
+        } else {
+            let brainArea = this.$scope.brainAreaService.find(injection.brainAreaId);
+
+            let parts = brainArea.structureIdPath.split("/");
+
+            let partIds = parts.filter(obj => obj.length > 0).map(obj => parseInt(obj));
+
+            this.resetBrainAreaPath(partIds);
+        }
+    }
+
     private createNeuron() {
         this.$scope.lastCreateMessage = "";
         this.$scope.lastCreateError = "";
@@ -175,15 +199,49 @@ class CreateNeuronController {
             }
         }
 
+        let location = this.$scope.model.somaLocation;
+        if (location.length > 2 && location[0] === "(" && location[location.length -1] === ")") {
+            location = location.slice(1, location.length - 1).trim();
+        }
+        console.log(location);
+        let parts = location.split(",");
+
+        let x = 0;
+        let y = 0;
+        let z = 0;
+
+        if (parts.length === 3) {
+            x = parseFloat(parts[0].trim());
+            if (isNaN(x)) {
+                this.$scope.lastCreateError = "Could not parse soma x location.";
+                return;
+            }
+
+            y = parseFloat(parts[1].trim());
+            if (isNaN(y)) {
+                this.$scope.lastCreateError = "Could not parse soma y location.";
+                return;
+            }
+
+            z = parseFloat(parts[2].trim());
+            if (isNaN(z)) {
+                this.$scope.lastCreateError = "Could not parse soma z location.";
+                return;
+            }
+        } else {
+            this.$scope.lastCreateError = "Could not parse soma location.";
+            return;
+        }
+
         let item = {
             idNumber: parseInt(this.$scope.model.idNumber),
             tag: this.$scope.model.tag,
             keywords: this.$scope.model.keywords,
             injectionId: this.$scope.model.injectionId,
             brainAreaId: area.id,
-            x: parseFloat(this.$scope.model.x),
-            y: parseFloat(this.$scope.model.y),
-            z: parseFloat(this.$scope.model.z)
+            x: x,
+            y: y,
+            z: z
         };
 
         this.$scope.neuronService.createItem(item).then((neuron) => {
@@ -205,12 +263,12 @@ class CreateNeuronController {
         });
     }
 
-    private resetBrainAreaPath() {
+    private resetBrainAreaPath(stack: number[]) {
         this.$scope.brainAreaNavigationNeuron = [];
-        this.moveToNextDepth(1);
+        this.moveToNextDepth(1, stack);
     }
 
-    private onBrainAreasForDepth(depth: number, data) {
+    private onBrainAreasForDepth(depth: number, data, stack: number[]) {
         let nextIndex = 0;
 
         if (data !== null && data.length > 0) {
@@ -218,28 +276,41 @@ class CreateNeuronController {
                 data.splice(0, 0, this.noBrainAreaSelection);
                 nextIndex = 1;
             }
+
+            if (depth > 0 && stack != null) {
+                if (stack.length > depth) {
+                    let matchedIndex = data.map((obj, index) => obj.structureId === stack[depth] ? index : -1).filter(obj => obj >= 0);
+
+                    if (matchedIndex.length === 1) {
+                        nextIndex = matchedIndex[0];
+                    }
+                } else {
+                    nextIndex = 0;
+                }
+            }
+
             this.$scope.brainAreaNavigationNeuron[depth] = new BrainAreaDepthEntry();
             this.$scope.brainAreaNavigationNeuron[depth].depth = depth;
             this.$scope.brainAreaNavigationNeuron[depth].areas = data;
             this.$scope.brainAreaNavigationNeuron[depth].selectedAreaIndex = nextIndex;
-            this.moveToNextDepthForParent(depth + 1, data[nextIndex].structureId);
+            this.moveToNextDepthForParent(depth + 1, data[nextIndex].structureId, stack);
         }
     }
 
-    private moveToNextDepthForParent(depth: number, parentId: number) {
+    private moveToNextDepthForParent(depth: number, parentId: number, stack: number[]) {
         this.$scope.brainAreaService.brainAreasForParent(parentId).then((data) => {
             this.$scope.$apply(() => {
-                this.onBrainAreasForDepth(depth, data);
+                this.onBrainAreasForDepth(depth, data, stack);
             });
         }).catch((err) => {
             console.log(err);
         });
     }
 
-    private moveToNextDepth(depth: number) {
+    private moveToNextDepth(depth: number, stack: number[]) {
         this.$scope.brainAreaService.brainAreasForDepth(depth).then((data) => {
             this.$scope.$apply(() => {
-                this.onBrainAreasForDepth(depth, data);
+                this.onBrainAreasForDepth(depth, data, stack;
             });
         }).catch((err) => {
             console.log(err);

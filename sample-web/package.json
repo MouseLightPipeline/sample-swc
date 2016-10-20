@@ -20,14 +20,25 @@
     "serve-favicon": "^2.3.0"
   },
   "devDependencies": {
+    "@types/angular": "^1.5.16",
+    "@types/angular-resource": "^1.5.6",
+    "@types/bootstrap": "^3.3.32",
+    "@types/dropzone": "^4.3.32",
+    "@types/es6-promise": "0.0.32",
+    "@types/express": "^4.0.33",
+    "@types/express-serve-static-core": "^4.0.37",
+    "@types/jquery": "^2.0.33",
+    "@types/mime": "0.0.29",
+    "@types/node": "^6.0.45",
+    "@types/serve-static": "^1.7.31",
     "del": "^2.2.0",
     "gulp": "^3.9.1",
     "gulp-livereload": "^3.8.1",
     "gulp-nodemon": "^2.0.2",
     "gulp-plumber": "^1.1.0",
     "gulp-rename": "^1.2.2",
-    "gulp-typescript": "^2.13.5",
-    "gulp-typings": "^2.0.0",
-    "gulp-watch": "^4.3.5"
+    "gulp-typescript": "^3.0.2",
+    "gulp-watch": "^4.3.5",
+    "typescript": "^2.0.3"
   }
 }

@@ -10,6 +10,9 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true
   },
+  "include": [
+    "client/**/*.ts"
+  ],
   "exclude": [
     "node_modules",
     "bower_components"

@@ -5,7 +5,6 @@ var gulp = require('gulp'),
   plumber = require('gulp-plumber'),
   livereload = require('gulp-livereload'),
   typescript = require("gulp-typescript");
-  gulpTypings = require("gulp-typings");
 
 gulp.task('default', ['sampleweb']);
 
@@ -49,11 +48,6 @@ gulp.task('clean', function () {
   return del('dist/**/*');
 });
 
-// install typings
-gulp.task("typings", ['clean'], function() {
-  return gulp.src("./typings.json").pipe(gulpTypings());
-});
-
 gulp.task('lib:js', ['clean'], function() {
   return gulp.src([
       'bower_components/jquery/dist/jquery.min.js',
@@ -90,7 +84,7 @@ gulp.task('lib:css', ['clean'], function() {
 });
 
 // compile typescript
-gulp.task('ts', ['typings'], function () {
+gulp.task('ts', ['clean'], function () {
   var tsconfig = require('./tsconfig.json');
 
   return gulp.src(['client/**/*.ts', 'typings/**/*.d.ts']).pipe(typescript(tsconfig.compilerOptions)).pipe(gulp.dest('dist/public'));

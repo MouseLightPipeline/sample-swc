@@ -47,24 +47,10 @@ div(class="row", ng-controller="createNeuronController")
                   a(ng-click="updateLocation($parent.$index, $index)") {{area.name}}
 
     div(class="row")
-      div(class="col-sm-4")
-        div(class="form-group")
-          label(class="control-label" for="somaX") Soma Sample X
-          div(class="input-group")
-            input(type="text", class="form-control", id="somaX", ng-model="model.x")
-            span(class="input-group-addon") µm
-      div(class="col-sm-4")
-        div(class="form-group")
-          label(class="control-label" for="somaY") Soma Sample Y
-          div(class="input-group")
-            input(type="text", class="form-control", id="somaY", ng-model="model.y")
-            span(class="input-group-addon") µm
-      div(class="col-sm-4")
-        div(class="form-group")
-          label(class="control-label" for="somaZ") Soma Sample Z
-          div(class="input-group")
-            input(type="text", class="form-control", id="somaZ", ng-model="model.z")
-            span(class="input-group-addon") µm
+      div(class="col-sm-12")
+        div(ng-class="['form-group', 'label-floating', {'has-warning': false}]")
+          label(class="control-label" for="somaLocation") Soma Location (x, y, z) µm
+          input(type="text", class="form-control form-control-sm", id="somaLocation", ng-model="model.somaLocation")
 
     div(class="row")
       div(class="col-sm-12")
