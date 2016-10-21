@@ -37,10 +37,13 @@ function post(req, res) {
 
     var neuronId = req.swagger.params.neuronId.value || '';
 
+    var structureIdentifierId = req.swagger.params.structureIdentifierId.value || '';
+
     var tracing = {
         filename: originalName,
         annotator: annotator,
         neuronId: neuronId,
+        structureIdentifierId: structureIdentifierId,
         comments: comments,
         offsetX: 0,
         offsetY: 0,

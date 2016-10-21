@@ -39,6 +39,7 @@ module.exports = function(sequelize, DataTypes) {
         classMethods: {
             associate: function(models) {
                 Tracing.hasMany(models.TracingNode, {foreignKey: 'tracingId', as: 'nodes'});
+                Tracing.belongsTo(models.StructureIdentifier, {foreignKey: 'structureIdentifierId'});
             }
         },
         timestamps: true,

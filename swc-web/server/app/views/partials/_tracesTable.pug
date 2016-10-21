@@ -8,17 +8,13 @@ div(class="row", ng-controller="tracingTableController")
           th File
           th Annotator
           th Neuron
-          th Janelia Offset X
-          th Janelia Offset Y
-          th Janelia Offset Z
+          th Structure
       tbody
         tr(dir-paginate="s in tracingService.tracings | itemsPerPage: itemsPerPage" pagination-id="traces" current-page="currentPage")
           td {{s.filename}}
           td {{s.annotator}}
           td {{neuronDisplayForId(s.neuronId)}}
-          td {{s.offsetX}}
-          td {{s.offsetY}}
-          td {{s.offsetZ}}
+          td {{structureDisplayForId(s.structureIdentifierId)}}
   div(class="col-sm-12")
     div(class="centered" ng-show="tracingService.resourcesAreAvailable && tracingService.tracings.length == 0")
       h5 There are no tracings in the database.  Upload tracings in the "Contribute" section.

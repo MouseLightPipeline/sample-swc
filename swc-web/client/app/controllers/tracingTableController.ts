@@ -12,10 +12,18 @@ class TracingTableController {
         this.$scope.neuronDisplayForId = (id: string): any => {
             return this.neuronDisplayForId(id);
         };
+
+        this.$scope.structureDisplayForId = (id: string): any => {
+            return this.structureDisplayForId(id);
+        };
     }
 
     private neuronDisplayForId(id: string): string {
         return this.$scope.neuronService.getDisplayNameForId(id);
+    }
+
+    private structureDisplayForId(id: string): string {
+        return this.$scope.structureIdentifierService.getDisplayNameForId(id);
     }
 
     private onCreatedTracingIndex(val) {

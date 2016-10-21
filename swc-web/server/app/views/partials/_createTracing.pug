@@ -11,6 +11,10 @@ div(class="row", ng-controller="createTracingController")
           input(type="file" id="selectfile" class="form-control-file" name="contents", file-model="theFile")
     div(class="row")
       div(class="col-sm-6 form-group")
+        label(class="control-label" for="tracingStructure") Structure
+        select(class="form-control form-control-sm c-select", id="tracingStructure", ng-model="structureId")
+          option(ng-repeat="option in structureIdentifierService.structures" value="{{option.id}}") {{option.name}}
+      div(class="col-sm-6 form-group")
         label(class="control-label" for="annotator") Annotator
         input(type="text" class="form-control form-control-sm", id="annotator" ng-model="annotator")
     div(class="row")
@@ -33,9 +37,8 @@ div(class="row", ng-controller="createTracingController")
             option(ng-repeat="option in neuronsForInjection" value="{{option.id}}") {{neuronService.getDisplayName(option)}}
           small(class="text-muted") {{injectionId.length > 0 ? '': ('Select an injection to choose a neuron')}}
     div(class="row")
-      div(class="col-sm-1")
-        button(type="submit" class="btn btn-info btn-sm btn-raised", ng-click="send()" ng-disabled="!canCreateTracing()") Upload
+      div(class="col-sm-12")
+        button(type="submit" class="btn btn-primary round outline", ng-click="send()" ng-disabled="!canCreateTracing()") Upload
           i(class="fa fa-spinner fa-spin" ng-show="isInCreatePost")
-      div(class="col-sm-11")
-        span {{lastCreateMessage}}
+        span    {{lastCreateMessage}}
 

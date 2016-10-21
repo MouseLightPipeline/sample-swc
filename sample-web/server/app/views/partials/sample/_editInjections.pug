@@ -63,6 +63,6 @@ div(class="modal fade model-wide" id="editInjectionsModal" tabindex="-1" role="d
                     li(role="menuitem" ng-repeat="area in depthNav.areas")
                       a(ng-click="updateLocation($parent.$index, $index)") {{area.name}}
           div(class="row")
-            button(type="button pull-right" class="btn btn-info btn-raised" ng-disabled="!canAddInjection" ng-click="addInjection()") Add Injection
+            button(type="button pull-right" class="btn btn-primary round outline" ng-disabled="!canAddInjection" ng-click="addInjection()") Add Injection
       div(class="modal-footer")
-        button(type="button" class="btn btn-default btn-raised" data-dismiss="modal") Close
+        button(type="button" class="btn btn-primary round outline" data-dismiss="modal") Close

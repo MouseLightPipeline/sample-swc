@@ -11,6 +11,7 @@ class CreateTracingController {
         this.$scope.neuronId = '';
         this.$scope.injectionId = '';
         this.$scope.sampleId = '';
+        this.$scope.structureId = '';
         this.$scope.neuronsForInjection = [];
         this.$scope.injectionsForSample = [];
         this.$scope.isInCreatePost = false;
@@ -24,9 +25,15 @@ class CreateTracingController {
             if (newValue !== oldValue) this.updateNeurons(newValue);
         });
 
+        this.$scope.$watch('structureIdentifierService.structures', (newValue, oldValue) => {
+            if (newValue !== oldValue) this.updateDefaultTracingStructure();
+        });
+
         this.$scope.send = () => {
             this.send()
         };
+
+        this.updateDefaultTracingStructure();
 
         this.$scope.canCreateTracing = (): boolean => this.isValidTracingEntry();
     }
@@ -53,6 +60,23 @@ class CreateTracingController {
 
     private isValidFile(): boolean {
         return (this.$scope.theFile != null) && (this.$scope.theFile.name.length > 0);
+    }
+
+    private updateDefaultTracingStructure() {
+        if (this.$scope.structureId.length > 0) {
+            return;
+        }
+
+        if (!this.$scope.structureIdentifierService.resourcesAreAvailable) {
+            setTimeout(() => { this.updateDefaultTracingStructure(); }, 250);
+            return;
+        }
+
+        let undefinedStructures = this.$scope.structureIdentifierService.structures.filter(obj => obj.value === 0);
+
+        if (undefinedStructures.length > 0) {
+            this.$scope.structureId = undefinedStructures[0].id;
+        }
     }
 
     private updateInjections(sampleId) {
@@ -82,9 +106,10 @@ class CreateTracingController {
     }
 
     private send() {
-        var tracingInfo = {
+        let tracingInfo = {
             annotator: this.$scope.annotator,
-            neuronId: this.$scope.neuronId
+            neuronId: this.$scope.neuronId,
+            structureIdentifierId: this.$scope.structureId
         };
 
         this.$scope.isInCreatePost = true;

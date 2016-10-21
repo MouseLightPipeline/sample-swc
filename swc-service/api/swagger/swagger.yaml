@@ -158,6 +158,10 @@ paths:
           in: query
           description: Neuron Id
           type: string
+        - name: structureIdentifierId
+          in: query
+          description: Structure Identifier Id
+          type: string
         - name: contents
           in: formData
           description: File to upload
@@ -227,6 +231,9 @@ definitions:
       neuronId:
         type: string
         description: Id of neuron in sample database
+      structureIdentifierId:
+        type: string
+        description: Id of structure identifier in sample database
   Node:
     type: object
     properties:
