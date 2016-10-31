@@ -2,23 +2,21 @@
 
 class CreateSampleController {
     public static $inject = [
-        "$scope"
+        "$scope",
+        "toastr",
+        "modalService"
     ];
 
-    constructor(private $scope: any) {
+    constructor(private $scope: any, private toastr: IToastrService, private modalService: ModalService) {
         this.$scope.model = {};
         this.$scope.model.idNumber = "";
         this.$scope.model.sampleDate = "";
         this.$scope.model.tag = "";
         this.$scope.model.comment = "";
-        this.$scope.model.registrationTransformId = "";
         this.$scope.model.mouseStrainId = "";
 
         this.$scope.isValidIdNumber = false;
         this.$scope.isValidDate = false;
-
-        this.$scope.lastCreateMessage = "";
-        this.$scope.lastCreateError = "";
 
         this.$scope.sampleDatePickerIsOpen = false;
 
@@ -28,49 +26,61 @@ class CreateSampleController {
 
         this.$scope.$watch("model.sampleDate", (newValue) => {
             this.$scope.isValidDate = isValidDateValue(new Date(newValue));
-         });
+        });
 
         this.$scope.$watchCollection("sampleService.samples", (newValues) => this.onSampleCollectionChanged());
-
-        this.$scope.$watchCollection("transformService.transforms", () => {
-            this.updateRegistrationSelection();
-        });
 
         this.$scope.$watchCollection("mouseStrainService.mouseStrains", () => {
             this.updateMouseStrainSelection();
         });
 
-        this.$scope.$on("registrationCreatedEvent", (evt, registration: string) => {
-            this.onRegistrationCreatedEvent(evt, registration);
+        this.$scope.createMouseStrainCallerContext = () => {
+            return () => this.$scope.model.mouseStrainId;
+        };
+
+        this.$scope.$on("mouseStrainCreatedEvent", (evt, eventData: ICreateItemEventData<ISelectMouseStrainControllerContext, IMouseStrain>) => {
+            this.onMouseStrainCreatedEvent(eventData.callerContext, eventData.item);
         });
 
-        this.$scope.$on("mouseStrainCreatedEvent", (evt, strain: string) => {
-            this.onMouseStrainCreatedEvent(evt, strain);
+        this.$scope.$on("mouseStrainSelectedEvent", (evt, eventData: ICreateItemEventData<ISelectMouseStrainControllerContext, IMouseStrain>) => {
+            this.onMouseStrainCreatedEvent(eventData.callerContext, eventData.item);
         });
 
         this.$scope.openSampleDatePicker = () => {
             this.$scope.sampleDatePickerIsOpen = true;
-        }
+        };
 
         this.$scope.createSample = () => this.createSample();
 
         this.$scope.canCreateSample = (): boolean => this.isValidSampleEntry();
 
+        this.$scope.getSelectedMouseStrainName = () => {
+            let strain: IMouseStrain = this.$scope.mouseStrainService.find(this.$scope.model.mouseStrainId);
+            return strain ? strain.name : "";
+        };
+
         let today = new Date();
 
         this.$scope.model.sampleDate = today.getFullYear() + "-" + pad(today.getMonth() + 1, 2) + "-" + pad(today.getDate(), 2);
+
+        this.$scope.foo = () => {
+            this.modalService.openSelectMouseStrainController({
+                name: this.$scope.getSelectedMouseStrainName(),
+                sample: null
+            });
+        }
     }
 
     private isValidSampleEntry(): boolean {
         return this.$scope.isValidDate && this.$scope.isValidIdNumber;
     }
 
-    private onRegistrationCreatedEvent(ignore, registration) {
-        this.$scope.model.registrationTransformId = registration.id;
-    }
-
-    private onMouseStrainCreatedEvent(ignore, strain) {
-        this.$scope.model.mouseStrainId = strain.id;
+    private onMouseStrainCreatedEvent(context: ISelectMouseStrainControllerContext, strain: IMouseStrain) {
+        // Anything broadcast with a sample as the context is an edit of an existing.  If it is null, it is applicable
+        // here (creating a new).
+        if (!context.sample) {
+            this.$scope.model.mouseStrainId = strain.id;
+        }
     }
 
     private onSampleCollectionChanged() {
@@ -81,16 +91,6 @@ class CreateSampleController {
         }
 
         this.$scope.model.idNumber = nextValue.toString();
-    }
-
-    private updateRegistrationSelection() {
-        if (this.$scope.transformService.find(this.$scope.model.registrationTransformId) === null) {
-            this.$scope.model.registrationTransformId = "";
-        }
-
-        if (this.$scope.model.registrationTransformId === "" && this.$scope.transformService.transforms.length > 0) {
-            this.$scope.model.registrationTransformId = this.$scope.transformService.transforms[0].id;
-        }
     }
 
     private updateMouseStrainSelection() {
@@ -107,30 +107,32 @@ class CreateSampleController {
         this.$scope.lastCreateMessage = "";
         this.$scope.lastCreateError = "";
 
+        if (!this.$scope.canCreateSample()) {
+            this.$scope.lastCreateError = "Can't create";
+            return;
+        }
+
         let sample = {
             idNumber: parseInt(this.$scope.model.idNumber),
             sampleDate: new Date(this.$scope.model.sampleDate + "T12:00:00Z").toISOString(),
             tag: this.$scope.model.tag,
             comment: this.$scope.model.comment,
-            registrationTransformId: this.$scope.model.registrationTransformId,
-            mouseStrainId: this.$scope.model.mouseStrainId
+            mouseStrainId: this.$scope.model.mouseStrainId,
+            activeRegistrationTransformId: ''
         };
 
         this.$scope.sampleService.createItem(sample).then((sample) => {
             this.$scope.$apply(() => {
-                this.$scope.lastCreateMessage = "Created sample with id number " + sample.idNumber;
+                this.toastr.success("Created sample with id <b>" + sample.idNumber + "</b>", "Success");
             });
-            setTimeout(() => {
-                this.$scope.$apply(() => {
-                    this.$scope.lastCreateMessage = "";
-                });
-            }, 4000);
         }).catch((error) => {
             this.$scope.$apply(() => {
+                let msg = "";
                 if (error.data != null)
-                    this.$scope.lastCreateError = error.data.message;
+                    msg = error.data.message;
                 else
-                    this.$scope.lastCreateError = "An unknown error occurred connecting to the server.";
+                    msg = "An unknown error occurred connecting to the server.";
+                this.toastr.error(msg, "Error", {timeOut: 0});
             });
         });
     }

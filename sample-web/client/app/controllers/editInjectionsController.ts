@@ -1,4 +1,6 @@
 interface IEditInjectionsScope extends IAppScope {
+    title: string;
+
     sample: ISample;
     injectionsForSample: Array<IInjection>;
 
@@ -39,6 +41,8 @@ class EditInjectionsController {
             safeName: "",
             acronym: "'"
         };
+
+        $scope.title = "";
 
         $scope.sample = null;
 
@@ -109,9 +113,11 @@ class EditInjectionsController {
         this.$scope.sample = sample;
 
         if (sample === null) {
+            this.$scope.title = "Injections for New Sample";
             this.$scope.injectionsForSample = [];
         } else {
             this.$scope.injectionsForSample = this.$scope.injectionService.injectionsForSample(sample.id);
+            this.$scope.title = `Injections for Sample ${this.$scope.sampleService.getDisplayName(sample)}`;
         }
 
         if (this.$scope.injectionVirusService.injectionViruses.length > 0) {

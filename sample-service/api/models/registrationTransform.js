@@ -7,40 +7,18 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4
         },
-        name: DataTypes.TEXT
+        location: DataTypes.TEXT,
+        name: DataTypes.TEXT,
+        notes: DataTypes.TEXT,
     }, {
         classMethods: {
             associate: function (models) {
-                RegistrationTransform.hasMany(models.Sample, {foreignKey: 'registrationTransformId', as: 'samples'});
+                RegistrationTransform.belongsTo(models.Sample, {foreignKey: 'sampleId', as: 'sample'});
             }
         },
         timestamps: true,
         paranoid: true
     });
-
-    function populateDefault(model) {
-        return new Promise((resolve, reject) => {
-            model.count().then((count) => {
-                if (count < 2) {
-                    if (count < 1) {
-                        model.create({name: 'Affine'});
-                    }
-                    if (count < 2) {
-                        model.create({name: 'B-spline'});
-                    }
-                    resolve(true);
-                } else {
-                    resolve(false);
-                }
-            }).catch((err) => {
-                reject(err);
-            });
-        });
-    }
-
-    RegistrationTransform.populateDefault = () => {
-        return populateDefault(RegistrationTransform);
-    };
 
     return RegistrationTransform;
 };

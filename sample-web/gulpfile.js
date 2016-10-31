@@ -35,7 +35,7 @@ gulp.task('nodemon', ['build'], () => {
 });
 
 gulp.task('watch', ['build'], function() {
-    return gulp.watch(['server/**/*.*', 'client/**/*.*', '../shared/dist/**/*.*'], ['build']);
+    return gulp.watch(['server/**/*.*', 'client/**/*.*'], ['build']);
 });
 
 gulp.task('server:dep', ['js', 'pug']);
@@ -64,7 +64,8 @@ gulp.task('lib:js', ['clean'], function() {
       'bower_components/bootstrap-material-design/dist/js/ripples.min.js',
       'bower_components/bootstrap-material-design/dist/js/ripples.min.js.map',
       'bower_components/tether/dist/js/tether.min.js',
-      'bower_components/socket.io-client/socket.io.js'
+      'bower_components/socket.io-client/socket.io.js',
+      'node_modules/angular-toastr/dist/angular-toastr.tpls.js'
     ])
     .pipe(gulp.dest('dist/public/lib'))
 });
@@ -78,7 +79,8 @@ gulp.task('lib:css', ['clean'], function() {
       'bower_components/bootstrap-material-design/dist/css/ripples.min.css',
       'bower_components/bootstrap-material-design/dist/css/ripples.min.css.map',
       'bower_components/tether/dist/css/tether.min.css',
-      'bower_components/font-awesome/css/font-awesome.min.css'
+      'bower_components/font-awesome/css/font-awesome.min.css',
+      'node_modules/angular-toastr/dist/angular-toastr.css'
     ])
     .pipe(gulp.dest('dist/public/css'))
 });

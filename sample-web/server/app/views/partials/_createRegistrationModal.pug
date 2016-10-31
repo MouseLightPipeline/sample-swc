@@ -1,18 +1,47 @@
 div(class="modal fade" id="createRegistrationModal" tabindex="-1" role="dialog" aria-labelledby="createRegistrationModalLabel" aria-hidden="true" ng-controller="createRegistrationController")
   div(class="modal-dialog" role="document")
-    div(class="modal-content")
-      div(class="modal-header")
+    div(class="modal-content modal-content-wide")
+
+      div(class="modal-header accent")
         button(type="button" class="close" data-dismiss="modal" aria-label="Close")
-          span(aria-hidden="true") &times;
-        h4(class="modal-title" id="myModalLabel") Create New Registration Transform
+          i(class="material-icons") cancel
+        h3(class="modal-title" id="myModalLabel") {{title}}
+
       div(class="modal-body")
-        form
-          div(class="form-group label-floating")
-            label(class="control-label" for="newRegistrationName") Registration Transform Name
-            input(type="text", class="form-control form-control-sm", id="newRegistrationName", placeholder="", ng-model="item.name")
+        h4 Select an existing transform associated with this sample or enter a new location
+        div(class="text-muted")
+          | The selected registration transform will be used in transform operations from sample coordinates to Allen
+          | atlas coordinates in any future transform operations.  Any past registration transforms defined for
+          | this sample are retained as they may be referenced in earlier transformation operations.
+
+
+        div(class="form-group label-floating")
+          div(class="inset")
+            h5 Location of HDF5 registration transform file
+          div(class="input-group")
+            span(class="input-group-btn btn-group" uib-dropdown)
+              button(type="button" id="transformSelectionDropdownButton" class="btn outline" uib-dropdown-toggle)
+                i(class="material-icons") arrow_drop_down
+              ul(class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="transformSelectionDropdownButton")
+                li(role="menuitem" ng-repeat="option in existingItems")
+                  a(ng-click="onReferenceExistingItem(option)") {{option.location}}
+            input(type="text", class="form-control", id="sampleTag" ng-model="name")
+            p(class="help-block") Enter an absolute path location reachable by servers performing transform operations
+
+        div
+          form(class="inset")
+            fieldset
+            h5 Optional values for new registration transforms
+              div(class="form-group")
+                label(class="control-label" for="newRegistrationName") Name (for lists/quick identification)
+                input(type="text", class="form-control form-control-sm", id="newRegistrationName", placeholder="", ng-model="item.name" ng-disabled="!isCreateEnabled()")
+              div(class="form-group")
+                label(class="control-label" for="newRegistrationNotes") Notes
+                input(type="text", class="form-control form-control-sm", id="newRegistrationNotes", placeholder="", ng-model="item.notes" ng-disabled="!isCreateEnabled()")
+
       div(class="modal-footer")
-        button(type="button" class="btn btn-danger round outline" data-dismiss="modal") Cancel
-        button(type="button" class="btn btn-primary round outline" ng-disabled="item.name.length == 0" ng-click="createItem()") Create
-      div(class="alert alert-danger" role="alert" ng-show="errorMessage.length > 0")
-        strong Oops!&nbsp;
-        span {{errorMessage}}
+        button(type="button" class="btn btn-primary" data-dismiss="modal") Cancel
+        button(type="button" class="btn btn-info btn-raised" ng-disabled="name.length == 0" ng-click="onCreateOrSelectItemClicked()") {{actionText}}
+
+      include components/_simpleErrorMessage
+

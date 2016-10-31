@@ -59,11 +59,6 @@ sync();
 
 function sync() {
     syncDatabase().then(() => {
-        return db.RegistrationTransform.populateDefault()
-    }).then((didPopulate) => {
-        if (didPopulate) {
-            console.log("Populated registration transforms with defaults.");
-        }
         return db.InjectionVirus.populateDefault();
     }).then((didPopulate) => {
         if (didPopulate) {

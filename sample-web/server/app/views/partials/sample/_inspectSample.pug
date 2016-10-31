@@ -1,0 +1,39 @@
+div(class="modal fade" id="inspectSampleModal" tabindex="-1" role="dialog" aria-labelledby="inspectSampleModalLabel" aria-hidden="true" ng-controller="inspectSampleController")
+  div(class="modal-dialog" role="document")
+    div(class="modal-content")
+
+      div(class="modal-header accent")
+        button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+          i(class="material-icons") cancel
+        h3(class="modal-title" id="myModalLabel") {{title}}
+
+      div(class="modal-body")
+        h5 Id Number
+        span {{sample.idNumber}}
+
+        h5 Date
+        span {{sample.sampleDate}}
+
+        h5 Strain
+        span {{sample.mouseStrainId}}
+
+        h5 Registrations
+        span {{sample.activeRegistrationId}}
+
+        h5 Injections
+        span {{sample.idNumber}}
+
+        h5 Tag
+        span {{sample.tag}}
+
+        h5 Comment
+        span {{sample.comment}}
+
+        h5 Last Updated
+        span {{sample.createdAt}}
+
+        h5 Created
+        span {{sample.updatedAt}}
+
+      div(class="modal-footer")
+        button(type="button" class="btn btn-primary" data-dismiss="modal") Close

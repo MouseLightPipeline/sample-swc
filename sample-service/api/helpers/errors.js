@@ -41,7 +41,11 @@ var Codes = {
     },
     DUPLICATE_STRAIN: {
         code: 2601,
-        message: 'A strain with that name already exists for that virus.'
+        message: 'A strain with that name already exists.'
+    },
+    DUPLICATE_STRAIN_CASE_INSENSITIVE: {
+        code: 2602,
+        message: 'A strain with that (case-insensitive) name already exists.'
     }
 };
 
@@ -91,6 +95,10 @@ function duplicateStrain() {
     return Codes.DUPLICATE_STRAIN;
 }
 
+function duplicateStrainCaseInsensitive() {
+    return Codes.DUPLICATE_STRAIN_CASE_INSENSITIVE;
+}
+
 module.exports = {
     Codes: Codes,
     sequelizeError: sequelizeError,
@@ -102,5 +110,6 @@ module.exports = {
     duplicateInjection: duplicateInjection,
     duplicateRegistration: duplicateRegistration,
     duplicateVirus: duplicateVirus,
-    duplicateStrain: duplicateStrain
+    duplicateStrain: duplicateStrain,
+    duplicateStrainCaseInsensitive: duplicateStrainCaseInsensitive
 };

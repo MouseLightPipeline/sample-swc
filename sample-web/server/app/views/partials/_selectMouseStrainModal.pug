@@ -1,0 +1,26 @@
+div(class="modal fade" id="selectMouseStrainModal" tabindex="-1" role="dialog" aria-labelledby="selectMouseStrainModalLabel" aria-hidden="true" ng-controller="createMouseStrainController")
+  div(class="modal-dialog" role="document")
+    div(class="modal-content")
+
+      div(class="modal-header accent")
+        button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+          i(class="material-icons") cancel
+        h3(class="modal-title" id="myModalLabel") {{title}}
+
+      div(class="modal-body")
+        h5 Select an existing mouse strain from the list or enter a new name
+        div(class="form-group label-floating")
+          div(class="input-group")
+            span(class="input-group-btn btn-group" uib-dropdown)
+              button(type="button" id="mouseStrainSelectionDropdownButton" class="btn outline" uib-dropdown-toggle)
+                i(class="material-icons") arrow_drop_down
+              ul(class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="mouseStrainSelectionDropdownButton")
+                li(role="menuitem" ng-repeat="option in existingItems")
+                  a(ng-click="onReferenceExistingItem(option)") {{option.name}}
+            input(type="text", class="form-control", id="sampleTag" ng-model="name")
+
+      div(class="modal-footer")
+        button(type="button" class="btn btn-primary" data-dismiss="modal") Cancel
+        button(type="button" class="btn btn-info btn-raised" ng-disabled="name.length == 0" ng-click="onCreateOrSelectItemClicked()") {{actionText}}
+
+      include components/_simpleErrorMessage

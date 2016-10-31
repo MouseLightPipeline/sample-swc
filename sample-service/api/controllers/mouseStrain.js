@@ -16,7 +16,7 @@ module.exports = {
 function get(req, res) {
     models.MouseStrain.findAll({}).then(function (strains) {
         res.json(strains);
-    }).catch(function(err){
+    }).catch(function (err) {
         res.status(500).json(errors.sequelizeError(err));
     });
 }
@@ -27,7 +27,7 @@ function getMouseStrainById(req, res) {
             res.json(strain[0]);
         else
             res.status(500).json(errors.idDoesNotExit());
-    }).catch(function(err){
+    }).catch(function (err) {
         res.status(500).json(errors.sequelizeError(err));
     });
 }
@@ -38,20 +38,23 @@ function post(req, res) {
         return;
     }
 
-    models.MouseStrain.findAll({where:{name: req.body.name}}).then(function (strain) {
+    models.MouseStrain.findAll({where: {name: {$iLike: req.body.name}}}).then(function (strain) {
         if (strain != null && strain.length > 0) {
-            res.status(500).json(errors.duplicateStrain());
+            if (strain[0].name === req.body.name)
+                res.status(500).json(errors.duplicateStrain());
+            else
+                res.status(500).json(errors.duplicateStrainCaseInsensitive());
         } else {
             models.MouseStrain.create({
                 name: req.body.name
             }).then(function (strain) {
                 res.json(strain);
                 app.broadcast();
-            }).catch(function(err){
+            }).catch(function (err) {
                 res.status(500).json(errors.sequelizeError(err));
             });
         }
-    }).catch(function(err){
+    }).catch(function (err) {
         res.status(500).json(errors.sequelizeError(err));
     });
 }
@@ -62,7 +65,7 @@ function updateMouseStrain(req, res) {
         return;
     }
 
-    models.MouseStrain.findAll({where:{id: req.body.id}}).then(function (strains) {
+    models.MouseStrain.findAll({where: {id: req.body.id}}).then(function (strains) {
         if (strains === null || strains.length === 0) {
             res.status(500).json(errors.idDoesNotExit());
         } else {
@@ -77,11 +80,11 @@ function updateMouseStrain(req, res) {
                 name: req.body.name
             }).then(function (updated) {
                 res.json(updated);
-            }).catch(function(err){
+            }).catch(function (err) {
                 res.status(500).json(errors.sequelizeError(err));
             });
         }
-    }).catch(function(err){
+    }).catch(function (err) {
         res.status(500).json(errors.sequelizeError(err));
     });
 }
@@ -96,7 +99,7 @@ function deleteMouseStrain(req, res) {
 
     var mouseStrainId = mouseStrainParam.value;
 
-    models.MouseStrain.findAll({where:{id: mouseStrainId}}).then(function (strains) {
+    models.MouseStrain.findAll({where: {id: mouseStrainId}}).then(function (strains) {
         if (strains === null || strains.length === 0) {
             res.status(500).json(errors.idDoesNotExit());
         } else {
@@ -105,11 +108,11 @@ function deleteMouseStrain(req, res) {
             strain.destroy().then(function () {
                 res.json({id: mouseStrainId});
                 app.broadcast();
-            }).catch(function(err){
+            }).catch(function (err) {
                 res.status(500).json(errors.sequelizeError(err));
             });
         }
-    }).catch(function(err){
+    }).catch(function (err) {
         res.status(500).json(errors.sequelizeError(err));
     });
 }

@@ -1,23 +1,24 @@
 class SampleTableController {
     public static $inject = [
-        "$scope"
+        "$scope",
+        "modalService"
     ];
 
-    constructor(private $scope: any) {
+    constructor(private $scope: any, private modalService: ModalService) {
 
         this.$scope.injectionsForSample = {};
 
-        this.$scope.formatRegistrationTransform = (registrationTransformId) => {
-            return this.formatRegistrationTransform(registrationTransformId);
-        };
+        this.$scope.formatRegistrationTransforms = (sample: ISample) => this.formatRegistrationTransforms(sample);
 
-        this.$scope.formatMouseStrain = (mouseStrainId: string) => {
-            return this.formatMouseStrain(mouseStrainId);
-        };
+        this.$scope.formatMouseStrain = (sample: ISample) => this.formatMouseStrain(sample);
 
-        this.$scope.formatInjections = (sample: ISample) => {
-            return this.formatInjections(sample);
-        };
+        this.$scope.formatInjections = (sample: ISample) => this.formatInjections(sample);
+
+        this.$scope.$watchCollection("sampleService.samples", () => this.onSampleCollectionChanged());
+
+        this.$scope.createMouseStrainCallerContext = (sample: ISample) => {
+            return {controller: this, sample: sample};
+        }
 
         this.$scope.$on("injectionAdded", (evt, sample, injection) => {
             this.$scope.$apply(() => {
@@ -25,30 +26,53 @@ class SampleTableController {
             })
         });
 
-        this.$scope.$watchCollection("sampleService.samples", () => this.onSampleCollectionChanged());
+        this.$scope.$on("registrationCreatedEvent", (evt, eventData: ICreateItemEventData<ISample, IMouseStrain>) => {
+            this.$scope.refresh();
+        });
 
-        this.$scope.$watchCollection("injectionsService.injections", () => this.onInjectionCollectionChanged());
+        this.$scope.$on("registrationSelectedEvent", (evt, eventData: ICreateItemEventData<ISample, IMouseStrain>) => {
+            this.$scope.refresh();
+        });
+
+        this.$scope.inspectSample = (sample: ISample) => {
+            this.modalService.openInspectSampleController(sample);
+        }
+
+        this.$scope.selectMouseStrain = (sample: ISample) => {
+            this.modalService.openSelectMouseStrainController({
+                name: this.nameForMouseStrain(sample),
+                sample: sample
+            });
+        };
+
+        this.$scope.selectRegistrationTransform = (sample: ISample) => {
+            this.modalService.openRegistrationTransformController(sample);
+        };
     }
 
     private onSampleCollectionChanged() {
     }
 
-    private onInjectionCollectionChanged() {
+    private nameForMouseStrain(sample: ISample) {
+        let mouseStrain: IMouseStrain = this.$scope.mouseStrainService.find(sample.mouseStrainId);
+
+        return mouseStrain ? mouseStrain.name : "";
+
     }
 
-    private formatRegistrationTransform(registrationTransformId: string): string {
-        if (registrationTransformId !== null && registrationTransformId.length > 0) {
-            return this.$scope.transformService.getDisplayNameForId(registrationTransformId);
+    private formatRegistrationTransforms(sample: ISample): string {
+        if (sample.activeRegistrationTransformId.length === 0) {
+            return "(click to set)";
         } else {
-            return "(none)";
+            return this.$scope.transformService.getDisplayNameForId(sample.activeRegistrationTransformId, "(name unspecified)");
         }
     }
 
-    private formatMouseStrain(mouseStrainId: string): string {
-        if (mouseStrainId !== null && mouseStrainId.length > 0) {
-            return this.$scope.mouseStrainService.getDisplayNameForId(mouseStrainId);
+    private formatMouseStrain(sample: ISample): string {
+        if (sample.mouseStrainId !== null && sample.mouseStrainId.length > 0) {
+            return this.$scope.mouseStrainService.getDisplayNameForId(sample.mouseStrainId);
         } else {
-            return "(none)";
+            return "(none)</i>";
         }
     }
 

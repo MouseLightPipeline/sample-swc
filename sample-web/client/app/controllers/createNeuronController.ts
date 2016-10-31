@@ -25,6 +25,7 @@ class CreateNeuronController {
     ];
 
     private noBrainAreaSelection;
+    private _pauseBrainAreaResets = false;
 
     constructor(private $scope: ICreateNeuronScope, private $http: any, private $resource: any) {
 
@@ -93,7 +94,7 @@ class CreateNeuronController {
                     this.$scope.brainAreaNavigationNeuron.splice(depth + 1);
                     this.$scope.brainAreaNavigationNeuron[depth].selectedAreaIndex = index;
                     if (depth < 2 || index > 0) {
-                        this.moveToNextDepthForParent(depth + 1, this.$scope.brainAreaNavigationNeuron[depth].areas[this.$scope.brainAreaNavigationNeuron[depth].selectedAreaIndex].structureId);
+                        this.moveToNextDepthForParent(depth + 1, this.$scope.brainAreaNavigationNeuron[depth].areas[this.$scope.brainAreaNavigationNeuron[depth].selectedAreaIndex].structureId, []);
                     }
                 }
             }
@@ -143,8 +144,13 @@ class CreateNeuronController {
     }
 
     private onInjectionsChanged() {
-        if (this.$scope.model.injectionId === "" && this.$scope.injectionsForSample.length > 0) {
-            this.$scope.model.injectionId = this.$scope.injectionsForSample[0].id;
+        this._pauseBrainAreaResets = false;
+        if (this.$scope.model.injectionId === "") {
+            if (this.$scope.injectionsForSample.length > 0) {
+                this.$scope.model.injectionId = this.$scope.injectionsForSample[0].id;
+            } else {
+                this.onInjectionIdChanged("", "forceChange")
+            }
         }
     }
 
@@ -158,6 +164,7 @@ class CreateNeuronController {
         this.$scope.model.injectionId = "";
 
         if (this.$scope.sampleId.length > 0) {
+            this._pauseBrainAreaResets = true;
             this.$scope.injectionsForSample = this.$scope.injectionService.injectionsForSample(this.$scope.sampleId);
         }
     }
@@ -171,14 +178,18 @@ class CreateNeuronController {
 
         if (!this.$scope.brainAreaService.resourcesAreAvailable) {
             setTimeout(() => this.onInjectionIdChanged(newValue, oldValue), 250)
-        } else {
+        } else if (injection) {
             let brainArea = this.$scope.brainAreaService.find(injection.brainAreaId);
 
             let parts = brainArea.structureIdPath.split("/");
 
             let partIds = parts.filter(obj => obj.length > 0).map(obj => parseInt(obj));
 
-            this.resetBrainAreaPath(partIds);
+            if (!this._pauseBrainAreaResets)
+                this.resetBrainAreaPath(partIds);
+        } else {
+            if (!this._pauseBrainAreaResets)
+                this.resetBrainAreaPath([]);
         }
     }
 
@@ -200,7 +211,7 @@ class CreateNeuronController {
         }
 
         let location = this.$scope.model.somaLocation;
-        if (location.length > 2 && location[0] === "(" && location[location.length -1] === ")") {
+        if (location.length > 2 && location[0] === "(" && location[location.length - 1] === ")") {
             location = location.slice(1, location.length - 1).trim();
         }
         console.log(location);
@@ -284,6 +295,8 @@ class CreateNeuronController {
                     if (matchedIndex.length === 1) {
                         nextIndex = matchedIndex[0];
                     }
+                } else if (stack.length === 0) {
+                    nextIndex = (depth > 1) ? 1 : 0;
                 } else {
                     nextIndex = 0;
                 }
@@ -310,7 +323,7 @@ class CreateNeuronController {
     private moveToNextDepth(depth: number, stack: number[]) {
         this.$scope.brainAreaService.brainAreasForDepth(depth).then((data) => {
             this.$scope.$apply(() => {
-                this.onBrainAreasForDepth(depth, data, stack;
+                this.onBrainAreasForDepth(depth, data, stack);
             });
         }).catch((err) => {
             console.log(err);

@@ -1,27 +1,12 @@
-div(class="modal fade model-wide" id="editInjectionsModal" tabindex="-1" role="dialog" aria-labelledby="editInjectionsModalLabel" aria-hidden="true" ng-controller="editInjectionsController")
+div(class="modal fade" id="editInjectionsModal" tabindex="-1" role="dialog" aria-labelledby="editInjectionsModalLabel" aria-hidden="true" ng-controller="editInjectionsController")
   div(class="modal-dialog" role="document")
-    div(class="modal-content")
-      div(class="modal-header")
+    div(class="modal-content modal-content-wider")
+      div(class="modal-header accent")
         button(type="button" class="close" data-dismiss="modal" aria-label="Close")
-          span(aria-hidden="true") &times;
-        h3(class="modal-title" id="editInjectionsModalTitle") Injections for Sample: {{formatSample(sample)}}
+          i(class="material-icons") cancel
+        h3(class="modal-title" id="editInjectionsModalTitle") {{title}}
+
       div(class="modal-body")
-        div(class="row inset-group")
-          table(class="table table-sm")
-            thead
-              tr
-                th Virus
-                th Fluorophore
-                th Location
-            tbody
-              tr(ng-repeat="injection in injectionsForSample")
-               td {{formatInjectionVirus(injection.injectionVirusId)}}
-               td {{formatFluorophore(injection.fluorophoreId)}}
-               td {{formatBrainArea(injection.brainAreaId)}}
-
-        div(class="row centered" ng-show="injectionsForSample.length === 0")
-          p(class="text-danger") No injections are defined for this sample.  Create injections below.
-
         h3 Add Injection
 
         div(class="inset-group")
@@ -31,9 +16,8 @@ div(class="modal fade model-wide" id="editInjectionsModal" tabindex="-1" role="d
               div(class="input-group")
                 span(class="input-group-btn")
                   div(class="btn-group" uib-dropdown)
-                    button(type="button" id="injectionVirusButton" class="btn btn-default" uib-dropdown-toggle)
-                      span(class="caret")
-                      span(class="sr-only")
+                    button(type="button" id="injectionVirusButton" class="btn outline" uib-dropdown-toggle)
+                      i(class="material-icons") arrow_drop_down
                     ul(class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="injectionVirusButton")
                       li(role="menuitem" ng-repeat="option in injectionVirusService.injectionViruses")
                         a(ng-click="setInjectionVirusName(option)") {{option.name}}
@@ -45,9 +29,8 @@ div(class="modal fade model-wide" id="editInjectionsModal" tabindex="-1" role="d
               div(class="input-group")
                 span(class="input-group-btn")
                   div(class="btn-group" uib-dropdown)
-                    button(type="button" id="fluorophore-button" class="btn btn-default" uib-dropdown-toggle)
-                      span(class="caret")
-                      span(class="sr-only")
+                    button(type="button" id="fluorophore-button" class="btn outline" uib-dropdown-toggle)
+                      i(class="material-icons") arrow_drop_down
                     ul(class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="fluorophore-button")
                       li(role="menuitem" ng-repeat="option in fluorophoreService.fluorophores")
                         a(ng-click="setFluorophoreName(option)") {{option.name}}
@@ -55,14 +38,36 @@ div(class="modal fade model-wide" id="editInjectionsModal" tabindex="-1" role="d
 
           div(class="row")
             h5 Choose a brain area
-            ol(class="breadcrumb blue")
+            ol(class="breadcrumb")
               li(ng-repeat="depthNav in brainAreaNavigation")
                 span(uib-dropdown)
                   a(class="brain-area-nav" href uib-dropdown-toggle) {{depthNav.areas[depthNav.selectedAreaIndex].name}}
                   ul(class="dropdown-menu" uib-dropdown-menu role="menu")
                     li(role="menuitem" ng-repeat="area in depthNav.areas")
                       a(ng-click="updateLocation($parent.$index, $index)") {{area.name}}
-          div(class="row")
-            button(type="button pull-right" class="btn btn-primary round outline" ng-disabled="!canAddInjection" ng-click="addInjection()") Add Injection
+
+      hr
+      div(class="fab-mini")
+        button(class="btn btn-success btn-raised btn-fab btn-fab-mini" ng-disabled="!canAddInjection"  ng-click="addInjection()")
+          i(class="material-icons") add
+
+      div(class="modal-body")
+        div(class="row inset-group")
+          table(class="table table-sm")
+            thead
+              tr
+                th Virus
+                th Fluorophore
+                th Location
+            tbody
+              tr(ng-repeat="injection in injectionsForSample")
+                td {{formatInjectionVirus(injection.injectionVirusId)}}
+                td {{formatFluorophore(injection.fluorophoreId)}}
+                td {{formatBrainArea(injection.brainAreaId)}}
+
+        div(class="row centered" ng-show="injectionsForSample.length === 0")
+          p(class="text-danger") No injections are defined for this sample.  Create injections above.
+
+
       div(class="modal-footer")
-        button(type="button" class="btn btn-primary round outline" data-dismiss="modal") Close
+        button(type="button" class="btn btn-raised btn-info" data-dismiss="modal") Close

@@ -1,5 +1,7 @@
+/// <reference path="../../bower_components/ndb-client-db/dist/@types/index.d.ts"/>
+
 ((): void => {
-    angular.module("sampleManager", ["ngResource", "ui.bootstrap", "ngAnimate"]);
+    angular.module("sampleManager", ["ngResource", "ui.bootstrap", "ngAnimate", "toastr"]);
 
     angular.module("sampleManager").service("brainAreaService", BrainAreaService);
     angular.module("sampleManager").service("injectionVirusService", InjectionVirusService);

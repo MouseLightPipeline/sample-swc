@@ -16,7 +16,7 @@ module.exports = function(sequelize, DataTypes) {
     function populateDefault(model) {
         return new Promise((resolve, reject) => {
             model.count().then((count) => {
-                if (count < 2) {
+                if (count < 1) {
                     if (count < 1) {
                         model.create({name: "C57BL/6J"});
                     }

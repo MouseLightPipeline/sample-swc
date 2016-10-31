@@ -1,3 +1,5 @@
+import IToastrConfig = angular.toastr.IToastrConfig;
+
 interface IAppScope extends ng.IScope {
     service: ApiAccessService;
     injectionService: InjectionService;
@@ -18,6 +20,7 @@ class AppController {
     public static $inject = [
         "$scope",
         "$resource",
+        "toastrConfig",
         "apiAccessService",
         "injectionService",
         "registrationTransformService",
@@ -29,7 +32,7 @@ class AppController {
         "fluorophoreService"
     ];
 
-    constructor(private $scope: IAppScope, private $resource: any, private serviceApi: ApiAccessService,
+    constructor(private $scope: IAppScope, private $resource: any, protected toastrConfig: IToastrConfig, private serviceApi: ApiAccessService,
                 private injectionService: InjectionService, private transformService: RegistrationTransformService,
                 private injectionVirusService: InjectionVirusService, private brainAreaService: BrainAreaService,
                 private sampleService: SampleService, private neuronService: NeuronService,
@@ -52,6 +55,10 @@ class AppController {
         this.updateService(serviceApi.serviceUrl);
         this.updateServiceDoc(serviceApi.serviceDocUrl);
         this.updateStatus(serviceApi.statusUrl);
+
+        this.toastrConfig.positionClass = "toast-top-center";
+        this.toastrConfig.allowHtml = true;
+        this.toastrConfig.timeOut = 2500;
     }
 
     private updateService(val) {

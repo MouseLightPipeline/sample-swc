@@ -38,20 +38,33 @@ function post(req, res) {
         return;
     }
 
-    models.RegistrationTransform.findAll({where:{name: req.body.name}}).then(function (registration) {
+    models.RegistrationTransform.findAll({where:{location: req.body.location}}).then(function (registration) {
         if (registration != null && registration.length > 0) {
             res.status(500).json(errors.duplicateRegistration());
         } else {
-            models.RegistrationTransform.create({
-                name: req.body.name,
-            }).then(function (registration) {
-                res.json(registration);
-                app.broadcast();
-            }).catch(function(err){
-                res.status(500).json(errors.sequelizeError(err));
-            });
+            create(req.body, res);
         }
     }).catch(function(err){
+        res.status(500).json(errors.sequelizeError(err));
+    });
+}
+
+function create(body, res) {
+    var sampleId = body.sampleId || null;
+    var name = body.name || '';
+    var location = body.location || '';
+    var notes = body.notes || '';
+
+    models.RegistrationTransform.create({
+        idNumber: body.idNumber,
+        sampleId: sampleId,
+        name: name,
+        location: location,
+        notes: notes
+    }).then(function (registration) {
+        res.json(registration);
+        app.broadcast();
+    }).catch(function (err) {
         res.status(500).json(errors.sequelizeError(err));
     });
 }
@@ -66,22 +79,26 @@ function updateRegistrationTransform(req, res) {
         if (registrationTransforms === null || registrationTransforms.length === 0) {
             res.status(500).json(errors.idDoesNotExit());
         } else {
-            var registrationTransform = registrationTransforms[0];
-
-            if (req.body.name === undefined || req.body.name === null || req.body.name.length === 0) {
-                res.status(500).json(errors.invalidName());
-                return;
-            }
-
-            registrationTransform.update({
-                name: req.body.name
-            }).then(function (updated) {
-                res.json(updated);
-            }).catch(function(err){
-                res.status(500).json(errors.sequelizeError(err));
-            });
+            update(registrationTransforms[0], req.body, res);
         }
     }).catch(function(err){
+        res.status(500).json(errors.sequelizeError(err));
+    });
+}
+
+function update(registrationTransform, body, res) {
+    var name = body.name || '';
+    var location = body.location || '';
+    var notes = body.notes || '';
+
+    registrationTransform.update({
+        name: name,
+        location: location,
+        notes: notes
+    }).then(function (updatedRegistration) {
+        res.json(updatedRegistration);
+        app.broadcast();
+    }).catch(function (err) {
         res.status(500).json(errors.sequelizeError(err));
     });
 }

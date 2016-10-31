@@ -1,0 +1,46 @@
+div(ng-controller="createSampleController")
+  // - createSampleController relies on $emit events.  The modals must be placed within currently (alternative is to
+  // - define a callback).  The sampel table submits an actual sample to the modal to be modified, and therefore does
+  // - not rely on the event or any nesting relationships of controller scopes.
+  include ../_createRegistrationModal
+  include ../_selectMouseStrainModal
+
+  div(class="section")
+
+    form
+      div(class="row")
+        div(class="col-sm-4")
+          div(ng-class="['form-group', 'label-floating', {'has-warning': !isValidIdNumber}]")
+            label(class="control-label" for="sampleIdNumber") Sample Id Number
+            input(type="text", class="form-control form-control-sm", id="sampleIdNumber", ng-model="model.idNumber")
+
+        div(class="col-sm-4")
+          div(class="form-group label-floating")
+            label(class="control-label" for="mouseStrainSelect") Strain
+            div(class="input-group")
+              select(ng-model="model.mouseStrainId" id="mouseStrainSelect" class="form-control c-select" ng-disabled="!mouseStrainService.resourcesAreAvailable")
+                option(ng-repeat="option in mouseStrainService.mouseStrains" value="{{option.id}}") {{option.name}}
+              span(class="input-group-btn")
+                label(ng-show="!mouseStrainService.resourcesAreAvailable")
+                  i(class="fa fa-spinner fa-spin")
+                button(class="btn btn-info btn-raised btn-fab btn-fab-mini" type="button" ng-click="foo()" ng-show="mouseStrainService.resourcesAreAvailable")
+                  i(class="material-icons") edit
+        div(class="col-sm-4")
+          div(ng-class="['form-group', 'label-floating', {'has-warning': !isValidDate}]")
+            label(class="control-label" for="date") Date (yyyy-mm-dd)
+            input(type="text", class="form-control form-control-sm", id="date", ng-model="model.sampleDate")
+
+      div(class="row")
+        div(class="col-sm-3")
+          div(class="form-group label-floating")
+            label(class="control-label" for="sampleTag") Tag (optional)
+            input(type="text", class="form-control form-control-sm", id="sampleTag", placeholder="", ng-model="model.tag")
+        div(class="col-sm-9")
+          div(class="form-group label-floating")
+            label(class="control-label" for="comment") Comments (optional)
+            input(type="text", class="form-control form-control-sm", id="comment", placeholder="", ng-model="model.comment")
+
+  hr(class="fab-offset")
+  div(class="fab")
+    button(class="btn btn-success btn-raised btn-fab" ng-click="createSample()")
+      i(class="material-icons") add

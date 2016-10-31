@@ -14,7 +14,7 @@ module.exports = {
 };
 
 function get(req, res) {
-    models.Sample.findAll(/*{include:GET_SAMPLE_INCLUDE}*/).then(function (samples) {
+    models.Sample.findAll({order:[["idNumber", "DESC"]]}).then(function (samples) {
         res.json(samples);
     }).catch(function(err){
         res.status(500).json(errors.sequelizeError(err));
@@ -53,7 +53,7 @@ function create(body, res) {
     var sampleDate = (body.sampleDate && body.sampleDate.length > 0) ? new Date(body.sampleDate) : new Date();
     var tag = body.tag || '';
     var comment = body.comment || '';
-    var registrationTransformId = body.registrationTransformId || null;
+    var activeRegistrationTransformId = body.activeRegistrationTransformId || '';
     var mouseStrainId = body.mouseStrainId || null;
 
     models.Sample.create({
@@ -61,7 +61,7 @@ function create(body, res) {
         sampleDate: sampleDate,
         tag: tag,
         comment: comment,
-        registrationTransformId: registrationTransformId,
+        activeRegistrationTransformId: activeRegistrationTransformId,
         mouseStrainId: mouseStrainId
     }).then(function (sample) {
         res.json(sample);
@@ -76,19 +76,21 @@ function updateSample(req, res) {
         res.status(500).json(errors.invalidIdNumber());
         return;
     }
-
     models.Sample.findAll({where:{id: req.body.id}}).then(function (samples) {
         if (samples === null || samples.length === 0) {
             res.status(500).json(errors.idDoesNotExit());
         } else {
             var sample = samples[0];
 
+            var activeRegistrationTransformId = req.body.activeRegistrationTransformId || '';
+            var mouseStrainId = req.body.mouseStrainId || null;
+
             sample.update({
                 sampleDate: req.body.sampleDate,
                 tag: req.body.tag,
                 comment: req.body.comment,
-                registrationTransformId: req.body.registrationTransformId,
-                mouseStrainId: req.body.mouseStrainId
+                activeRegistrationTransformId: activeRegistrationTransformId,
+                mouseStrainId: mouseStrainId
             }).then(function (updated) {
                 res.json(updated);
             }).catch(function(err){

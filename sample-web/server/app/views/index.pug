@@ -2,72 +2,46 @@ extends layout
 block js
   script(src='/lib/socket.io.js')
   script(src='/lib/entityStore.js')
-  script(src='/lib/services/dataService.js')
-  script(src='/lib/services/brainAreaService.js')
-  script(src='/lib/services/neuronService.js')
-  script(src='/lib/services/sampleService.js')
-  script(src='/lib/services/structureIdentifierService.js')
-  script(src='/lib/services/tracingNodeService.js')
-  script(src='/lib/services/tracingService.js')
-  script(src='/lib/services/registrationTransformService.js')
-  script(src='/lib/services/injectionVirusService.js')
-  script(src='/lib/services/fluorophoreService.js')
-  script(src='/lib/services/injectionService.js')
-  script(src='/lib/services/mouseStrainService.js')
+  script(src='/lib/dataService.js')
+  script(src='/lib/brainAreaService.js')
+  script(src='/lib/neuronService.js')
+  script(src='/lib/sampleService.js')
+  script(src='/lib/structureIdentifierService.js')
+  script(src='/lib/tracingNodeService.js')
+  script(src='/lib/tracingService.js')
+  script(src='/lib/registrationTransformService.js')
+  script(src='/lib/injectionVirusService.js')
+  script(src='/lib/fluorophoreService.js')
+  script(src='/lib/injectionService.js')
+  script(src='/lib/mouseStrainService.js')
   script(src='/app/helpers/validation.js')
   script(src='/app/app.js')
   script(src='/app/services/apiAccessService.js')
+  script(src='/app/services/modalService.js')
   script(src='/app/controllers/appController.js')
+  script(src='/app/controllers/inspectSampleController.js')
+  script(src='/app/controllers/selectItemController.js')
+  script(src='/app/controllers/selectMouseStrainController.js')
   script(src='/app/controllers/createSampleController.js')
   script(src='/app/controllers/createNeuronController.js')
-  script(src='/app/controllers/abstractCreateItemController.js')
   script(src='/app/controllers/createRegistrationController.js')
-  script(src='/app/controllers/createVirusController.js')
-  script(src='/app/controllers/createMouseStrainController.js')
   script(src='/app/controllers/editInjectionsController.js')
   script(src='/app/controllers/sampleTableController.js')
   script(src='/app/controllers/neuronTableController.js')
-  script(src='/app/controllers/mouseStrainController.js')
 block content
-  div(class="blue section")
+
+  div(id="appBar" class="section")
     div(class="row centered")
       h1 Sample and Neuron Manager
-      hr(class="partial")
-      p An interactive service to manage sample definitions and related information.
-    div(class="row")
-      h3(class="centered") Services Provided
-    br
-    div(class="row")
-      div(class="col-md-2 col-xs-1 centered")
-      div(class="col-md-4 col-xs-5 centered")
-        a(href="#upload" class="iconlink")
-          i(class="fa fa-plus-circle fa-3x")
-          p(class="lead") Create definitions
-      div(class="col-md-4 col-xs-5 centered")
-        a(href="#search" class="iconlink")
-          i(class="fa fa-search fa-3x")
-          p(class="lead") Query definitions
-  div(class="orange section")
-    div(class="row")
-      div(class="col-sm-12")
-        h2(class="centered") SUMMARY
-    include ./partials/_summary
-  div(class="blue section" id="query-tables")
-    div(class="row")
-      div(class="col-sm-12")
-        h2(class="centered") SAMPLES
-    div(class="row")
-      div(class="col-sm-12")
-        include ./partials/_sampleTable
-    div(class="row")
-      div(class="col-sm-2")
-      div(class="col-sm-8")
-        include ./partials/_createSample
-      div(class="col-sm-2")
-  div(class="orange section", id="create")
-    div(class="row")
-      div(class="col-sm-12")
-        h2(class="centered") NEURONS
+      p(class="text-muted-light") An interactive service to manage sample definitions and related information.
+      include ./partials/_summary
+
+  div
+    include ./partials/_mainSampleSection
+
+  div
+    div(class="title")
+      h2(class="centered") NEURONS
     div(class="row")
       div(class="col-sm-12")
         include ./partials/_neuronTable
@@ -76,10 +50,12 @@ block content
       div(class="col-sm-8")
         include ./partials/_createNeuron
       div(class="col-sm-2")
-  div(class="blue section")
-    div(class="row")
-      div(class="col-sm-12")
-        h2(class="centered") DIAGNOSTICS
-    include ./partials/_diagnostics
-  div(id="footer", class="container-fluid dark") Copyright © 2016 Howard Hughes Medical Institute
+
+  div
+    div(class="diagnostics")
+      h4(class="centered ") DIAGNOSTICS
+    div(class="section diagnostics-content")
+      include ./partials/_diagnostics
+
+  div(id="footer", class="container-fluid") Copyright © 2016 Howard Hughes Medical Institute
   script $.material.init();

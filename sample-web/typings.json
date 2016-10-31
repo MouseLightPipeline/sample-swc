@@ -1,0 +1,17 @@
+{
+  "name": "ndb-client-db",
+  "dependencies": {},
+  "globalDependencies": {
+    "angular": "registry:dt/angular#1.5.0+20160517064839",
+    "angular-resource": "registry:dt/angular-resource#1.5.0+20160412142209",
+    "angular-toastr": "registry:dt/angular-toastr#1.6.0+20160330162121",
+    "bootstrap": "registry:dt/bootstrap#3.3.5+20160619023404",
+    "es6-promise": "registry:dt/es6-promise#0.0.0+20160423074304",
+    "express": "registry:dt/express#4.0.0+20160708185218",
+    "express-serve-static-core": "registry:dt/express-serve-static-core#4.0.0+20161012061536",
+    "jquery": "registry:dt/jquery#1.10.0+20160417213236",
+    "mime": "registry:dt/mime#0.0.0+20160316155526",
+    "node": "registry:dt/node#6.0.0+20161019125345",
+    "serve-static": "registry:dt/serve-static#0.0.0+20160606155157"
+  }
+}

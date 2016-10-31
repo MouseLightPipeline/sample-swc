@@ -310,7 +310,7 @@ paths:
           schema:
             $ref: "#/definitions/Error"
   /registrationtransforms/{transformId}:
-    x-swagger-router-controller: registrationtransform
+    x-swagger-router-controller: registrationTransform
     get:
       summary: Registration transform by id
       tags:
@@ -967,6 +967,12 @@ definitions:
       comment:
         type: string
         description: Comments
+      mouseStrainId:
+        type: string
+        description: Mouse strain id
+      activeRegistrationTransformId:
+        type: string
+        description: Active registration id
       createdAt:
         type: string
         format: date-time
@@ -991,12 +997,12 @@ definitions:
       comment:
         type: string
         description: Comments
-      registrationTransformId:
-        type: string
-        description: Registration tranform reference id
       mouseStrainId:
         type: string
         description: Mouse Strain
+      activeRegistrationTransformId:
+        type: string
+        description: Active registration id
   RegistrationTransform:
     type: object
     properties:
@@ -1006,6 +1012,15 @@ definitions:
       name:
         type: string
         description: Name
+      location:
+        type: string
+        description: Location
+      notes:
+        type: string
+        description: Notes
+      sampleId:
+        type: string
+        description: Sample reference id
       createdAt:
         type: string
         format: date-time
@@ -1020,6 +1035,15 @@ definitions:
       name:
         type: string
         description: Name
+      location:
+        type: string
+        description: Location
+      notes:
+        type: string
+        description: Notes
+      sampleId:
+        type: string
+        description: Sample reference id
   MouseStrain:
     type: object
     properties:

@@ -19,11 +19,16 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.TEXT,
             defaultValue: ''
         },
-        sampleDate: DataTypes.DATE
+        sampleDate: DataTypes.DATE,
+        activeRegistrationTransformId: {
+            type: DataTypes.TEXT,
+            defaultValue: '',
+        },
+
     }, {
         classMethods: {
             associate: function(models) {
-                Sample.belongsTo(models.RegistrationTransform, {foreignKey: 'registrationTransformId', as: 'registrationTransform'});
+                Sample.hasMany(models.RegistrationTransform, {foreignKey: 'sampleId', as: 'registrationTransforms'});
                 Sample.belongsTo(models.MouseStrain, {foreignKey: 'mouseStrainId', as: 'mouseStrain'});
             }
         },
