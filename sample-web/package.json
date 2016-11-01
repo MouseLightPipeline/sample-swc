@@ -20,7 +20,8 @@
     "node-rest-client": "^1.8.0",
     "pug": "^2.0.0-alpha7",
     "request": "^2.69.0",
-    "serve-favicon": "^2.3.0"
+    "serve-favicon": "^2.3.0",
+    "toastr": "^2.1.2"
   },
   "devDependencies": {
     "del": "^2.2.0",
