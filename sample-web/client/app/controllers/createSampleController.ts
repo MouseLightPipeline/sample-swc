@@ -7,7 +7,7 @@ class CreateSampleController {
         "modalService"
     ];
 
-    constructor(private $scope: any, private toastr: IToastrService, private modalService: ModalService) {
+    constructor(private $scope: any, private toastr: any, private modalService: ModalService) {
         this.$scope.model = {};
         this.$scope.model.idNumber = "";
         this.$scope.model.sampleDate = "";

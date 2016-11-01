@@ -1,5 +1,3 @@
-import IToastrService = angular.toastr.IToastrService;
-
 class SelectMouseStrainController extends SelectItemController<IMouseStrain, ISelectMouseStrainControllerContext> implements IModalController<ISelectMouseStrainControllerContext> {
     public static $inject = [
         "$scope",
@@ -7,7 +5,7 @@ class SelectMouseStrainController extends SelectItemController<IMouseStrain, ISe
         "modalService"
     ];
 
-    constructor(protected $scope: any, protected toaster: IToastrService, private modalService: ModalService) {
+    constructor(protected $scope: any, protected toaster: any, private modalService: ModalService) {
         super($scope, $scope.mouseStrainService, {
             modalElementId: "#selectMouseStrainModal",
             itemCreatedEventName: "mouseStrainCreatedEvent",

@@ -1,5 +1,3 @@
-import IToastrConfig = angular.toastr.IToastrConfig;
-
 interface IAppScope extends ng.IScope {
     service: ApiAccessService;
     injectionService: InjectionService;
@@ -32,7 +30,7 @@ class AppController {
         "fluorophoreService"
     ];
 
-    constructor(private $scope: IAppScope, private $resource: any, protected toastrConfig: IToastrConfig, private serviceApi: ApiAccessService,
+    constructor(private $scope: IAppScope, private $resource: any, protected toastrConfig: any, private serviceApi: ApiAccessService,
                 private injectionService: InjectionService, private transformService: RegistrationTransformService,
                 private injectionVirusService: InjectionVirusService, private brainAreaService: BrainAreaService,
                 private sampleService: SampleService, private neuronService: NeuronService,

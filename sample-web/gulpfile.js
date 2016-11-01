@@ -66,8 +66,7 @@ gulp.task('lib:js', ['clean'], function() {
       'bower_components/tether/dist/js/tether.min.js',
       'bower_components/socket.io-client/socket.io.js',
       'bower_components/moment/moment.js',
-      'node_modules/angular-toastr/dist/angular-toastr.tpls.js',
-      'node_modules/toastr/build/toastr.min.js'
+      'bower_components/angular-toastr/dist/angular-toastr.tpls.js'
     ])
     .pipe(gulp.dest('dist/public/lib'))
 });
@@ -82,8 +81,7 @@ gulp.task('lib:css', ['clean'], function() {
       'bower_components/bootstrap-material-design/dist/css/ripples.min.css.map',
       'bower_components/tether/dist/css/tether.min.css',
       'bower_components/font-awesome/css/font-awesome.min.css',
-      'node_modules/angular-toastr/dist/angular-toastr.css',
-      'node_modules/toastr/build/toastr.min.css'
+      'bower_components/angular-toastr/dist/angular-toastr.css'
     ])
     .pipe(gulp.dest('dist/public/css'))
 });

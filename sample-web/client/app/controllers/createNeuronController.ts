@@ -25,7 +25,7 @@ class CreateNeuronController {
     private noBrainAreaSelection;
     private _pauseBrainAreaResets = false;
 
-    constructor(private $scope: ICreateNeuronScope, private toastr: IToastrService) {
+    constructor(private $scope: ICreateNeuronScope, private toastr: any) {
 
         this.noBrainAreaSelection = {
             id: "",

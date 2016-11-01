@@ -5,7 +5,7 @@ class CreateRegistrationController extends SelectItemController<IRegistrationTra
         "modalService"
     ];
 
-    constructor(protected $scope: any, protected toaster: IToastrService, private modalService: ModalService) {
+    constructor(protected $scope: any, protected toaster: any, private modalService: ModalService) {
         super($scope, $scope.transformService, {
             modalElementId: "#createRegistrationModal",
             itemCreatedEventName: "registrationCreatedEvent",
