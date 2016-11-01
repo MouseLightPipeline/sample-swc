@@ -13,6 +13,9 @@ class ModalService {
     private _selectMouseStrainController: any;
     private _selectRegistrationTransformController: any;
     private _inspectSampleController: any;
+    private _inspectNeuronController: any;
+    private _editSampleController: any;
+    private _editNeuronController: any;
 
     constructor() {
     }
@@ -39,6 +42,30 @@ class ModalService {
 
     public openInspectSampleController(callerContext: ISample) {
         this._inspectSampleController.open(callerContext);
+    }
+
+   public registerInspectNeuronController(controller: any) {
+        this._inspectNeuronController = controller;
+    }
+
+    public openInspectNeuronController(callerContext: INeuron) {
+        this._inspectNeuronController.open(callerContext);
+    }
+
+    public registerEditSampleController(controller: any) {
+        this._editSampleController = controller;
+    }
+
+    public openEditSampleController(callerContext: ISample) {
+        this._editSampleController.open(callerContext);
+    }
+
+    public registerEditNeuronController(controller: any) {
+        this._editNeuronController = controller;
+    }
+
+    public openEditNeuronController(callerContext: INeuron) {
+        this._editNeuronController.open(callerContext);
     }
 
     public static safeApply = function (scope, fn) {

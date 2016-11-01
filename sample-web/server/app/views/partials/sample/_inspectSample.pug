@@ -12,28 +12,31 @@ div(class="modal fade" id="inspectSampleModal" tabindex="-1" role="dialog" aria-
         span {{sample.idNumber}}
 
         h5 Date
-        span {{sample.sampleDate}}
+        span {{formatSampleDate(sample.sampleDate)}}
 
         h5 Strain
-        span {{sample.mouseStrainId}}
+        span {{formatMouseStrain(sample)}}
 
-        h5 Registrations
-        span {{sample.activeRegistrationId}}
+        h5 Active Registration
+        span {{formatRegistrationTransforms(sample)}}
+
+        h5 Additional Registrations
+        span {{formatAdditionalRegistrationTransforms(sample)}}
 
         h5 Injections
-        span {{sample.idNumber}}
+        span {{formatInjections(sample)}}
 
         h5 Tag
-        span {{sample.tag}}
+        span {{formatPossibleEmpty(sample.tag)}}
 
         h5 Comment
-        span {{sample.comment}}
+        span {{formatPossibleEmpty(sample.comment)}}
 
         h5 Last Updated
-        span {{sample.createdAt}}
+        span {{formatTimestampDate(sample.updatedAt)}}
 
         h5 Created
-        span {{sample.updatedAt}}
+        span {{formatTimestampDate(sample.createdAt)}}
 
       div(class="modal-footer")
-        button(type="button" class="btn btn-primary" data-dismiss="modal") Close
+        button(type="button" class="btn btn-raised btn-info" data-dismiss="modal") Close

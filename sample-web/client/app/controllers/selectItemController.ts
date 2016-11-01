@@ -68,7 +68,6 @@ abstract class SelectItemController<T extends IApiNamedItem, S> implements IModa
     }
 
     protected didOpenWindow(): void {
-
     }
 
     protected didReceiveCallerContext(context: any): S {

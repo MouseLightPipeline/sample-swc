@@ -56,7 +56,7 @@ class AppController {
         this.updateServiceDoc(serviceApi.serviceDocUrl);
         this.updateStatus(serviceApi.statusUrl);
 
-        this.toastrConfig.positionClass = "toast-top-center";
+        this.toastrConfig.positionClass = "toast-bottom-center";
         this.toastrConfig.allowHtml = true;
         this.toastrConfig.timeOut = 2500;
     }

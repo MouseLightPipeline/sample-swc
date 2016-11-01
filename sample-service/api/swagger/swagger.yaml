@@ -1163,9 +1163,6 @@ definitions:
       injectionId:
         type: string
         description: Injection id
-      brainAreaId:
-        type: string
-        description: Brain area id
       tag:
         type: string
         description: Tag
@@ -1195,9 +1192,6 @@ definitions:
       injectionId:
         type: string
         description: Injection id
-      brainAreaId:
-        type: string
-        description: Brain area id
       x:
         type: number
         format: double

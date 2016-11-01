@@ -35,7 +35,7 @@ module.exports = function(sequelize, DataTypes) {
         classMethods: {
             associate: function(models) {
                 Neuron.belongsTo(models.Injection, {foreignKey: 'injectionId', as: 'injection'});
-                Neuron.belongsTo(models.BrainArea, {foreignKey: 'brainAreaId', as: 'brainArea'});
+                Neuron.belongsTo(models.BrainArea, {foreignKey: {name: 'brainAreaId', allowNull: true}, as: 'brainArea'});
             }
         },
         timestamps: true,

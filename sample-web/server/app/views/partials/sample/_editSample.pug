@@ -1,0 +1,24 @@
+div(class="modal fade" id="editSampleModal" tabindex="-1" role="dialog" aria-labelledby="editSampleModalLabel" aria-hidden="true" ng-controller="editSampleController")
+  div(class="modal-dialog" role="document")
+    div(class="modal-content")
+
+      div(class="modal-header accent")
+        button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+          i(class="material-icons") cancel
+        h3(class="modal-title" id="myModalLabel") {{title}}
+
+      div(class="modal-body")
+        form
+          div(ng-class="['form-group', {'has-warning': !isValidDate()}]")
+            label(class="control-label" for="editSampleTag") Sample Date (YYYY-MM-DD)
+            input(type="text", class="form-control", id="editSampleDate" ng-model="sampleDate")
+          div(class="form-group")
+            label(class="control-label" for="editSampleTag") Tag
+            input(type="text", class="form-control", id="editSampleTag" ng-model="tag")
+          div(class="form-group")
+            label(class="control-label" for="editSampleTag") Comment
+            input(type="text", class="form-control", id="editSampleComment" ng-model="comment")
+
+      div(class="modal-footer")
+        button(type="button" class="btn" data-dismiss="modal") Cancel
+        button(type="button" class="btn btn-info btn-raised" ng-disabled="!isValidDate()" ng-click="updateSample()") Update

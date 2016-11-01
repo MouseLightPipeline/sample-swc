@@ -19,7 +19,10 @@ block js
   script(src='/app/services/apiAccessService.js')
   script(src='/app/services/modalService.js')
   script(src='/app/controllers/appController.js')
-  script(src='/app/controllers/inspectSampleController.js')
+  script(src='/app/modals/inspectSampleController.js')
+  script(src='/app/modals/inspectNeuronController.js')
+  script(src='/app/modals/editSampleController.js')
+  script(src='/app/modals/editNeuronController.js')
   script(src='/app/controllers/selectItemController.js')
   script(src='/app/controllers/selectMouseStrainController.js')
   script(src='/app/controllers/createSampleController.js')
@@ -37,19 +40,10 @@ block content
       include ./partials/_summary
 
   div
-    include ./partials/_mainSampleSection
+    include partials/sample/_samples
 
   div
-    div(class="title")
-      h2(class="centered") NEURONS
-    div(class="row")
-      div(class="col-sm-12")
-        include ./partials/_neuronTable
-    div(class="row")
-      div(class="col-sm-2")
-      div(class="col-sm-8")
-        include ./partials/_createNeuron
-      div(class="col-sm-2")
+    include partials/neuron/_neurons
 
   div
     div(class="diagnostics")

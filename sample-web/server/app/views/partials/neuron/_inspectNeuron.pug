@@ -1,0 +1,39 @@
+div(class="modal fade" id="inspectNeuronModal" tabindex="-1" role="dialog" aria-labelledby="inspectNeuronModalLabel" aria-hidden="true" ng-controller="inspectNeuronController")
+  div(class="modal-dialog" role="document")
+    div(class="modal-content")
+
+      div(class="modal-header accent")
+        button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+          i(class="material-icons") cancel
+        h3(class="modal-title" id="myModalLabel") {{title}}
+
+      div(class="modal-body")
+        h5 Id Number
+        span {{neuron.idNumber}}
+
+        h5 Sample
+        span {{formatSample(neuron)}}
+
+        h5 Injection
+        span {{formatInjection(neuron)}}
+
+        h5 Brain Area
+        span {{formatBrainArea(neuron)}}
+
+        h5 Soma Location
+        span {{formatSomaLocation(neuron)}}
+
+        h5 Tag
+        span {{formatPossibleEmpty(neuron.tag)}}
+
+        h5 Keywords
+        span {{formatPossibleEmpty(neuron.keywords)}}
+
+        h5 Last Updated
+        span {{formatTimestampDate(neuron.updatedAt)}}
+
+        h5 Created
+        span {{formatTimestampDate(neuron.createdAt)}}
+
+      div(class="modal-footer")
+        button(type="button" class="btn btn-raised btn-info" data-dismiss="modal") Close

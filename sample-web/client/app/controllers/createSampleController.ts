@@ -28,11 +28,11 @@ class CreateSampleController {
             this.$scope.isValidDate = isValidDateValue(new Date(newValue));
         });
 
-        this.$scope.$watchCollection("sampleService.samples", (newValues) => this.onSampleCollectionChanged());
+        this.$scope.$watchCollection("sampleService.samples", (newValues) => this.onSampleCollectionChanged(), true);
 
         this.$scope.$watchCollection("mouseStrainService.mouseStrains", () => {
             this.updateMouseStrainSelection();
-        });
+        }, true);
 
         this.$scope.createMouseStrainCallerContext = () => {
             return () => this.$scope.model.mouseStrainId;
@@ -52,8 +52,6 @@ class CreateSampleController {
 
         this.$scope.createSample = () => this.createSample();
 
-        this.$scope.canCreateSample = (): boolean => this.isValidSampleEntry();
-
         this.$scope.getSelectedMouseStrainName = () => {
             let strain: IMouseStrain = this.$scope.mouseStrainService.find(this.$scope.model.mouseStrainId);
             return strain ? strain.name : "";
@@ -61,18 +59,14 @@ class CreateSampleController {
 
         let today = new Date();
 
-        this.$scope.model.sampleDate = today.getFullYear() + "-" + pad(today.getMonth() + 1, 2) + "-" + pad(today.getDate(), 2);
+        this.$scope.model.sampleDate = moment().format("YYYY-MM-DD");
 
-        this.$scope.foo = () => {
+        this.$scope.selectOrCreateMouseStrain = () => {
             this.modalService.openSelectMouseStrainController({
                 name: this.$scope.getSelectedMouseStrainName(),
                 sample: null
             });
         }
-    }
-
-    private isValidSampleEntry(): boolean {
-        return this.$scope.isValidDate && this.$scope.isValidIdNumber;
     }
 
     private onMouseStrainCreatedEvent(context: ISelectMouseStrainControllerContext, strain: IMouseStrain) {
@@ -104,11 +98,13 @@ class CreateSampleController {
     }
 
     private createSample() {
-        this.$scope.lastCreateMessage = "";
-        this.$scope.lastCreateError = "";
+        if (!this.$scope.isValidIdNumber) {
+            this.toastr.error("Sample id number must be a unique integer.", "Can't Create Sample", {timeOut: 6000});
+            return;
+        }
 
-        if (!this.$scope.canCreateSample()) {
-            this.$scope.lastCreateError = "Can't create";
+        if (!this.$scope.isValidDate) {
+            this.toastr.error("Can not parse the sample date (must be YYYY-MM-DD).", "Can't Create Sample", {timeOut: 6000});
             return;
         }
 

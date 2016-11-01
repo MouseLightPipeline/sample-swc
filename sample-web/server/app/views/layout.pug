@@ -27,7 +27,8 @@ html(lang='en', ng-app= appName)
     script(src='/lib/ui-bootstrap-tpls.min.js')
     script(src='/lib/ui-bootstrap.min.js')
     script(src='/lib/angular-toastr.tpls.js')
-    block js
+    script(src='/lib/moment.js')
+  block js
       if ENV_DEVELOPMENT
         script(src='http://localhost:34729/livereload.js')
   body(ng-controller= appController)

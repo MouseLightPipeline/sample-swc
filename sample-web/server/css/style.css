@@ -8,7 +8,7 @@ body {
 }
 
 #appBar {
-    background-color: #03A9F4EE;
+    background-color: #03A9F4;
     color: white;
     position: fixed;
     top: 0;
@@ -19,7 +19,7 @@ body {
 }
 
 #footer {
-    background-color: #01579BEE;
+    background-color: #01579B;
     color: white;
     font-size: 14px;
     position: fixed;
@@ -71,6 +71,8 @@ div.diagnostics {
 div.diagnostics-content {
     background-color: #FF7043;
     color: white;
+    padding-top: 5px;
+    padding-bottom: 5px;
 }
 
 div.diagnostics-content a {
@@ -94,7 +96,7 @@ div.diagnostics-content a {
 }
 
 hr.fab-offset {
-    padding-top: 20px;
+    padding-top: 30px;
 }
 
 hr.fab-offset-mini {

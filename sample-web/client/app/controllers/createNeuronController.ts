@@ -3,8 +3,7 @@
 interface ICreateNeuronScope extends IAppScope {
     model: any;
     isValidIdNumber: boolean;
-    lastCreateMessage: string;
-    lastCreateError: string;
+    inheritInjectionBrainArea: boolean;
     injectionsForSample: any;
     brainAreaNavigationNeuron: Array<BrainAreaDepthEntry>;
     initialBrainAreaReset: boolean;
@@ -13,21 +12,20 @@ interface ICreateNeuronScope extends IAppScope {
     isValidDouble(val: string);
     createNeuron();
     canCreateNeuron(): boolean;
-    formatInjection(s);
     updateLocation(depth: number, index: number);
+    getSelectedInjectionLocation(): string;
 }
 
 class CreateNeuronController {
     public static $inject = [
         "$scope",
-        "$http",
-        "$resource"
+        "toastr"
     ];
 
     private noBrainAreaSelection;
     private _pauseBrainAreaResets = false;
 
-    constructor(private $scope: ICreateNeuronScope, private $http: any, private $resource: any) {
+    constructor(private $scope: ICreateNeuronScope, private toastr: IToastrService) {
 
         this.noBrainAreaSelection = {
             id: "",
@@ -47,12 +45,11 @@ class CreateNeuronController {
         this.$scope.model.injectionId = "";
         this.$scope.model.somaLocation = "";
 
+        this.$scope.inheritInjectionBrainArea = true;
+
         this.$scope.sampleId = "";
 
         this.$scope.isValidIdNumber = false;
-
-        this.$scope.lastCreateMessage = "";
-        this.$scope.lastCreateError = "";
 
         this.$scope.injectionsForSample = [];
 
@@ -69,10 +66,6 @@ class CreateNeuronController {
         this.$scope.createNeuron = () => this.createNeuron();
 
         this.$scope.canCreateNeuron = (): boolean => this.isValidNeuronEntry();
-
-        this.$scope.formatInjection = (s) => {
-            return "Foo"
-        };
 
         this.$scope.$watchCollection("neuronService.neurons", (newValues) => this.onNeuronCollectionChanged());
 
@@ -111,6 +104,20 @@ class CreateNeuronController {
             this.$scope.initialBrainAreaReset = true;
             this.resetBrainAreaPath(null);
         }
+
+        this.$scope.getSelectedInjectionLocation = () => {
+            let location = "(none selected)";
+
+            if (this.$scope.model.injectionId.length > 0) {
+                let injection = this.$scope.injectionService.find(this.$scope.model.injectionId);
+
+                if (injection) {
+                    location = this.$scope.brainAreaService.getDisplayNameForId(injection.brainAreaId);
+                }
+            }
+
+            return location;
+        };
 
         this.onSampleCollectionChanged();
     }
@@ -194,27 +201,31 @@ class CreateNeuronController {
     }
 
     private createNeuron() {
-        this.$scope.lastCreateMessage = "";
-        this.$scope.lastCreateError = "";
+        let brainAreaId = null;
 
-        let index = this.$scope.brainAreaNavigationNeuron.length - 1;
-        let area: IBrainArea = null;
+        if (!this.$scope.inheritInjectionBrainArea) {
+            let index = this.$scope.brainAreaNavigationNeuron.length - 1;
+            let area: IBrainArea = null;
 
-        while (area === null && index > 0) {
-            let areaEntry: BrainAreaDepthEntry = this.$scope.brainAreaNavigationNeuron[index];
-            area = areaEntry.areas[areaEntry.selectedAreaIndex];
+            while (area === null && index > 0) {
+                let areaEntry: BrainAreaDepthEntry = this.$scope.brainAreaNavigationNeuron[index];
+                area = areaEntry.areas[areaEntry.selectedAreaIndex];
 
-            if (area.depth < 0) {
-                area = null;
-                index--;
+                if (area.depth < 0) {
+                    area = null;
+                    index--;
+                }
             }
+
+            brainAreaId = area.id
         }
 
         let location = this.$scope.model.somaLocation;
+
         if (location.length > 2 && location[0] === "(" && location[location.length - 1] === ")") {
             location = location.slice(1, location.length - 1).trim();
         }
-        console.log(location);
+
         let parts = location.split(",");
 
         let x = 0;
@@ -224,23 +235,27 @@ class CreateNeuronController {
         if (parts.length === 3) {
             x = parseFloat(parts[0].trim());
             if (isNaN(x)) {
-                this.$scope.lastCreateError = "Could not parse soma x location.";
+                this.toastr.error("Could not parse soma x location.", "Error", {timeOut: 10000});
+                //this.$scope."Could not parse soma x location." = "Could not parse soma x location.";
                 return;
             }
 
             y = parseFloat(parts[1].trim());
             if (isNaN(y)) {
-                this.$scope.lastCreateError = "Could not parse soma y location.";
+                this.toastr.error("Could not parse soma y location.", "Error", {timeOut: 10000});
+                //this.$scope."Could not parse soma y location." = "Could not parse soma y location.";
                 return;
             }
 
             z = parseFloat(parts[2].trim());
             if (isNaN(z)) {
-                this.$scope.lastCreateError = "Could not parse soma z location.";
+                this.toastr.error("Could not parse soma z location.", "Error", {timeOut: 10000});
+                //this.$scope."Could not parse soma z location." = "Could not parse soma z location.";
                 return;
             }
         } else {
-            this.$scope.lastCreateError = "Could not parse soma location.";
+            this.toastr.error("Could not parse soma location.", "Error", {timeOut: 10000});
+            //this.$scope.lastCreateError = "Could not parse soma location.";
             return;
         }
 
@@ -249,7 +264,7 @@ class CreateNeuronController {
             tag: this.$scope.model.tag,
             keywords: this.$scope.model.keywords,
             injectionId: this.$scope.model.injectionId,
-            brainAreaId: area.id,
+            brainAreaId: brainAreaId,
             x: x,
             y: y,
             z: z
@@ -257,19 +272,17 @@ class CreateNeuronController {
 
         this.$scope.neuronService.createItem(item).then((neuron) => {
             this.$scope.$apply(() => {
-                this.$scope.lastCreateMessage = "Created neuron with id number " + neuron.idNumber;
+                this.toastr.success("Created neuron with id <b>" + neuron.idNumber + "</b>", "Success");
             });
-            setTimeout(() => {
-                this.$scope.$apply(() => {
-                    this.$scope.lastCreateMessage = "";
-                });
-            }, 4000);
         }).catch((error) => {
             this.$scope.$apply(() => {
+                let msg = "";
                 if (error.data != null)
-                    this.$scope.lastCreateError = error.data.message;
+                    msg = error.data.message;
                 else
-                    this.$scope.lastCreateError = "An unknown error occurred connecting to the server.";
+                    msg = "An unknown error occurred connecting to the server.";
+
+                this.toastr.error(msg, "Error", {timeOut: 0});
             });
         });
     }
@@ -279,7 +292,7 @@ class CreateNeuronController {
         this.moveToNextDepth(1, stack);
     }
 
-    private onBrainAreasForDepth(depth: number, data, stack: number[]) {
+    private onBrainAreasForDepth(depth: number, data: IBrainArea[], stack: number[]) {
         let nextIndex = 0;
 
         if (data !== null && data.length > 0) {
@@ -311,7 +324,7 @@ class CreateNeuronController {
     }
 
     private moveToNextDepthForParent(depth: number, parentId: number, stack: number[]) {
-        this.$scope.brainAreaService.brainAreasForParent(parentId).then((data) => {
+        this.$scope.brainAreaService.brainAreasForParent(parentId).then((data: IBrainArea[]) => {
             this.$scope.$apply(() => {
                 this.onBrainAreasForDepth(depth, data, stack);
             });
@@ -321,7 +334,7 @@ class CreateNeuronController {
     }
 
     private moveToNextDepth(depth: number, stack: number[]) {
-        this.$scope.brainAreaService.brainAreasForDepth(depth).then((data) => {
+        this.$scope.brainAreaService.brainAreasForDepth(depth).then((data: IBrainArea[]) => {
             this.$scope.$apply(() => {
                 this.onBrainAreasForDepth(depth, data, stack);
             });

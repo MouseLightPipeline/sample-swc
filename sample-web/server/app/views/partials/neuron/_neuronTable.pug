@@ -1,0 +1,34 @@
+div(ng-controller="neuronTableController")
+  include _inspectNeuron
+  include _editNeuron
+
+  div(ng-show="neuronService.resourcesAreAvailable")
+    div(ng-show="neuronService.neurons.length > 0")
+      table(class="table")
+        thead
+          tr
+            th Id
+            th Tag
+            th Sample
+            th Soma Brain Area
+            th Soma Sample Location
+        tbody
+          tr(ng-repeat="n in neuronService.neurons")
+            td
+              a(ng-click="inspectNeuron(n)")
+                i(class="fa fa-info-circle right-edge icons-table")
+              span {{n.idNumber}}
+            td
+              a(ng-click="editNeuron(n)")
+                span {{n.tag || '(none)'}}
+            td {{formatSample(n)}}
+            td {{formatBrainArea(n)}}
+            td
+              a(ng-click="editNeuron(n)")
+                span ({{n.x}}, {{n.y}}, {{n.z}})
+
+    div(class="centered" ng-show="neuronService.neurons.length === 0")
+      h5 There are no neurons in the database.  Define a neuron for an existing in sample below in the "Create" section.
+
+  div(class="centered" ng-show="!neuronService.resourcesAreAvailable")
+    i(class="fa fa-spinner fa-spin" style="font-size:48px")

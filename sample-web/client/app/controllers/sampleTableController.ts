@@ -14,17 +14,11 @@ class SampleTableController {
 
         this.$scope.formatInjections = (sample: ISample) => this.formatInjections(sample);
 
-        this.$scope.$watchCollection("sampleService.samples", () => this.onSampleCollectionChanged());
+        this.$scope.$watchCollection("sampleService.samples", () => this.onSampleCollectionChanged(), true);
 
         this.$scope.createMouseStrainCallerContext = (sample: ISample) => {
             return {controller: this, sample: sample};
-        }
-
-        this.$scope.$on("injectionAdded", (evt, sample, injection) => {
-            this.$scope.$apply(() => {
-                // sample.injections.push(injection.id);
-            })
-        });
+        };
 
         this.$scope.$on("registrationCreatedEvent", (evt, eventData: ICreateItemEventData<ISample, IMouseStrain>) => {
             this.$scope.refresh();
@@ -34,9 +28,13 @@ class SampleTableController {
             this.$scope.refresh();
         });
 
+        this.$scope.editSample = (sample: ISample) => {
+            this.modalService.openEditSampleController(sample);
+        };
+
         this.$scope.inspectSample = (sample: ISample) => {
             this.modalService.openInspectSampleController(sample);
-        }
+        };
 
         this.$scope.selectMouseStrain = (sample: ISample) => {
             this.modalService.openSelectMouseStrainController({
@@ -54,29 +52,32 @@ class SampleTableController {
     }
 
     private nameForMouseStrain(sample: ISample) {
-        let mouseStrain: IMouseStrain = this.$scope.mouseStrainService.find(sample.mouseStrainId);
+        let name = "";
 
-        return mouseStrain ? mouseStrain.name : "";
+        if (sample) {
+            let mouseStrain: IMouseStrain = this.$scope.mouseStrainService.find(sample.mouseStrainId);
 
+            if (mouseStrain) {
+                name = mouseStrain.name;
+            }
+        }
+
+        return name;
     }
 
     private formatRegistrationTransforms(sample: ISample): string {
-        if (sample.activeRegistrationTransformId.length === 0) {
-            return "(click to set)";
-        } else {
-            return this.$scope.transformService.getDisplayNameForId(sample.activeRegistrationTransformId, "(name unspecified)");
-        }
+        return sample ? this.$scope.transformService.getDisplayNameForId(sample.activeRegistrationTransformId, "(name unspecified)") : "(click to set)";
     }
 
     private formatMouseStrain(sample: ISample): string {
-        if (sample.mouseStrainId !== null && sample.mouseStrainId.length > 0) {
-            return this.$scope.mouseStrainService.getDisplayNameForId(sample.mouseStrainId);
-        } else {
-            return "(none)</i>";
-        }
+        return sample ? this.$scope.mouseStrainService.getDisplayNameForId(sample.mouseStrainId) : "(none)";
     }
 
     private formatInjections(sample: ISample): string {
+        if (!sample) {
+            return "(click to add)";
+        }
+
         let injections = this.$scope.injectionService.injectionsForSample(sample.id);
 
         if (injections.length === 0) {

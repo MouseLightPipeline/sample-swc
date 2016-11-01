@@ -23,7 +23,7 @@ div(ng-controller="createSampleController")
               span(class="input-group-btn")
                 label(ng-show="!mouseStrainService.resourcesAreAvailable")
                   i(class="fa fa-spinner fa-spin")
-                button(class="btn btn-info btn-raised btn-fab btn-fab-mini" type="button" ng-click="foo()" ng-show="mouseStrainService.resourcesAreAvailable")
+                button(class="btn btn-info btn-raised btn-fab btn-fab-mini" type="button" ng-click="selectOrCreateMouseStrain()" ng-show="mouseStrainService.resourcesAreAvailable")
                   i(class="material-icons") edit
         div(class="col-sm-4")
           div(ng-class="['form-group', 'label-floating', {'has-warning': !isValidDate}]")

@@ -1,38 +1,45 @@
 div(ng-controller="sampleTableController")
   include _editInjections
   include _inspectSample
+  include _editSample
 
-  div(ng-show="sampleService.resourcesAreAvailable && sampleService.samples.length > 0")
-    table(class="table")
-      thead
-        tr
-          th Id
-          th Tag
-          th Date
-          th Strain
-          th Registration
-          th Injections
-      tbody
-        tr(ng-repeat="s in sampleService.samples")
-          td
-            a(ng-click="inspectSample(s)")
-              i(class="fa fa-info-circle right-edge icons-table")
-            span {{s.idNumber}}
-          td {{s.tag || '(none)'}}
-          td {{s.sampleDate | date: 'yyyy-MM-dd'}}
-          td
-            a(data-target="#selectMouseStrainModal" ng-click="selectMouseStrain(s)")
-              span {{formatMouseStrain(s)}}
-          td
-            a(data-target="#createRegistrationModal"  ng-click="selectRegistrationTransform(s)")
-              span {{formatRegistrationTransforms(s)}}
-          td
-            a(data-toggle="modal" data-target="#editInjectionsModal" data-sample="{{s}}")
-              span {{formatInjections(s)}}
-    div(class="centered min-height-40")
-      span(class="text-muted") Click on cells to modify properties or the info button to view all properties
+  div(ng-show="sampleService.resourcesAreAvailable")
+    div(ng-show="sampleService.samples.length > 0")
+      table(class="table")
+        thead
+          tr
+            th Id
+            th Tag
+            th Date
+            th Strain
+            th Registration
+            th Injections
+        tbody
+          tr(ng-repeat="s in sampleService.samples")
+            td
+              a(ng-click="inspectSample(s)")
+                i(class="fa fa-info-circle right-edge icons-table")
+              span {{s.idNumber}}
+            td
+              a(ng-click="editSample(s)")
+                span {{s.tag || '(none)'}}
+            td
+              a(ng-click="editSample(s)")
+                span {{s.sampleDate | date: 'yyyy-MM-dd'}}
+            td
+              a(ng-click="selectMouseStrain(s)")
+                span {{formatMouseStrain(s)}}
+            td
+              a(ng-click="selectRegistrationTransform(s)")
+                span {{formatRegistrationTransforms(s)}}
+            td
+              a(data-toggle="modal" data-target="#editInjectionsModal" data-sample="{{s}}")
+                span {{formatInjections(s)}}
+      div(class="centered min-height-40")
+        span(class="text-muted") Click on cells to modify properties or the info button to view all properties
 
-  div(class="centered" ng-show="sampleService.resourcesAreAvailable && sampleService.samples.length == 0")
-    h5 There are no samples in the database.  Define samples above.
+    div(class="centered" ng-show="sampleService.samples.length === 0")
+      h5 There are no samples in the database.  Define samples above.
+
   div(class="centered" ng-show="!sampleService.resourcesAreAvailable")
    i(class="fa fa-spinner fa-spin" style="font-size:48px")
