@@ -36,7 +36,7 @@ gulp.task('nodemon', ['build'], () => {
 });
 
 gulp.task('watch', ['build'], function () {
-    return gulp.watch(['server/**/*.*', 'client/**/*.*', '../shared/dist/**/*.*'], ['build']);
+    return gulp.watch(['server/**/*.*', 'client/**/*.*'], ['build']);
 });
 
 gulp.task('server:dep', ['js', 'pug']);
