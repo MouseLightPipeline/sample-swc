@@ -45,7 +45,7 @@ gulp.task('lib:js', ['clean'], function() {
       'bower_components/bootstrap-material-design/dist/js/ripples.min.js',
       'bower_components/bootstrap-material-design/dist/js/ripples.min.js.map',
       'bower_components/tether/dist/js/tether.min.js',
-      'bower_components/socket.io-client/socket.io.js'
+      'bower_components/socket.io-client/dist/socket.io.js'
     ])
     .pipe(gulp.dest('dist/public/lib'))
 });

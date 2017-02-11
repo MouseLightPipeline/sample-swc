@@ -10,7 +10,6 @@
     "express-serve-static-core": "registry:dt/express-serve-static-core#4.0.0+20160829034835",
     "jquery": "registry:dt/jquery#1.10.0+20160704162008",
     "mime": "registry:dt/mime#0.0.0+20160316155526",
-    "ndb-client-db": "github:TeravoxelTwoPhotonTomography/ndb-client-db/dist/definitions/index.d.ts",
     "node": "registry:dt/node#6.0.0+20160906151955",
     "serve-static": "registry:dt/serve-static#0.0.0+20160606155157",
     "socket.io-client": "registry:dt/socket.io-client#1.4.4+20160317120654"

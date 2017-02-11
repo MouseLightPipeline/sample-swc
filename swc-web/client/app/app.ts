@@ -1,4 +1,4 @@
-'use strict';
+/// <reference path="../../bower_components/ndb-client-db/dist/@types/index.d.ts"/>
 
 ((): void => {
     angular.module('tracingManager', ['ngResource', 'angularUtils.directives.dirPagination', "ui.bootstrap", "ngAnimate"]);

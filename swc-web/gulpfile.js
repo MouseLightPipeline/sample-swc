@@ -4,8 +4,7 @@ var gulp = require('gulp'),
     nodemon = require('gulp-nodemon'),
     plumber = require('gulp-plumber'),
     livereload = require('gulp-livereload'),
-    typescript = require("gulp-typescript"),
-    gulpTypings = require("gulp-typings");
+    typescript = require("gulp-typescript")
 
 gulp.task('default', ['swcweb']);
 
@@ -16,7 +15,7 @@ gulp.task('build', ['server:dep', 'client:dep', 'client:src']);
 gulp.task('develop', ['nodemon', 'watch']);
 
 gulp.task('nodemon', ['build'], () => {
-    livereload.listen({port: 34731, basePath: 'dist'});
+    livereload.listen({port: 34731});
     nodemon({
         script: 'dist/server/app.js',
         ext: 'js pug html css',
@@ -49,11 +48,6 @@ gulp.task('clean', function () {
     return del('dist/**/*');
 });
 
-// install typings
-gulp.task("typings", ['clean'], function () {
-    return gulp.src("./typings.json").pipe(gulpTypings());
-});
-
 gulp.task('lib:js', ['clean'], function () {
     return gulp.src([
         'bower_components/jquery/dist/jquery.min.js',
@@ -70,7 +64,7 @@ gulp.task('lib:js', ['clean'], function () {
         'bower_components/bootstrap-material-design/dist/js/ripples.min.js',
         'bower_components/bootstrap-material-design/dist/js/ripples.min.js.map',
         'bower_components/tether/dist/js/tether.min.js',
-        'bower_components/socket.io-client/socket.io.js',
+        'bower_components/socket.io-client/dist/socket.io.js',
         'bower_components/angularUtils-pagination/dirPagination.js'
     ])
         .pipe(gulp.dest('dist/public/lib'))
@@ -91,7 +85,7 @@ gulp.task('lib:css', ['clean'], function () {
 });
 
 // compile typescript
-gulp.task('ts', ['typings'], function () {
+gulp.task('ts', ['clean'], function () {
     var tsconfig = require('./tsconfig.json');
 
     return gulp.src(['client/**/*.ts', 'typings/**/*.d.ts']).pipe(typescript(tsconfig.compilerOptions)).pipe(gulp.dest('dist/public'));
