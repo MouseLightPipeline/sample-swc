@@ -10,4 +10,19 @@ fi
 
 echo $SRCDIR
 
-docker run --name sample-db -e POSTGRES_PASSWORD=pgsecret -v $SRCDIR/sample-datastore:/docker-entrypoint-initdb.d --rm -p 5432:5432 postgres
+docker inspect sample-datastore
+
+if [ $? -ne 0 ]; then
+  docker create --name sample-datastore postgres
+fi
+
+docker inspect sample-db
+
+if [ $? -ne 0 ]; then
+    echo "Running new sample-db container"
+    docker run -v $SRCDIR/sample-datastore:/docker-entrypoint-initdb.d --volumes-from sample-datastore -e POSTGRES_PASSWORD=pgsecret -p 5432:5432 -i --name sample-db postgres
+else
+    echo "Starting existing sample-db container"
+    docker start sample-db -ai
+fi
+

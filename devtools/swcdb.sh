@@ -10,4 +10,19 @@ fi
 
 echo $SRCDIR
 
-docker run --name swc-db -e POSTGRES_PASSWORD=pgsecret -v $SRCDIR/swc-datastore:/docker-entrypoint-initdb.d --rm -p 5433:5432 postgres
+docker inspect swc-datastore
+
+if [ $? -ne 0 ]; then
+  docker create --name swc-datastore postgres
+fi
+
+docker inspect swc-db
+
+if [ $? -ne 0 ]; then
+    echo "Running new swc-db container"
+    docker run -v $SRCDIR/swc-datastore:/docker-entrypoint-initdb.d --volumes-from swc-datastore -e POSTGRES_PASSWORD=pgsecret -p 5433:5432 -i --name swc-db postgres
+else
+    echo "Starting existing swc-db container"
+    docker start swc-db -ai
+fi
+
