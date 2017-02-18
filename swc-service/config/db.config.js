@@ -1,4 +1,4 @@
-{
+const config = {
   "development": {
     "username": "postgres",
     "password": "pgsecret",
@@ -26,4 +26,8 @@
     "dialect": "postgres",
     "logging": null
   }
-}
+};
+
+const env = process.env.NODE_ENV || 'development';
+
+module.exports = config[env];
