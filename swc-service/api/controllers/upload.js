@@ -8,6 +8,8 @@ var app = require('../../app');
 var errors = require('../helpers/errors');
 var models = require('../models/index');
 
+const apiClient = require("../helpers/transformGraphqlClient").Instance;
+
 /*
  For a controller you should export the functions referenced in your Swagger document by name.
 
@@ -141,6 +143,12 @@ function onComplete(res, tracingData, samples, tmpFile) {
         })
     }).then(function (result) {
         app.broadcast();
+
+        console.log(`submitting transform for ${tracing.id}`);
+        apiClient.transformTracing(tracing.id).then((out) => {
+            console.log(out);
+        }).catch(err => console.log(err));
+
         return res.status(200).send(tracing);
     }).catch(function (err) {
         res.status(500).json(errors.sequelizeError(err));

@@ -15,7 +15,7 @@ class TransformApiClient {
         const networkInterface = createNetworkInterface({uri: url});
 
         this._client = new ApolloClient({
-            networkInterface
+            networkInterface: networkInterface,
         });
     }
 
@@ -25,6 +25,9 @@ class TransformApiClient {
                 query($id: String!) {
                     tracing(id: $id) {
                         id
+                        janeliaTracing {
+                            id
+                        }
                     }
                 }`,
             variables: {
@@ -44,7 +47,7 @@ class TransformApiClient {
                     }
                 }`,
             variables: {
-                id: id,
+                id: id
             }
         });
     }

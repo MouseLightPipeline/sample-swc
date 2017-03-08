@@ -2,19 +2,19 @@ const config = {
     development: {
         transformService: {
             host: 'localhost',
-            port: 5000
+            port: 9661
         }
     },
     test: {
         transformService: {
             host: 'localhost',
-            port: 5000
+            port: 9661
         }
     },
     production: {
         transformService: {
-            host: 'transformapi',
-            port: 5000
+            host: 'transform-api',
+            port: 9661
         }
     }
 };
