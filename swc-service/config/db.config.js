@@ -12,7 +12,7 @@ const config = {
     "username": "postgres",
     "password": "pgsecret",
     "database": "swc_test",
-    "host": "192.168.6.134",
+    "host": "swc-db",
     "port": "5432",
     "dialect": "postgres",
     "logging": null
@@ -21,7 +21,7 @@ const config = {
     "username": "postgres",
     "password": "pgsecret",
     "database": "swc_production",
-    "host": "swcdatabase",
+    "host": "swc-db",
     "port": "5432",
     "dialect": "postgres",
     "logging": null

@@ -1,25 +1,6 @@
-### Note: Alot of ports hard-coded as env that could all be determined by something like
-### Consul + Registrar containers, but for the moment, all on the same host, explicitly
-### managed, so keep it fixed for dev/deploy.
 version: '2'
+
 services:
-### Janelia sample/neuron entries and constants
-  sample-datastore:
-    image: postgres:latest
-    volumes:
-      - /sampledbstore
-    entrypoint: /bin/bash
-  sample-db-server:
-    image: postgres:latest
-    volumes:
-      - ./sample-datastore:/docker-entrypoint-initdb.d
-    volumes_from:
-      - sample-datastore
-    environment:
-      POSTGRES_PASSWORD: pgsecret
-      PGDATA: /sampledbstore/pgdata
-    ports:
-      - 5433:5432
   sample-service:
     build: ./sample-service
     environment:
@@ -27,18 +8,6 @@ services:
     command: node /app/app.js
     ports:
       - 9641:9641
-    links:
-      - "sample-db-server:sampledatabase"
-  sample-status:
-    build: ./sample-status
-    environment:
-      NODE_ENV: production
-      SAMPLE_SERVICE_PORT: 9641
-    command: node /app/dist/server/app.js
-    ports:
-      - 9642:9642
-    links:
-      - "sample-service:sampleservice"
   sample-web:
     build: ./sample-web
     environment:
@@ -48,26 +17,7 @@ services:
     command: node /app/dist/server/app.js
     ports:
       - 9643:9643
-    links:
-      - "sample-service:sampleservice"
-      - "sample-status:samplestatus"
-### # SWC raw tracing entries
-  tracing-datastore:
-    image: postgres:latest
-    volumes:
-      - /tracingdbstore
-    entrypoint: /bin/bash
-  tracing-db-server:
-    image: postgres:latest
-    volumes:
-      - ./swc-datastore:/docker-entrypoint-initdb.d
-    volumes_from:
-      - tracing-datastore
-    environment:
-      POSTGRES_PASSWORD: pgsecret
-      PGDATA: /tracingdbstore/pgdata
-    ports:
-      - 5432:5432
+
   tracing-service:
     build: ./swc-service
     environment:
@@ -75,18 +25,6 @@ services:
     command: node /app/app.js
     ports:
       - 9651:9651
-    links:
-      - "tracing-db-server:swcdatabase"
-  tracing-status:
-    build: ./swc-status
-    environment:
-      NODE_ENV: production
-      SWC_SERVICE_PORT: 9652
-    command: node /app/dist/server/app.js
-    ports:
-      - 9652:9652
-    links:
-      - "tracing-service:tracingervice"
   tracing-web:
     build: ./swc-web
     environment:
@@ -97,8 +35,8 @@ services:
     command: node /app/dist/server/app.js
     ports:
       - 9653:9653
-    links:
-      - "tracing-service:tracingservice"
-      - "tracing-status:tracingstatus"
-### NDB Front End
 
+networks:
+  default:
+    external:
+      name: ndb_back_tier

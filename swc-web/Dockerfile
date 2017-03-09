@@ -1,4 +1,4 @@
-FROM node:6
+FROM node:7.5
 
 # Bundle app source
 COPY . /app

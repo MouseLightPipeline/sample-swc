@@ -12,7 +12,7 @@
     "username": "postgres",
     "password": "pgsecret",
     "database": "samples_test",
-    "host": "localhost",
+    "host": "sample-db",
     "port": "5432",
     "dialect": "postgres",
     "logging": null
@@ -21,7 +21,7 @@
     "username": "postgres",
     "password": "pgsecret",
     "database": "samples_production",
-    "host": "sampledatabase",
+    "host": "sample-db",
     "port": "5432",
     "dialect": "postgres",
     "logging": null

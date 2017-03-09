@@ -1,9 +1,0 @@
-{
-  "name": "neuron-web",
-  "dependencies": {},
-  "globalDependencies": {
-    "angular": "registry:dt/angular#1.5.0+20160602160139",
-    "angular-resource": "registry:dt/angular-resource#1.5.0+20160602125522",
-    "jquery": "registry:dt/jquery#1.10.0+20160417213236"
-  }
-}
