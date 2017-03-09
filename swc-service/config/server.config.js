@@ -3,18 +3,27 @@ const config = {
         transformService: {
             host: 'localhost',
             port: 9661
+        },
+        messageQueue: {
+            host: "localhost",
         }
     },
     test: {
         transformService: {
-            host: 'localhost',
+            host: 'transform-api',
             port: 9661
+        },
+        messageQueue: {
+            host: "message-queue",
         }
     },
     production: {
         transformService: {
             host: 'transform-api',
             port: 9661
+        },
+        messageQueue: {
+            host: "message-queue",
         }
     }
 };

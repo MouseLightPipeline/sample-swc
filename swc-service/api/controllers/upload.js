@@ -9,6 +9,7 @@ var errors = require('../helpers/errors');
 var models = require('../models/index');
 
 const apiClient = require("../helpers/transformGraphqlClient").Instance;
+const send = require("../helpers/messageQueue").send;
 
 /*
  For a controller you should export the functions referenced in your Swagger document by name.
@@ -25,7 +26,10 @@ var currentStructureMap = {};
 
 function post(req, res) {
     if (!req.app.locals.dbready) {
-        return res.status(503).send({code: 503, message: 'Database service unavailable'});
+        return res.status(503).send({
+            code: 503,
+            message: 'Database service unavailable'
+        });
     }
 
     var tmpFile = req.file.path;
@@ -120,34 +124,36 @@ function onData(line, samples, tracing) {
 
 function onComplete(res, tracingData, samples, tmpFile) {
     // Remove temporary upload
-    fs.unlink(tmpFile);
+    fs.unlinkSync(tmpFile);
 
     if (samples.length == 0) {
         res.status(500).json(errors.noSamplesInSwcFile(tracingData.filename));
         return;
     }
 
-    console.log(tracingData);
-
-    var tracing = null;
+    let tracing = null;
 
     models.sequelize.transaction(function (t) {
         return models.Tracing.create(tracingData, {transaction: t}).then(function (createdTracing) {
             tracing = createdTracing;
 
             samples.forEach(function (sample) {
-                sample.tracingId = tracing.id;
+                sample.tracingId = createdTracing.id;
             });
 
-            models.TracingNode.bulkCreate(samples);
+            return models.TracingNode.bulkCreate(samples, {transaction: t});
         })
     }).then(function (result) {
         app.broadcast();
 
         console.log(`submitting transform for ${tracing.id}`);
+
         apiClient.transformTracing(tracing.id).then((out) => {
             console.log(out);
         }).catch(err => console.log(err));
+
+        //send("Hello World");
+        console.log(`returning`);
 
         return res.status(200).send(tracing);
     }).catch(function (err) {

@@ -1,2 +1,4 @@
-docker-compose -p ndb-sub stop
+#!/usr/bin/env bash
+
+docker-compose -p ndbsub stop
 

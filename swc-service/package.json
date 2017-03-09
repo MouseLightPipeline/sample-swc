@@ -9,6 +9,7 @@
     ]
   },
   "dependencies": {
+    "amqplib": "^0.5.1",
     "apollo-client": "^0.8.7",
     "byline": "^4.2.1",
     "cors": "^2.7.1",
@@ -35,7 +36,7 @@
   },
   "scripts": {
     "start": "swagger project start",
-    "debug": "node $NODE_DEBUG_OPTION app.js",
+    "debug": "node  --trace-warnings $NODE_DEBUG_OPTION app.js",
     "test": "swagger project test"
   }
 }
