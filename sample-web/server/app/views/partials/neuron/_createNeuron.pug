@@ -47,6 +47,7 @@ div(ng-controller="createNeuronController")
                 ul(class="dropdown-menu" uib-dropdown-menu role="menu")
                   li(role="menuitem" ng-repeat="area in depthNav.areas track by $index")
                     a(ng-click="updateLocation($parent.$index, $index)") {{area.name}}
+          angucomplete-alt(id="ex1" ng-show="!inheritInjectionBrainArea" placeholder="Search brain areas" maxlength="50" pause="300"  selected-object="onSelectedArea" local-data="searchableBrainAreas" search-fields="name" title-field="name" minlength="1" input-class="form-control form-control-sm" match-class="highlight")
           div(ng-show="inheritInjectionBrainArea")
             span {{getSelectedInjectionLocation()}}
 

@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function(sequelize, DataTypes) {
-    var TracingNode = sequelize.define('TracingNode', {
+    const TracingNode = sequelize.define('TracingNode', {
         id: {
             primaryKey: true,
             type: DataTypes.UUID,

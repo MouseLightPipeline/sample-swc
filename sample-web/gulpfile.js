@@ -66,7 +66,8 @@ gulp.task('lib:js', ['clean'], function () {
         'bower_components/tether/dist/js/tether.min.js',
         'bower_components/socket.io-client/dist/socket.io.js',
         'bower_components/moment/moment.js',
-        'bower_components/angular-toastr/dist/angular-toastr.tpls.js'
+        'bower_components/angular-toastr/dist/angular-toastr.tpls.js',
+        'bower_components/angucomplete-alt/dist/angucomplete-alt.min.js'
     ])
         .pipe(gulp.dest('dist/public/lib'))
 });

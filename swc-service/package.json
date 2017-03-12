@@ -36,7 +36,7 @@
   },
   "scripts": {
     "start": "swagger project start",
-    "debug": "node  --trace-warnings $NODE_DEBUG_OPTION app.js",
+    "debug": "DEBUG=ndb* node  --trace-warnings $NODE_DEBUG_OPTION app.js",
     "test": "swagger project test"
   }
 }

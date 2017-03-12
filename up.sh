@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-docker-compose -p ndb-sub up
+docker-compose -p ndbsub up
 

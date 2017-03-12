@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function(sequelize, DataTypes) {
-    var Neuron = sequelize.define('Neuron', {
+    const Neuron = sequelize.define('Neuron', {
         id: {
             primaryKey: true,
             type: DataTypes.UUID,

@@ -1,18 +1,18 @@
 'use strict';
 
-var SwaggerExpress = require('swagger-express-mw');
-var cors = require('cors');
-var SwaggerUi = require('swagger-tools/middleware/swagger-ui');
-var db = require('./api/models/index');
-//var bodyParser = require('body-parser');
-var express = require('express');
-var multer = require('multer');
+const SwaggerExpress = require('swagger-express-mw');
+const cors = require('cors');
+const SwaggerUi = require('swagger-tools/middleware/swagger-ui');
+const db = require('./api/models/index');
+const express = require('express');
+const multer = require('multer');
 
-var app = express();
+const app = express();
 
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
 
+const debug = require("debug")("ndb:swc-service:models");
 
 app.locals.dbready = false;
 
@@ -23,23 +23,14 @@ io.on('connection', function (socket) {
 module.exports.app = app; // for testing
 module.exports.broadcast = broadcastAll;
 
-var config = {
-    appRoot: __dirname      // required config
+const config = {
+    appRoot: __dirname  // required config
 };
 
 app.use('/script/socket.io', express.static(__dirname + '/node_modules/socket.io-client'));
 
-
-//app.use(require('skipper')());
-var upload = multer({dest: 'uploads/'})
+const upload = multer({dest: 'uploads/'})
 app.use(upload.single('contents'));
-
-//app.post('/api/v1/uploads', upload.single('contents'), function (req, res, next) {
-//    console.log(req.file)
-//    console.log(req.body);
-// req.file is the `avatar` file
-// req.body will hold the text fields, if there were any
-//})
 
 SwaggerExpress.create(config, function (err, swaggerExpress) {
     if (err) {
@@ -53,7 +44,7 @@ SwaggerExpress.create(config, function (err, swaggerExpress) {
     // install middleware
     swaggerExpress.register(app);
 
-    var port = process.env.PORT || 9651;
+    const port = process.env.PORT || 9651;
 
     http.listen(port);
 });
@@ -61,16 +52,16 @@ SwaggerExpress.create(config, function (err, swaggerExpress) {
 sync();
 
 function sync() {
-    db.sequelize.sync().then(function () {
+    db.sequelize.authenticate().then(() => {
         app.locals.dbready = true;
 
-        db.StructureIdentifier.populateDefault().then(function () {
+        //db.StructureIdentifier.populateDefault().then(function () {
             broadcastAll();
-            console.log('Successful database sync.');
-        });
-    }).catch(function (err) {
-        console.log('Failed database sync.');
-        console.log(err);
+        //    debug('successful database sync.');
+        //});
+    }).catch((err) => {
+        debug('failed database sync.');
+        debug(err);
         setTimeout(sync, 5000);
     });
 }
@@ -79,13 +70,13 @@ function broadcastAll() {
     io.emit('db_status', app.locals.dbready);
 
     if (app.locals.dbready) {
-        db.Tracing.count().then(function (val) {
+        db.Tracing.count().then((val) => {
             io.emit('tracingCount', val);
         });
-        db.TracingNode.count().then(function (val) {
+        db.TracingNode.count().then((val) => {
             io.emit('tracingNodeCount', val);
         });
-        db.StructureIdentifier.count().then(function (val) {
+        db.StructureIdentifier.count().then((val) => {
             io.emit('structureIdentifierCount', val);
         });
     } else {
@@ -95,19 +86,3 @@ function broadcastAll() {
         io.emit('structureIdentifierCount', -1);
     }
 }
-/*
-const transformApi = require("./api/helpers/transformGraphqlClient").Instance;
-
-transformApi.queryTracing('f64eb890-9a6e-4fda-ab4f-cdcaeb9beb3b').then(response => {
-    console.log(response);
-}).catch(err => {
-    console.log(err);
-});
-
-
-transformApi.transformTracing('98b6c8ec-c265-4b7d-8dcf-ef87308ce0c7').then(response => {
-    console.log(response);
-}).catch(err => {
-    console.log(err);
-});
-*/

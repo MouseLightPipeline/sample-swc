@@ -38,6 +38,7 @@ div(class="modal fade" id="editInjectionsModal" tabindex="-1" role="dialog" aria
 
           div(class="row")
             h5 Choose a brain area
+            angucomplete-alt(id="ex2" ng-show="!inheritInjectionBrainArea" placeholder="Search brain areas" maxlength="50" pause="300"  selected-object="onSelectedArea" local-data="searchableBrainAreas" search-fields="name" title-field="name" minlength="1" input-class="form-control form-control-sm" match-class="highlight")
             ol(class="breadcrumb")
               li(ng-repeat="depthNav in brainAreaNavigation")
                 span(uib-dropdown)

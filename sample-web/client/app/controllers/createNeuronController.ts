@@ -9,11 +9,15 @@ interface ICreateNeuronScope extends IAppScope {
     initialBrainAreaReset: boolean;
     sampleId: string;
 
+    searchableBrainAreas: any
+
     isValidDouble(val: string);
     createNeuron();
     canCreateNeuron(): boolean;
     updateLocation(depth: number, index: number);
     getSelectedInjectionLocation(): string;
+
+    onSelectedArea(sel: any);
 }
 
 class CreateNeuronController {
@@ -36,6 +40,24 @@ class CreateNeuronController {
             structureIdPath: "",
             safeName: "",
             acronym: "'"
+        };
+
+        this.$scope.searchableBrainAreas = [];
+        this.$scope.onSelectedArea = (sel: any) => {
+            if (sel) {
+                const brainArea: IBrainArea = sel.originalObject;
+
+                if (brainArea) {
+                    console.log(brainArea);
+
+                    let parts = brainArea.structureIdPath.split("/");
+
+                    let partIds = parts.filter(obj => obj.length > 0).map(obj => parseInt(obj));
+
+                    if (!this._pauseBrainAreaResets)
+                        this.resetBrainAreaPath(partIds);
+                }
+            }
         };
 
         this.$scope.model = {};
@@ -70,6 +92,8 @@ class CreateNeuronController {
         this.$scope.$watchCollection("neuronService.neurons", (newValues) => this.onNeuronCollectionChanged());
 
         this.$scope.$watchCollection("sampleService.samples", (newValues) => this.onSampleCollectionChanged());
+
+        this.$scope.$watchCollection("brainAreaService.brainAreas", () => {this.$scope.searchableBrainAreas = this.$scope.brainAreaService.brainAreas});
 
         this.$scope.$watchCollection("injectionsForSample", (newValues) => this.onInjectionsChanged());
 

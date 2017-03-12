@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function(sequelize, DataTypes) {
-    var Injection = sequelize.define('Injection', {
+    const Injection = sequelize.define('Injection', {
         id: {
             primaryKey: true,
             type: DataTypes.UUID,

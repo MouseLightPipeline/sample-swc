@@ -1,12 +1,11 @@
 FROM node:7.5
 
-# Bundle app source
-COPY . /app
+WORKDIR /app
 
-# Remove development dependencies
-RUN rm -rf /app/node_modules
+# Bundle app source
+COPY . .
 
 # Install production app dependencies
-RUN cd /app; npm install
+RUN npm install
 
 EXPOSE  9641

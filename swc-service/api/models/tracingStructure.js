@@ -1,7 +1,7 @@
-'use strict';
+const TableName = "TracingStructure";
 
 module.exports = function(sequelize, DataTypes) {
-    const StructureIdentifier = sequelize.define('StructureIdentifier', {
+    const TracingStructure = sequelize.define(TableName, {
         id: {
             primaryKey: true,
             type: DataTypes.UUID,
@@ -12,13 +12,13 @@ module.exports = function(sequelize, DataTypes) {
         mutable: {type: DataTypes.BOOLEAN, defaultValue: true}
     }, {
         classMethods: {
-            associate: function(models) {
-                StructureIdentifier.hasMany(models.TracingNode, {foreignKey: 'structureIdentifierId', as: 'nodes'});
+            associate: models => {
+                TracingStructure.hasMany(models.Tracing, {foreignKey: "tracingStructureId", as: "Tracings"});
             }
         },
         timestamps: true,
         paranoid: true
     });
-    
-    return StructureIdentifier;
+
+    return TracingStructure;
 };

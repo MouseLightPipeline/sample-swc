@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function (sequelize, DataTypes) {
-    var RegistrationTransform = sequelize.define('RegistrationTransform', {
+    const RegistrationTransform = sequelize.define('RegistrationTransform', {
         id: {
             primaryKey: true,
             type: DataTypes.UUID,

@@ -1,9 +1,9 @@
 'use strict';
 
-var util = require('util');
-var app = require('../../app');
-var errors = require('../helpers/errors');
-var models = require('../models/index');
+const util = require('util');
+const app = require('../../app');
+const errors = require('../helpers/errors');
+const models = require('../models/index');
 
 module.exports = {
     get: get,
@@ -16,7 +16,7 @@ module.exports = {
 function get(req, res) {
     models.InjectionVirus.findAll({}).then(function (viruses) {
         res.json(viruses);
-    }).catch(function(){
+    }).catch(function(err){
         res.status(500).json(errors.sequelizeError(err));
     });
 }
@@ -66,7 +66,7 @@ function updateVirus(req, res) {
         if (viruses === null || viruses.length === 0) {
             res.status(500).json(errors.idDoesNotExit());
         } else {
-            var virus = viruses[0];
+            const virus = viruses[0];
 
             if (req.body.name === undefined || req.body.name === null || req.body.name.length === 0) {
                 res.status(500).json(errors.invalidName());
@@ -87,20 +87,20 @@ function updateVirus(req, res) {
 }
 
 function deleteVirus(req, res) {
-    var virusParam = req.swagger.params.virusId;
+    const virusParam = req.swagger.params.virusId;
 
     if (virusParam === undefined || virusParam === null || virusParam.value === undefined || virusParam.value === null) {
         res.status(500).json(errors.invalidIdNumber());
         return;
     }
 
-    var virusId = virusParam.value;
+    const virusId = virusParam.value;
 
     models.InjectionVirus.findAll({where:{id: virusId}}).then(function (viruses) {
         if (viruses === null || viruses.length === 0) {
             res.status(500).json(errors.idDoesNotExit());
         } else {
-            var virus = viruses[0];
+            const virus = viruses[0];
 
             virus.destroy().then(function () {
                 res.json({id: virusId});

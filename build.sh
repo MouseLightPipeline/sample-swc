@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-docker-compose -p ndb-sub build
+docker-compose -p ndbsub build

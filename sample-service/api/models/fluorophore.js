@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function(sequelize, DataTypes) {
-    var Fluorophore = sequelize.define('Fluorophore', {
+    const Fluorophore = sequelize.define('Fluorophore', {
         id: {
             primaryKey: true,
             type: DataTypes.UUID,
@@ -17,30 +17,6 @@ module.exports = function(sequelize, DataTypes) {
         timestamps: true,
         paranoid: true
     });
-
-    function populateDefault(model) {
-        return new Promise((resolve, reject) => {
-            model.count().then((count) => {
-                if (count < 2) {
-                    if (count < 1) {
-                        model.create({name: 'eGFP'});
-                    }
-                    if (count < 2) {
-                        model.create({name: 'tdTomato'});
-                    }
-                    resolve(true);
-                } else {
-                    resolve(false);
-                }
-            }).catch((err) => {
-                reject(err);
-            });
-        });
-    }
-
-    Fluorophore.populateDefault = () => {
-        return populateDefault(Fluorophore);
-    };
 
     return Fluorophore;
 };
