@@ -1,12 +1,12 @@
 'use strict';
 
-var util = require('util');
-var fs = require('fs'), byline = require('byline');
-var io = require('../../app.js').io;
+const util = require('util');
+const fs = require('fs'), byline = require('byline');
+const io = require('../../app.js').io;
 
-var app = require('../../app');
-var errors = require('../helpers/errors');
-var models = require('../models/index');
+const app = require('../../app');
+const errors = require('../helpers/errors');
+const models = require('../models/index');
 
 const apiClient = require("../helpers/transformGraphqlClient").Instance;
 const send = require("../helpers/messageQueue").send;
@@ -22,7 +22,7 @@ module.exports = {
     post: post,
 };
 
-var currentStructureMap = {};
+let currentStructureMap = {};
 
 function post(req, res) {
     if (!req.app.locals.dbready) {
@@ -32,24 +32,24 @@ function post(req, res) {
         });
     }
 
-    var tmpFile = req.file.path;
-    var originalName = req.file.originalname;
+    const tmpFile = req.file.path;
+    const originalName = req.file.originalname;
 
-    var stream = byline(fs.createReadStream(tmpFile, {encoding: 'utf8'}));
+    const stream = byline(fs.createReadStream(tmpFile, {encoding: 'utf8'}));
 
-    var comments = '';
+    const comments = '';
 
-    var annotator = req.swagger.params.annotator.value || '';
+    const annotator = req.swagger.params.annotator.value || '';
 
-    var neuronId = req.swagger.params.neuronId.value || '';
+    const neuronId = req.swagger.params.neuronId.value || '';
 
-    var structureIdentifierId = req.swagger.params.structureIdentifierId.value || '';
+    const tracingStructureId = req.swagger.params.tracingStructureId.value || '';
 
-    var tracing = {
+    const tracing = {
         filename: originalName,
         annotator: annotator,
         neuronId: neuronId,
-        structureIdentifierId: structureIdentifierId,
+        tracingStructureId: tracingStructureId,
         comments: comments,
         offsetX: 0,
         offsetY: 0,
@@ -63,7 +63,7 @@ function post(req, res) {
             currentStructureMap[obj.value] = obj.id;
         });
 
-        var samples = [];
+        const samples = [];
 
         stream.on('data', function (line) {
             onData(line, samples, tracing)
@@ -79,19 +79,19 @@ function post(req, res) {
 
 function onData(line, samples, tracing) {
     //console.log('data');
-    var data = line.trim();
+    let data = line.trim();
 
     if (data.length > 0) {
         if (data[0] == '#') {
             tracing.comments += data + '\n';
 
             if (data.startsWith('# OFFSET')) {
-                var sub = data.substring(9);
-                var points = sub.split(/\s/);
+                const sub = data.substring(9);
+                const points = sub.split(/\s/);
                 if (points.length === 3) {
-                    var x = parseFloat(points[0]);
-                    var y = parseFloat(points[1]);
-                    var z = parseFloat(points[2]);
+                    const x = parseFloat(points[0]);
+                    const y = parseFloat(points[1]);
+                    const z = parseFloat(points[2]);
 
                     if (!Number.isNaN(x) && !Number.isNaN(y) && !Number.isNaN(z)) {
                         tracing.offsetX = x;
@@ -103,7 +103,7 @@ function onData(line, samples, tracing) {
         } else {
             data = data.split(/\s/);
             if (data.length == 7) {
-                var sample = {
+                const sample = {
                     sampleNumber: parseInt(data[0]),
                     structureIdentifierId: currentStructureMap[parseInt(data[1])],
                     x: parseFloat(data[2]),

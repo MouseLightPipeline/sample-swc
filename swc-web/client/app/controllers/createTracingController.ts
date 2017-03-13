@@ -11,7 +11,7 @@ class CreateTracingController {
         this.$scope.neuronId = '';
         this.$scope.injectionId = '';
         this.$scope.sampleId = '';
-        this.$scope.structureId = '';
+        this.$scope.tracingStructureId = '';
         this.$scope.neuronsForInjection = [];
         this.$scope.injectionsForSample = [];
         this.$scope.isInCreatePost = false;
@@ -25,7 +25,7 @@ class CreateTracingController {
             if (newValue !== oldValue) this.updateNeurons(newValue);
         });
 
-        this.$scope.$watch('structureIdentifierService.structures', (newValue, oldValue) => {
+        this.$scope.$watch('tracingStructureService.structures', (newValue, oldValue) => {
             if (newValue !== oldValue) this.updateDefaultTracingStructure();
         });
 
@@ -63,19 +63,19 @@ class CreateTracingController {
     }
 
     private updateDefaultTracingStructure() {
-        if (this.$scope.structureId.length > 0) {
+        if (this.$scope.tracingStructureId.length > 0) {
             return;
         }
 
-        if (!this.$scope.structureIdentifierService.resourcesAreAvailable) {
+        if (!this.$scope.tracingStructureService.resourcesAreAvailable) {
             setTimeout(() => { this.updateDefaultTracingStructure(); }, 250);
             return;
         }
 
-        let undefinedStructures = this.$scope.structureIdentifierService.structures.filter(obj => obj.value === 0);
-
-        if (undefinedStructures.length > 0) {
-            this.$scope.structureId = undefinedStructures[0].id;
+        if (this.$scope.tracingStructureService.structures.length > 0) {
+            this.$scope.$apply(() => {
+                this.$scope.tracingStructureId = this.$scope.tracingStructureService.structures[0].id;
+            });
         }
     }
 
@@ -109,7 +109,7 @@ class CreateTracingController {
         let tracingInfo = {
             annotator: this.$scope.annotator,
             neuronId: this.$scope.neuronId,
-            structureIdentifierId: this.$scope.structureId
+            tracingStructureId: this.$scope.tracingStructureId
         };
 
         this.$scope.isInCreatePost = true;

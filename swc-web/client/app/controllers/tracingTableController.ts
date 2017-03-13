@@ -7,7 +7,7 @@ class TracingTableController {
         this.$scope.itemsPerPage = 10;
         this.$scope.currentPage = 1;
 
-        this.$scope.$on('createdTracingIndex', (evt, val) => this.onCreatedTracingIndex(val))
+        this.$scope.$on('createdTracingIndex', (evt, val) => this.onCreatedTracingIndex(val));
 
         this.$scope.neuronDisplayForId = (id: string): any => {
             return this.neuronDisplayForId(id);
@@ -23,7 +23,7 @@ class TracingTableController {
     }
 
     private structureDisplayForId(id: string): string {
-        return this.$scope.structureIdentifierService.getDisplayNameForId(id);
+        return this.$scope.tracingStructureService.getDisplayNameForId(id);
     }
 
     private onCreatedTracingIndex(val) {

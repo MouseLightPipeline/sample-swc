@@ -13,5 +13,6 @@
     angular.module('tracingManager').service('structureIdentifierService', StructureIdentifierService);
     angular.module('tracingManager').service('tracingNodeService', TracingNodeService);
     angular.module('tracingManager').service('tracingService', TracingService);
+    angular.module('tracingManager').service('tracingStructureService', TracingStructureService);
 
 })();

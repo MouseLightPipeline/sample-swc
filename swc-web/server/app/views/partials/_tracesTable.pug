@@ -14,7 +14,7 @@ div(class="row", ng-controller="tracingTableController")
           td {{s.filename}}
           td {{s.annotator}}
           td {{neuronDisplayForId(s.neuronId)}}
-          td {{structureDisplayForId(s.structureIdentifierId)}}
+          td {{structureDisplayForId(s.tracingStructureId)}}
   div(class="col-sm-12")
     div(class="centered" ng-show="tracingService.resourcesAreAvailable && tracingService.tracings.length == 0")
       h5 There are no tracings in the database.  Upload tracings in the "Contribute" section.

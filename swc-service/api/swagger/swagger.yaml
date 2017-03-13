@@ -129,11 +129,28 @@ paths:
         - Structure Identifiers
       responses:
         200:
-          description: An array of files
+          description: An array of structure identifiers
           schema:
             type: array
             items:
               $ref: '#/definitions/StructureIdentifier'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
+  /tracingStructures:
+    x-swagger-router-controller: tracingStructure
+    get:
+      summary: Tracing structure definitions
+      tags:
+        - Tracings
+      responses:
+        200:
+          description: An array of tracing structures
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/TracingStructure'
         default:
           description: Error
           schema:
@@ -158,9 +175,9 @@ paths:
           in: query
           description: Neuron Id
           type: string
-        - name: structureIdentifierId
+        - name: tracingStructureId
           in: query
-          description: Structure Identifier Id
+          description: Tracing Structure Id
           type: string
         - name: contents
           in: formData
@@ -199,6 +216,9 @@ definitions:
       neuronId:
         type: string
         description: Id of neuron in sample database
+      tracingStructureId:
+        type: string
+        description: Id of tracing structure
       xOffset:
         type: number
         format: double
@@ -231,9 +251,9 @@ definitions:
       neuronId:
         type: string
         description: Id of neuron in sample database
-      structureIdentifierId:
+      tracingStructureId:
         type: string
-        description: Id of structure identifier in sample database
+        description: Id of tracing structure
   Node:
     type: object
     properties:
@@ -271,7 +291,24 @@ definitions:
         type: string
         format: date-time
         description: Update time
-  Error: 
+  TracingStructure:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Internal id
+      name:
+        type: string
+        description: Name
+      createdAt:
+        type: string
+        format: date-time
+        description: Creation time
+      updatedAt:
+        type: string
+        format: date-time
+        description: Update time
+  Error:
     type: object
     required:
       - code

@@ -9,7 +9,8 @@ class ApiAccessService {
         'neuronService',
         'tracingService',
         'tracingNodeService',
-        'structureIdentifierService'
+        'structureIdentifierService',
+        'tracingStructureService',
     ];
 
     public haveService: boolean;
@@ -23,7 +24,8 @@ class ApiAccessService {
     constructor(private $resource: any, private $location: any, private brainAreaService: BrainAreaService,
                 private injectionVirusService: InjectionVirusService, private injectionService: InjectionService,
                 private sampleService: SampleService, private neuronService: NeuronService, private tracingService: TracingService,
-                private tracingNodeService: TracingNodeService, private structureIdentifierService: StructureIdentifierService) {
+                private tracingNodeService: TracingNodeService, private structureIdentifierService: StructureIdentifierService,
+                private tracingStructureService: TracingStructureService) {
         this.haveService = false;
         this.serviceUrl = '';
         this.serviceDocUrl = '';
@@ -51,6 +53,7 @@ class ApiAccessService {
         this.tracingService.setLocation(this.serviceUrl);
         this.tracingNodeService.setLocation(this.serviceUrl);
         this.structureIdentifierService.setLocation(this.serviceUrl);
+        this.tracingStructureService.setLocation(this.serviceUrl);
     }
 }
 

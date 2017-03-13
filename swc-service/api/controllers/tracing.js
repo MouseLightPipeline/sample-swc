@@ -1,8 +1,8 @@
 'use strict';
 
-var util = require('util');
-var errors = require('../helpers/errors');
-var models = require('../models/index');
+const util = require('util');
+const errors = require('../helpers/errors');
+const models = require('../models/index');
 
 /*
  For a controller you should export the functions referenced in your Swagger document by name.
@@ -44,7 +44,7 @@ function getTracingById(req, res) {
 }
 
 function forTracing(req, res) {
-    var id = req.swagger.params.tracingId.value;
+    const id = req.swagger.params.tracingId.value;
     
     models.TracingNode.findAll({where: {tracingId: id}, order: [['sampleNumber', 'ASC']]}).then(function (samples) {
         res.json(samples);

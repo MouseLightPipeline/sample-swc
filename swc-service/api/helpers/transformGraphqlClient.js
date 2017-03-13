@@ -25,7 +25,7 @@ class TransformApiClient {
                 query($id: String!) {
                     tracing(id: $id) {
                         id
-                        janeliaTracing {
+                        swcTracing {
                             id
                         }
                     }

@@ -12,8 +12,8 @@ div(class="row", ng-controller="createTracingController")
     div(class="row")
       div(class="col-sm-6 form-group")
         label(class="control-label" for="tracingStructure") Structure
-        select(class="form-control form-control-sm c-select", id="tracingStructure", ng-model="structureId")
-          option(ng-repeat="option in structureIdentifierService.structures" value="{{option.id}}") {{option.name}}
+        select(class="form-control form-control-sm c-select", id="tracingStructure", ng-model="tracingStructureId")
+          option(ng-repeat="option in tracingStructureService.structures" value="{{option.id}}") {{option.name}}
       div(class="col-sm-6 form-group")
         label(class="control-label" for="annotator") Annotator
         input(type="text" class="form-control form-control-sm", id="annotator" ng-model="annotator")
@@ -41,4 +41,3 @@ div(class="row", ng-controller="createTracingController")
         button(type="submit" class="btn btn-primary round outline", ng-click="send()" ng-disabled="!canCreateTracing()") Upload
           i(class="fa fa-spinner fa-spin" ng-show="isInCreatePost")
         span    {{lastCreateMessage}}
-

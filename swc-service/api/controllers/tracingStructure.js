@@ -21,7 +21,7 @@ module.exports = {
  */
 
 function get(req, res) {
-    models.StructureIdentifier.findAll({order: [['value', 'ASC']]}).then(structures => {
+    models.TracingStructure.findAll({order: [['name', 'ASC']]}).then(structures => {
         res.json(structures);
     }).catch(err => {
         res.status(500).json(errors.sequelizeError(err));

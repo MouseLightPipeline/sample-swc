@@ -10,6 +10,7 @@ interface IAppScope extends ng.IScope {
     structureIdentifierService: StructureIdentifierService;
     tracingNodeService: TracingNodeService;
     tracingService: TracingService;
+    tracingStructureService: TracingStructureService;
 
     apiUrl: string;
     apiDocUrl: string;
@@ -28,7 +29,8 @@ class AppController {
         'neuronService',
         'structureIdentifierService',
         'tracingNodeService',
-        'tracingService'
+        'tracingService',
+        'tracingStructureService'
     ];
 
     constructor(private $scope: IAppScope, private $resource: any, private serviceApi: ApiAccessService,
@@ -36,7 +38,8 @@ class AppController {
                 private injectionVirusService: InjectionVirusService, private injectionService: InjectionService,
                 private sampleService: SampleService, private neuronService: NeuronService,
                 private structureIdentifierService: StructureIdentifierService,
-                private tracingNodeService: TracingNodeService, private tracingService: TracingService) {
+                private tracingNodeService: TracingNodeService, private tracingService: TracingService,
+                private tracingStructureService: TracingStructureService) {
 
         $scope.service = serviceApi;
         $scope.brainAreaService = brainAreaService;
@@ -47,6 +50,7 @@ class AppController {
         $scope.structureIdentifierService = structureIdentifierService;
         $scope.tracingNodeService = tracingNodeService;
         $scope.tracingService = tracingService;
+        $scope.tracingStructureService = tracingStructureService;
 
         $scope.$watch('service.serviceUrl', (val) => this.updateService(val));
         $scope.$watch('service.serviceDocUrl', (val) => this.updateServiceDoc(val));
