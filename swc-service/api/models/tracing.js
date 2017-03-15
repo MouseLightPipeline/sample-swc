@@ -43,7 +43,7 @@ module.exports = function(sequelize, DataTypes) {
             }
         },
         timestamps: true,
-        paranoid: true
+        paranoid: false
     });
     
     return Tracing;
