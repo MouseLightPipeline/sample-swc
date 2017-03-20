@@ -1,9 +1,9 @@
 'use strict';
 
-var util = require('util');
-var app = require('../../app');
-var errors = require('../helpers/errors');
-var models = require('../models/index');
+const util = require('util');
+const app = require('../../app');
+const errors = require('../helpers/errors');
+const models = require('../models/index');
 
 module.exports = {
     get: get,
@@ -32,14 +32,14 @@ function getSampleById(req, res) {
     });
 }
 
-function post(req, res, next) {
+function post(req, res) {
     if (req.body.idNumber === undefined || req.body.idNumber === null) {
         res.status(500).json(errors.invalidIdNumber());
         return;
     }
 
     models.Sample.findAll({where:{idNumber: req.body.idNumber}}).then(function (sample) {
-        if (sample != null && sample.length > 0) {
+        if (sample !== null && sample.length > 0) {
             res.status(500).json(errors.duplicateSample());
         } else {
             create(req.body, res);
@@ -50,15 +50,17 @@ function post(req, res, next) {
 }
 
 function create(body, res) {
-    var sampleDate = (body.sampleDate && body.sampleDate.length > 0) ? new Date(body.sampleDate) : new Date();
-    var tag = body.tag || '';
-    var comment = body.comment || '';
-    var activeRegistrationTransformId = body.activeRegistrationTransformId || '';
-    var mouseStrainId = body.mouseStrainId || null;
+    const sampleDate = (body.sampleDate && body.sampleDate.length > 0) ? new Date(body.sampleDate) : new Date();
+    const animalId = body.animalId || '';
+    const tag = body.tag || '';
+    const comment = body.comment || '';
+    const activeRegistrationTransformId = body.activeRegistrationTransformId || '';
+    const mouseStrainId = body.mouseStrainId || null;
 
     models.Sample.create({
         idNumber: body.idNumber,
         sampleDate: sampleDate,
+        animalId: animalId,
         tag: tag,
         comment: comment,
         activeRegistrationTransformId: activeRegistrationTransformId,
@@ -80,13 +82,15 @@ function updateSample(req, res) {
         if (samples === null || samples.length === 0) {
             res.status(500).json(errors.idDoesNotExit());
         } else {
-            var sample = samples[0];
+            const sample = samples[0];
 
-            var activeRegistrationTransformId = req.body.activeRegistrationTransformId || '';
-            var mouseStrainId = req.body.mouseStrainId || null;
+            const activeRegistrationTransformId = req.body.activeRegistrationTransformId || '';
+            const mouseStrainId = req.body.mouseStrainId || null;
+            const animalId = req.body.animalId || '';
 
             sample.update({
                 sampleDate: req.body.sampleDate,
+                animalId: animalId,
                 tag: req.body.tag,
                 comment: req.body.comment,
                 activeRegistrationTransformId: activeRegistrationTransformId,
@@ -103,20 +107,20 @@ function updateSample(req, res) {
 }
 
 function deleteSample(req, res) {
-    var sampleParam = req.swagger.params.sampleId;
+    const sampleParam = req.swagger.params.sampleId;
 
     if (sampleParam === undefined || sampleParam === null || sampleParam.value === undefined || sampleParam.value === null) {
         res.status(500).json(errors.invalidIdNumber());
         return;
     }
 
-    var sampleId = sampleParam.value;
+    const sampleId = sampleParam.value;
 
     models.Sample.findAll({where:{id: sampleId}}).then(function (samples) {
         if (samples === null || samples.length === 0) {
             res.status(500).json(errors.idDoesNotExit());
         } else {
-            var sample = samples[0];
+            const sample = samples[0];
 
             sample.destroy().then(function () {
                 res.json({id: sampleId});

@@ -63,9 +63,9 @@ function sync() {
     syncDatabase().then(() => {
         return broadcastAll();
     }).then(() => {
-        debug("successful database sync");
+        debug("successful database authentication");
     }).catch((err) => {
-        debug("failed database sync");
+        debug("failed database authentication");
         debug(err);
         setTimeout(sync, 5000);
     });

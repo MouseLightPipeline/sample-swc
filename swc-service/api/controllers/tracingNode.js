@@ -24,7 +24,7 @@ Param 2: a handle to the response object
 */
 
 function get(req, res) {
-    models.TracingNode.findAll({}).then(function (samples) {
+    models.SwcTracingNode.findAll({}).then(function (samples) {
         res.json(samples);
     }).catch(function(err){
         res.status(500).json(errors.sequelizeError(err));
@@ -34,7 +34,7 @@ function get(req, res) {
 function findByStructure(req, res) {
     var id = req.swagger.params.structureIdentifierId.value;
     
-    models.TracingNode.findAll({where: {structureIdentifierId: id}, include:[{model:models.Tracing, attributes:['filename']}], order: [[models.Tracing, 'filename', 'ASC'], ['sampleNumber', 'ASC']]}).then(function (samples) {
+    models.SwcTracingNode.findAll({where: {structureIdentifierId: id}, include:[{model:models.SwcTracing, attributes:['filename']}], order: [[models.SwcTracing, 'filename', 'ASC'], ['sampleNumber', 'ASC']]}).then(function (samples) {
         res.json(samples);
     }).catch(function(err){
         res.status(500).json(errors.sequelizeError(err));

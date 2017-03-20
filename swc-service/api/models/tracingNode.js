@@ -1,23 +1,23 @@
 'use strict';
 
 module.exports = function(sequelize, DataTypes) {
-    const TracingNode = sequelize.define('TracingNode', {
+    const TracingNode = sequelize.define('SwcTracingNode', {
         id: {
             primaryKey: true,
             type: DataTypes.UUID,
             defaultValue: DataTypes.UUIDV4
         },
         sampleNumber: DataTypes.INTEGER,
+        parentNumber: DataTypes.INTEGER,
         x: DataTypes.DOUBLE,
         y: DataTypes.DOUBLE,
         z: DataTypes.DOUBLE,
         radius: DataTypes.DOUBLE,
-        parentNumber: DataTypes.INTEGER
     }, {
         classMethods: {
             associate: function(models) {
                 TracingNode.belongsTo(models.StructureIdentifier, {foreignKey: 'structureIdentifierId'});
-                TracingNode.belongsTo(models.Tracing, {foreignKey: 'tracingId'});
+                TracingNode.belongsTo(models.SwcTracing, {foreignKey: 'swcTracingId'});
             }
         },
         timestamps: true,

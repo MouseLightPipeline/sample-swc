@@ -95,7 +95,7 @@ paths:
               $ref: '#/definitions/Node'
         "400":
           description: Invalid structure id value
-  /nodes/forTracing/{tracingId}:
+  /nodes/forTracing/{swcTracingId}:
     x-swagger-router-controller: tracing
     get:
       tags:
@@ -108,7 +108,7 @@ paths:
         - application/xml
       parameters:
         - in: path
-          name: tracingId
+          name: swcTracingId
           description: tracing id to filter by
           required: true
           type: string

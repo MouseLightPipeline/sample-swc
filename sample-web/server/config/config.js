@@ -1,12 +1,11 @@
-var path = require('path');
-var rootPath = path.normalize(__dirname + '/..');
-var env = process.env.NODE_ENV || 'development';
-var service_port = process.env.SAMPLE_SERVICE_PORT || 9641;
-var status_port = process.env.SAMPLE_STATUS_PORT || 9642;
+const path = require('path');
+const rootPath = path.normalize(__dirname + '/..');
+const env = process.env.NODE_ENV || 'development';
+const service_port = process.env.SAMPLE_SERVICE_PORT || 9641;
 
-var port = 9643;
+const port = 9643;
 
-var config = {
+const config = {
   development: {
     root: rootPath,
     app: {
@@ -17,27 +16,19 @@ var config = {
         host: 'localhost',
         port: service_port,
         api: 'api/v1'
-    },
-    status: {
-        host: 'localhost',
-        port: status_port,
     }
   },
 
   test: {
     root: rootPath,
     app: {
-      name: 'sample-web-test'
+      name: 'sample-web'
     },
     port: port,
     service: {
         host: 'sampleservice',
         port: service_port,
         api: 'api/v1'
-    },
-    status: {
-        host: 'samplestatus',
-        port: status_port,
     }
   },
   production: {
@@ -50,10 +41,6 @@ var config = {
         host: 'sampleservice',
         port: service_port,
         api: 'api/v1'
-    },
-    status: {
-        host: 'samplestatus',
-        port: status_port,
     }
   }
 };

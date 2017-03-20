@@ -3,6 +3,7 @@ interface IEditSampleScope extends IAppScope {
     sample: ISample;
 
     sampleDate: string;
+    animalId: string;
     tag: string;
     comment: string;
 
@@ -37,12 +38,14 @@ class EditSampleController implements IModalController<ISample> {
         this.$scope.title = `Sample ${this.$scope.sampleService.getDisplayName(sample)}`;
 
         this.$scope.sampleDate = moment(sample.sampleDate).format("YYYY-MM-DD");
+        this.$scope.animalId = sample.animalId;
         this.$scope.tag = sample.tag;
         this.$scope.comment = sample.comment;
     }
 
     private updateSample() {
         this.$scope.sample.sampleDate = new Date(this.$scope.sampleDate + "T12:00:00Z");
+        this.$scope.sample.animalId = this.$scope.animalId;
         this.$scope.sample.tag = this.$scope.tag;
         this.$scope.sample.comment = this.$scope.comment;
 

@@ -134,14 +134,14 @@ function onComplete(res, tracingData, samples, tmpFile) {
     let tracing = null;
 
     models.sequelize.transaction(function (t) {
-        return models.Tracing.create(tracingData, {transaction: t}).then(function (createdTracing) {
+        return models.SwcTracing.create(tracingData, {transaction: t}).then(function (createdTracing) {
             tracing = createdTracing;
 
             samples.forEach(function (sample) {
-                sample.tracingId = createdTracing.id;
+                sample.swcTracingId = createdTracing.id;
             });
 
-            return models.TracingNode.bulkCreate(samples, {transaction: t});
+            return models.SwcTracingNode.bulkCreate(samples, {transaction: t});
         })
     }).then(function (result) {
         app.broadcast();

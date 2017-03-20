@@ -11,6 +11,7 @@ class CreateSampleController {
         this.$scope.model = {};
         this.$scope.model.idNumber = "";
         this.$scope.model.sampleDate = "";
+        this.$scope.model.animalId = "";
         this.$scope.model.tag = "";
         this.$scope.model.comment = "";
         this.$scope.model.mouseStrainId = "";
@@ -111,6 +112,7 @@ class CreateSampleController {
         let sample = {
             idNumber: parseInt(this.$scope.model.idNumber),
             sampleDate: new Date(this.$scope.model.sampleDate + "T12:00:00Z").toISOString(),
+            animalId: this.$scope.model.animalId,
             tag: this.$scope.model.tag,
             comment: this.$scope.model.comment,
             mouseStrainId: this.$scope.model.mouseStrainId,

@@ -25,7 +25,7 @@ module.exports = {
  */
 
 function get(req, res) {
-    models.Tracing.findAll({}).then(function (tracings) {
+    models.SwcTracing.findAll({}).then(function (tracings) {
         res.json(tracings);
     }).catch(function(err){
         res.status(500).json(errors.sequelizeError(err));
@@ -33,7 +33,7 @@ function get(req, res) {
 }
 
 function getTracingById(req, res) {
-    models.Tracing.findAll({where: {id: req.swagger.params.tracingId.value}, limit: 1}).then(function (tracings) {
+    models.SwcTracing.findAll({where: {id: req.swagger.params.tracingId.value}, limit: 1}).then(function (tracings) {
         if (tracings.length > 0)
             res.json(tracings[0]);
         else
@@ -44,9 +44,9 @@ function getTracingById(req, res) {
 }
 
 function forTracing(req, res) {
-    const id = req.swagger.params.tracingId.value;
+    const id = req.swagger.params.swcTracingId.value;
     
-    models.TracingNode.findAll({where: {tracingId: id}, order: [['sampleNumber', 'ASC']]}).then(function (samples) {
+    models.SwcTracingNode.findAll({where: {swcTracingId: id}, order: [['sampleNumber', 'ASC']]}).then(function (samples) {
         res.json(samples);
     }).catch(function(err){
         res.status(500).json(errors.sequelizeError(err));

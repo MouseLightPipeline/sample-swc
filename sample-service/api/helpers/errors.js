@@ -33,7 +33,7 @@ var Codes = {
     },
     DUPLICATE_REGISTRATION: {
         code: 2401,
-        message: 'A registration transform with that name already exists.'
+        message: 'A registration transform at that location already exists for another sample.  A transform should only apply to a single sample.'
     },
     DUPLICATE_VIRUS: {
         code: 2501,

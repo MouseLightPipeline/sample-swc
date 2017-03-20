@@ -11,7 +11,6 @@ interface IAppScope extends ng.IScope {
 
     apiUrl: string;
     apiDocUrl: string;
-    statusUrl: string;
 }
 
 class AppController {
@@ -48,11 +47,9 @@ class AppController {
 
         $scope.$watch("service.serviceUrl", (val) => this.updateService(val));
         $scope.$watch("service.serviceDocUrl", (val) => this.updateServiceDoc(val));
-        $scope.$watch("service.statusUrl", (val) => this.updateStatus(val));
 
         this.updateService(serviceApi.serviceUrl);
         this.updateServiceDoc(serviceApi.serviceDocUrl);
-        this.updateStatus(serviceApi.statusUrl);
 
         this.toastrConfig.positionClass = "toast-bottom-center";
         this.toastrConfig.allowHtml = true;
@@ -66,11 +63,6 @@ class AppController {
     private updateServiceDoc(val) {
         this.$scope.apiDocUrl = val;
     }
-
-    private updateStatus(val) {
-        this.$scope.statusUrl = val;
-    }
-
 }
 
 angular.module("sampleManager").controller("appController", AppController);

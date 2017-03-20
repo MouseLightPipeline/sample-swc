@@ -11,6 +11,9 @@ div(class="modal fade" id="inspectSampleModal" tabindex="-1" role="dialog" aria-
         h5 Id Number
         span {{sample.idNumber}}
 
+        h5 Animal Id
+        span {{formatAnimalId(sample)}}
+
         h5 Date
         span {{formatSampleDate(sample.sampleDate)}}
 

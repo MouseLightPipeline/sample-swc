@@ -15,6 +15,11 @@ div(ng-controller="createSampleController")
             input(type="text", class="form-control form-control-sm", id="sampleIdNumber", ng-model="model.idNumber")
 
         div(class="col-sm-4")
+          div(ng-class="['form-group', 'label-floating']")
+            label(class="control-label" for="animalIdNumber") Animal Id
+            input(type="text", class="form-control form-control-sm", id="animalIdNumber", ng-model="model.animalId")
+
+        div(class="col-sm-4")
           div(class="form-group label-floating")
             label(class="control-label" for="mouseStrainSelect") Strain
             div(class="input-group")
@@ -25,17 +30,17 @@ div(ng-controller="createSampleController")
                   i(class="fa fa-spinner fa-spin")
                 button(class="btn btn-info btn-raised btn-fab btn-fab-mini" type="button" ng-click="selectOrCreateMouseStrain()" ng-show="mouseStrainService.resourcesAreAvailable")
                   i(class="material-icons") edit
-        div(class="col-sm-4")
+      div(class="row")
+        div(class="col-sm-3")
           div(ng-class="['form-group', 'label-floating', {'has-warning': !isValidDate}]")
             label(class="control-label" for="date") Date (yyyy-mm-dd)
             input(type="text", class="form-control form-control-sm", id="date", ng-model="model.sampleDate")
 
-      div(class="row")
         div(class="col-sm-3")
           div(class="form-group label-floating")
             label(class="control-label" for="sampleTag") Tag (optional)
             input(type="text", class="form-control form-control-sm", id="sampleTag", placeholder="", ng-model="model.tag")
-        div(class="col-sm-9")
+        div(class="col-sm-6")
           div(class="form-group label-floating")
             label(class="control-label" for="comment") Comments (optional)
             input(type="text", class="form-control form-control-sm", id="comment", placeholder="", ng-model="model.comment")

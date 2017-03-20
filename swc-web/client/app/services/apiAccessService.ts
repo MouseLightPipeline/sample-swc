@@ -16,7 +16,6 @@ class ApiAccessService {
     public haveService: boolean;
     public serviceUrl: string;
     public serviceDocUrl: string;
-    public statusUrl: string;
     public sampleServiceUrl: string;
 
     private apiLocation: any;
@@ -29,7 +28,6 @@ class ApiAccessService {
         this.haveService = false;
         this.serviceUrl = '';
         this.serviceDocUrl = '';
-        this.statusUrl = '';
         this.sampleServiceUrl = '';
 
         this.apiLocation = $resource('/service', {});
@@ -40,7 +38,6 @@ class ApiAccessService {
     private update(api) {
         this.serviceUrl = 'http://' + this.$location.host() + ':' + api.service.port + '/' + api.service.api + '/';
         this.serviceDocUrl = 'http://' + this.$location.host() + ':' + api.service.port + '/docs';
-        this.statusUrl = this.$location.host() + ':' + api.status.port;
         this.sampleServiceUrl = 'http://' + this.$location.host() + ':' + api.sampleService.port + '/' + api.sampleService.api + '/';
 
         this.haveService = true;

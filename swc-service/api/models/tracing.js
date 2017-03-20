@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function(sequelize, DataTypes) {
-    const Tracing = sequelize.define('Tracing', {
+    const Tracing = sequelize.define('SwcTracing', {
         id: {
             primaryKey: true,
             type: DataTypes.UUID,
@@ -38,7 +38,7 @@ module.exports = function(sequelize, DataTypes) {
     }, {
         classMethods: {
             associate: function(models) {
-                Tracing.hasMany(models.TracingNode, {foreignKey: 'tracingId', as: 'nodes'});
+                Tracing.hasMany(models.SwcTracingNode, {foreignKey: 'swcTracingId', as: 'nodes'});
                 Tracing.belongsTo(models.TracingStructure, {foreignKey: 'tracingStructureId'});
             }
         },

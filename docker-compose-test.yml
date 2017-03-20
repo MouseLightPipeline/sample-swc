@@ -4,37 +4,39 @@ services:
   sample-service:
     build: ./sample-service
     environment:
-      NODE_ENV: production
+      NODE_ENV: test
     command: node /app/app.js
     ports:
-      - 9641:9641
+      - 8641:9641
+
   sample-web:
     build: ./sample-web
     environment:
-      NODE_ENV: production
-      SAMPLE_SERVICE_PORT: 9641
+      NODE_ENV: test
+      SAMPLE_SERVICE_PORT: 8641
     command: node /app/dist/server/app.js
     ports:
-      - 9643:9643
+      - 8643:9643
 
-  swc-service:
+  tracing-service:
     build: ./swc-service
     environment:
-      NODE_ENV: production
+      NODE_ENV: test
     command: node /app/app.js
     ports:
-      - 9651:9651
-  swc-web:
+      - 8651:9651
+
+  tracing-web:
     build: ./swc-web
     environment:
-      NODE_ENV: production
-      SWC_SERVICE_PORT: 9651
-      SAMPLE_SERVICE_PORT: 9641
+      NODE_ENV: test
+      SWC_SERVICE_PORT: 8651
+      SAMPLE_SERVICE_PORT: 8641
     command: node /app/dist/server/app.js
     ports:
-      - 9653:9653
+      - 8653:9653
 
 networks:
   default:
     external:
-      name: ndb_back_tier
+      name: ndb_back_tier_test

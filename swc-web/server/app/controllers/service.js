@@ -6,5 +6,5 @@ module.exports = function (app) {
 };
 
 router.get('/', function (req, res, next) {
-    res.json({service: req.app.locals.serviceHost, status: req.app.locals.statusHost, sampleService: req.app.locals.sampleHost});
+    res.json({service: req.app.locals.serviceHost, sampleService: req.app.locals.sampleHost});
 });

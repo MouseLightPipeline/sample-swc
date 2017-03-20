@@ -13,7 +13,7 @@ module.exports = function(sequelize, DataTypes) {
     }, {
         classMethods: {
             associate: function(models) {
-                StructureIdentifier.hasMany(models.TracingNode, {foreignKey: 'structureIdentifierId', as: 'nodes'});
+                StructureIdentifier.hasMany(models.SwcTracingNode, {foreignKey: 'structureIdentifierId', as: 'nodes'});
             }
         },
         timestamps: true,

@@ -54,13 +54,10 @@ sync();
 function sync() {
     db.sequelize.authenticate().then(() => {
         app.locals.dbready = true;
-
-        //db.StructureIdentifier.populateDefault().then(function () {
-            broadcastAll();
-        //    debug('successful database sync.');
-        //});
+        broadcastAll();
+        debug('successful database authentication.');
     }).catch((err) => {
-        debug('failed database sync.');
+        debug('failed database authentication.');
         debug(err);
         setTimeout(sync, 5000);
     });
@@ -70,10 +67,10 @@ function broadcastAll() {
     io.emit('db_status', app.locals.dbready);
 
     if (app.locals.dbready) {
-        db.Tracing.count().then((val) => {
+        db.SwcTracing.count().then((val) => {
             io.emit('tracingCount', val);
         });
-        db.TracingNode.count().then((val) => {
+        db.SwcTracingNode.count().then((val) => {
             io.emit('tracingNodeCount', val);
         });
         db.StructureIdentifier.count().then((val) => {
@@ -82,7 +79,6 @@ function broadcastAll() {
     } else {
         io.emit('tracingCount', -1);
         io.emit('tracingNodeCount', -1);
-        io.emit('markerLocationCount', -1);
         io.emit('structureIdentifierCount', -1);
     }
 }

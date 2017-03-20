@@ -11,7 +11,7 @@ module.exports = function(sequelize, DataTypes) {
     }, {
         classMethods: {
             associate: models => {
-                TracingStructure.hasMany(models.Tracing, {foreignKey: "tracingStructureId", as: "Tracings"});
+                TracingStructure.hasMany(models.SwcTracing, {foreignKey: "tracingStructureId", as: "Tracings"});
             }
         },
         timestamps: true,

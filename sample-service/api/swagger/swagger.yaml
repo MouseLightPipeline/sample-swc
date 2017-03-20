@@ -961,6 +961,9 @@ definitions:
         type: string
         format: date-time
         description: Datestamp
+      animalId:
+        type: string
+        description: Janelia animal id
       tag:
         type: string
         description: Comments
@@ -991,6 +994,9 @@ definitions:
         type: string
         format: date-time
         description: Datestamp
+      animalId:
+        type: string
+        description: Janelia animal id
       tag:
         type: string
         description: Tag
