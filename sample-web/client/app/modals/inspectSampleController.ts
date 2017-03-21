@@ -23,7 +23,7 @@ class InspectSampleController implements IModalController<ISample> {
 
         this.$scope.formatPossibleEmpty = str => str || "(none)";
         this.$scope.formatSampleDate = date => moment(date).format("YYYY-MM-DD");
-        this.$scope.formatAnimalId = sample => sample.animalId.length ? sample.animalId : "(none)";
+        this.$scope.formatAnimalId = sample => (sample && sample.animalId.length) ? sample.animalId : "(none)";
         this.$scope.formatTimestampDate = date => moment(date).format("YYYY-MM-DD hh:mm:ss.SSS");
         this.$scope.formatMouseStrain = sample => this.formatMouseStrain(sample);
         this.$scope.formatRegistrationTransforms = sample => this.formatRegistrationTransforms(sample);
