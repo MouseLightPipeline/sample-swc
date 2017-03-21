@@ -1,23 +1,19 @@
-'use strict';
+"use strict";
 
-const util = require('util');
-const fs = require('fs'), byline = require('byline');
-const io = require('../../app.js').io;
+const util = require("util");
+const fs = require("fs"), byline = require("byline");
 
-const app = require('../../app');
-const errors = require('../helpers/errors');
-const models = require('../models/index');
+const app = require("../../app");
+const errors = require("../helpers/errors");
+const models = require("../models/index");
 
 const apiClient = require("../helpers/transformGraphqlClient").Instance;
-const send = require("../helpers/messageQueue").send;
+// const send = require("../helpers/messageQueue").send;
 
-/*
- For a controller you should export the functions referenced in your Swagger document by name.
+const debug = require("debug")("ndb:swc-service:upload");
 
- Either:
- - The HTTP Verb of the corresponding operation (get, put, post, delete, etc)
- - Or the operationId associated with the operation in your Swagger document
- */
+const SOMA_STRUCTURE_IDENTIFIER_INDEX = 1;
+
 module.exports = {
     post: post,
 };
@@ -28,14 +24,14 @@ function post(req, res) {
     if (!req.app.locals.dbready) {
         return res.status(503).send({
             code: 503,
-            message: 'Database service unavailable'
+            message: "Database service unavailable"
         });
     }
 
     const tmpFile = req.file.path;
     const originalName = req.file.originalname;
 
-    const stream = byline(fs.createReadStream(tmpFile, {encoding: 'utf8'}));
+    const stream = byline(fs.createReadStream(tmpFile, {encoding: "utf8"}));
 
     const comments = '';
 
@@ -65,27 +61,30 @@ function post(req, res) {
 
         const samples = [];
 
-        stream.on('data', function (line) {
-            onData(line, samples, tracing)
+        const metrics = {
+            unParentedCount: 0
+        };
+
+        stream.on("data", function (line) {
+            onData(line, samples, tracing, metrics);
         });
 
-        stream.on('end', function () {
-            onComplete(res, tracing, samples, tmpFile);
+        stream.on("end", function () {
+            onComplete(res, tracing, samples, metrics, tmpFile);
         });
     }).catch(function (err) {
         res.status(500).json(errors.sequelizeError(err));
     });
 }
 
-function onData(line, samples, tracing) {
-    //console.log('data');
+function onData(line, samples, tracing, metrics) {
     let data = line.trim();
 
     if (data.length > 0) {
-        if (data[0] == '#') {
-            tracing.comments += data + '\n';
+        if (data[0] === "#") {
+            tracing.comments += data + "\n";
 
-            if (data.startsWith('# OFFSET')) {
+            if (data.startsWith("# OFFSET")) {
                 const sub = data.substring(9);
                 const points = sub.split(/\s/);
                 if (points.length === 3) {
@@ -102,18 +101,22 @@ function onData(line, samples, tracing) {
             }
         } else {
             data = data.split(/\s/);
-            if (data.length == 7) {
+            if (data.length === 7) {
+                const parentNumber = parseInt(data[6]);
+                if (parentNumber === -1) {
+                    metrics.unParentedCount += 1;
+                }
                 const sample = {
                     sampleNumber: parseInt(data[0]),
-                    structureIdentifierId: currentStructureMap[parseInt(data[1])],
+                    structureIdentifierId: parentNumber === -1 ? currentStructureMap[SOMA_STRUCTURE_IDENTIFIER_INDEX] : currentStructureMap[parseInt(data[1])],
                     x: parseFloat(data[2]),
                     y: parseFloat(data[3]),
                     z: parseFloat(data[4]),
                     radius: parseFloat(data[5]),
-                    parentNumber: parseInt(data[6])
+                    parentNumber: parentNumber
                 };
                 if (isNaN(sample.sampleNumber) || isNaN(sample.parentNumber)) {
-                    // console.log('Unexpected line in swc file - not a comment and sample and/or parent number is NaN');
+                    // console.log("Unexpected line in swc file - not a comment and sample and/or parent number is NaN");
                 } else {
                     samples.push(sample);
                 }
@@ -122,12 +125,22 @@ function onData(line, samples, tracing) {
     }
 }
 
-function onComplete(res, tracingData, samples, tmpFile) {
+function onComplete(res, tracingData, samples, metrics, tmpFile) {
     // Remove temporary upload
     fs.unlinkSync(tmpFile);
 
-    if (samples.length == 0) {
+    if (samples.length === 0) {
         res.status(500).json(errors.noSamplesInSwcFile(tracingData.filename));
+        return;
+    }
+
+    if (metrics.unParentedCount === 0) {
+        res.status(500).json(errors.noUnParentedSampleInSwcFile(tracingData.filename));
+        return;
+    }
+
+    if (metrics.unParentedCount > 1) {
+        res.status(500).json(errors.tooManyUnParentedSamplesInSwcFile(tracingData.filename));
         return;
     }
 
@@ -143,17 +156,17 @@ function onComplete(res, tracingData, samples, tmpFile) {
 
             return models.SwcTracingNode.bulkCreate(samples, {transaction: t});
         })
-    }).then(function (result) {
+    }).then(() => {
         app.broadcast();
 
-        console.log(`submitting transform for ${tracing.id}`);
+        debug(`submitting transform for swc ${tracing.id}`);
 
         apiClient.transformTracing(tracing.id).then((out) => {
-            console.log(out);
-        }).catch(err => console.log(err));
-
-        //send("Hello World");
-        console.log(`returning`);
+            debug(`successfully created tracing ${out.data.applyTransform.id}`)
+        }).catch(err => {
+            debug("transform submission failed");
+            debug(err);
+        });
 
         return res.status(200).send(tracing);
     }).catch(function (err) {

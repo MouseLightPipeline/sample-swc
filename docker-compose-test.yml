@@ -39,4 +39,4 @@ services:
 networks:
   default:
     external:
-      name: ndb_back_tier_test
+      name: testndb_ndb_back_tier

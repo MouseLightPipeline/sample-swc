@@ -1,9 +1,9 @@
-'use strict';
+"use strict";
 
-const util = require('util');
-const app = require('../../app');
-const errors = require('../helpers/errors');
-const models = require('../models/index');
+const util = require("util");
+const app = require("../../app");
+const errors = require("../helpers/errors");
+const models = require("../models/index");
 
 module.exports = {
     get: get,
@@ -26,7 +26,7 @@ function getSampleById(req, res) {
         if (samples.length > 0)
             res.json(samples[0]);
         else
-            res.status(500).json({message: 'bad id'});
+            res.status(500).json({message: "bad id"});
     }).catch(function(err){
         res.status(500).json(errors.sequelizeError(err));
     });

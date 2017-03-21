@@ -10,7 +10,6 @@ const debug = require("debug")("ndb:swc-service:models");
 const databaseConfig = require('../../config/db.config.js');
 const db = {};
 
-
 debug(`initiating connection: ${databaseConfig.host}:${databaseConfig.port}#${databaseConfig.database}`);
 
 const sequelize = new Sequelize(databaseConfig.database, databaseConfig.username, databaseConfig.password, databaseConfig);

@@ -41,8 +41,8 @@ class TransformApiClient {
     transformTracing(id) {
         return this._client.mutate({
             mutation: gql`
-                mutation transform($id: String!) {
-                    transform(id: $id) {
+                mutation applyTransform($id: String!) {
+                    applyTransform(swcId: $id) {
                         id
                     }
                 }`,
