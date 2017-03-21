@@ -9,3 +9,5 @@ COPY . .
 RUN npm install
 
 EXPOSE  9641
+
+CMD ["node", "/app/app.js"]

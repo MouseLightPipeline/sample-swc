@@ -11,3 +11,5 @@ RUN rm -rf /app/test
 RUN cd /app; npm install
 
 EXPOSE  9651
+
+CMD ["node", "/app/app.js"]

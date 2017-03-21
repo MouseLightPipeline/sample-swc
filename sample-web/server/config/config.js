@@ -6,43 +6,43 @@ const service_port = process.env.SAMPLE_SERVICE_PORT || 9641;
 const port = 9643;
 
 const config = {
-  development: {
-    root: rootPath,
-    app: {
-      name: 'sample-web-dev'
+    development: {
+        root: rootPath,
+        app: {
+            name: 'sample-client'
+        },
+        port: port,
+        service: {
+            host: 'localhost',
+            port: service_port,
+            api: 'api/v1'
+        }
     },
-    port: port,
-    service: {
-        host: 'localhost',
-        port: service_port,
-        api: 'api/v1'
-    }
-  },
 
-  test: {
-    root: rootPath,
-    app: {
-      name: 'sample-web'
+    test: {
+        root: rootPath,
+        app: {
+            name: 'sample-client'
+        },
+        port: port,
+        service: {
+            host: 'sample-api',
+            port: service_port,
+            api: 'api/v1'
+        }
     },
-    port: port,
-    service: {
-        host: 'sampleservice',
-        port: service_port,
-        api: 'api/v1'
+    production: {
+        root: rootPath,
+        app: {
+            name: 'sample-client'
+        },
+        port: port,
+        service: {
+            host: 'sample-api',
+            port: service_port,
+            api: 'api/v1'
+        }
     }
-  },
-  production: {
-    root: rootPath,
-    app: {
-      name: 'sample-web'
-    },
-    port: port,
-    service: {
-        host: 'sampleservice',
-        port: service_port,
-        api: 'api/v1'
-    }
-  }
 };
 
 module.exports = config[env];
