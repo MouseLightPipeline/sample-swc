@@ -6,8 +6,8 @@
     "start": "node app.js",
     "debug": "node $NODE_DEBUG_OPTION dist/server/app.js",
     "test-docker": "docker build .",
-    "docker-build": "docker build --tag mouselightdatabrowser/sample-web .",
-    "docker-push": "docker push mouselightdatabrowser/sample-web"
+    "docker-build": "docker build --tag mouselightdatabrowser/sample-client .",
+    "docker-push": "docker push mouselightdatabrowser/sample-client"
   },
   "dependencies": {
     "body-parser": "^1.13.3",
