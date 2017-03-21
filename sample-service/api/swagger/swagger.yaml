@@ -857,6 +857,31 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/Error"
+  /neurons/sample/{sampleId}:
+    x-swagger-router-controller: neuron
+    get:
+      summary: Neurons for a sample
+      operationId: getNeuronsForSample
+      tags:
+        - Samples
+        - Neurons
+      parameters:
+        - name: sampleId
+          in: path
+          description: Sample id for neuron lookup
+          required: true
+          type: string
+      responses:
+        200:
+          description: An array of neurons for all injections associated with the sample
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Neuron'
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/Error"
   /brainareas:
     x-swagger-router-controller: brainareas
     get:

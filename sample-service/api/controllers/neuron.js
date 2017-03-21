@@ -1,21 +1,22 @@
-'use strict';
+"use strict";
 
-var util = require('util');
-var app = require('../../app');
-var errors = require('../helpers/errors');
-var models = require('../models/index');
+const util = require("util");
+const app = require("../../app");
+const errors = require("../helpers/errors");
+const models = require("../models/index");
 
 module.exports = {
     get: get,
     post: post,
     getNeuronById: getNeuronById,
     getNeuronsForInjection: getNeuronsForInjection,
+    getNeuronsForSample: getNeuronsForSample,
     updateNeuron: updateNeuron,
     deleteNeuron: deleteNeuron
 };
 
 function get(req, res) {
-    models.Neuron.findAll().then(function (neurons) {
+    models.Neuron.findAll().then(neurons => {
         res.json(neurons);
     }).catch(function (err) {
         res.status(500).json(errors.sequelizeError(err));
@@ -23,7 +24,10 @@ function get(req, res) {
 }
 
 function getNeuronById(req, res) {
-    models.Neuron.findAll({where: {id: req.swagger.params.neuronId.value}, limit: 1}).then(function (neurons) {
+    models.Neuron.findAll({
+        where: {id: req.swagger.params.neuronId.value},
+        limit: 1
+    }).then(function (neurons) {
         if (neurons.length > 0)
             res.json(neurons[0]);
         else
@@ -39,6 +43,27 @@ function getNeuronsForInjection(req, res) {
     }).catch(function (err) {
         res.status(500).json(errors.sequelizeError(err));
     });
+}
+
+function getNeuronsForSample(req, res) {
+    models.Injection.findAll({where: {sampleId: req.swagger.params.sampleId.originalValue}}).then(function (injections) {
+        injections = injections.map((obj) => {
+            return obj.id;
+        });
+
+        if (injections.length > 0) {
+            models.Neuron.findAll({where: {injectionId: {$in: injections}}}).then(function (neurons) {
+                res.json(neurons);
+            }).catch(function (err) {
+                res.status(500).json(errors.sequelizeError(err));
+            });
+        } else {
+            res.json([]);
+        }
+    }).catch(function (err) {
+        res.status(500).json(errors.sequelizeError(err));
+    });
+
 }
 
 function post(req, res) {
@@ -59,13 +84,13 @@ function post(req, res) {
 }
 
 function create(body, res) {
-    var injectionId = body.injectionId || null;
-    var brainAreaId = body.brainAreaId || null;
-    var tag = body.tag || '';
-    var keywords = body.keywords || '';
-    var x = body.x || 0;
-    var y = body.y || 0;
-    var z = body.z || 0;
+    const injectionId = body.injectionId || null;
+    const brainAreaId = body.brainAreaId || null;
+    const tag = body.tag || "";
+    const keywords = body.keywords || "";
+    const x = body.x || 0;
+    const y = body.y || 0;
+    const z = body.z || 0;
 
     models.Neuron.create({
         idNumber: body.idNumber,
@@ -94,7 +119,7 @@ function updateNeuron(req, res) {
         if (neurons === null || neurons.length === 0) {
             res.status(500).json(errors.idDoesNotExit());
         } else {
-            var neuron = neurons[0];
+            const neuron = neurons[0];
 
             neuron.update({
                 tag: req.body.tag,
@@ -115,20 +140,20 @@ function updateNeuron(req, res) {
 }
 
 function deleteNeuron(req, res) {
-    var neuronParam = req.swagger.params.neuronId;
+    const neuronParam = req.swagger.params.neuronId;
 
     if (neuronParam === undefined || neuronParam === null || neuronParam.value === undefined || neuronParam.value === null) {
         res.status(500).json(errors.invalidIdNumber());
         return;
     }
 
-    var neuronId = neuronParam.value;
+    const neuronId = neuronParam.value;
 
     models.Neuron.findAll({where: {id: neuronId}}).then(function (neurons) {
         if (neurons === null || neurons.length === 0) {
             res.status(500).json(errors.idDoesNotExit());
         } else {
-            var neuron = neurons[0];
+            const neuron = neurons[0];
 
             neuron.destroy().then(function () {
                 res.json({id: neuronId});

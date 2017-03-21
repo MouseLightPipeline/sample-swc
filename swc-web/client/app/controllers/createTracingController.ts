@@ -1,36 +1,46 @@
 class CreateTracingController {
     public static $inject = [
-        '$scope',
-        '$http'
+        "$scope",
+        "$http"
     ];
 
     constructor(private $scope: any, private $http: any) {
         this.$scope.theFile = null;
-        this.$scope.annotator = '';
-        this.$scope.lengthMicrometers = '0';
-        this.$scope.neuronId = '';
-        this.$scope.injectionId = '';
-        this.$scope.sampleId = '';
-        this.$scope.tracingStructureId = '';
-        this.$scope.neuronsForInjection = [];
-        this.$scope.injectionsForSample = [];
+        this.$scope.annotator = "";
+        this.$scope.lengthMicrometers = "0";
+        this.$scope.neuronId = "";
+        this.$scope.injectionId = "";
+        this.$scope.sampleId = "";
+        this.$scope.tracingStructureId = "";
+        this.$scope.neuronsForSample = [];
         this.$scope.isInCreatePost = false;
-        this.$scope.lastCreateMessage = '';
+        this.$scope.lastCreateMessage = "";
 
-        this.$scope.$watch('sampleId', (newValue, oldValue) => {
-            if (newValue !== oldValue) this.updateInjections(newValue);
-        });
-
-        this.$scope.$watch('injectionId', (newValue, oldValue) => {
+        this.$scope.$watch("sampleId", (newValue, oldValue) => {
             if (newValue !== oldValue) this.updateNeurons(newValue);
         });
 
-        this.$scope.$watch('tracingStructureService.structures', (newValue, oldValue) => {
+        this.$scope.$watch("tracingStructureService.structures", (newValue, oldValue) => {
             if (newValue !== oldValue) this.updateDefaultTracingStructure();
         });
 
         this.$scope.send = () => {
             this.send()
+        };
+
+        this.$scope.describeSamplesForNeuron = () => {
+            if (this.$scope.sampleId.length > 0) {
+                switch (this.$scope.neuronsForSample.length) {
+                    case 0:
+                        return "The selected sample does not have any associated neurons";
+                    case 1:
+                        return "1 neuron available for selected sample";
+                    default:
+                        return this.$scope.neuronsForSample.length + " neurons available for selected sample";
+                }
+            } else {
+                return "Select a sample to choose a neuron";
+            }
         };
 
         this.updateDefaultTracingStructure();
@@ -68,7 +78,9 @@ class CreateTracingController {
         }
 
         if (!this.$scope.tracingStructureService.resourcesAreAvailable) {
-            setTimeout(() => { this.updateDefaultTracingStructure(); }, 250);
+            setTimeout(() => {
+                this.updateDefaultTracingStructure();
+            }, 250);
             return;
         }
 
@@ -79,29 +91,25 @@ class CreateTracingController {
         }
     }
 
-    private updateInjections(sampleId) {
-        this.$scope.injectionId = '';
+    private updateNeurons(sampleId) {
+        this.$scope.neuronId = "";
 
         if (!sampleId || sampleId.length == 0) {
-            this.$scope.injectionsForsample = [];
+            this.$scope.neuronsForSample = [];
         } else {
-            this.$scope.injectionsForSample = this.$scope.injectionService.injectionsForSample(sampleId);
-            if (this.$scope.injectionsForSample.length > 0) {
-                this.$scope.injectionId = this.$scope.injectionsForSample[0].id;
-            }
-        }
-    }
-
-    private updateNeurons(injectionId) {
-        this.$scope.neuronId = '';
-
-        if (!injectionId || injectionId.length == 0) {
-            this.$scope.neuronsForInjection = [];
-        } else {
-            this.$scope.neuronsForInjection = this.$scope.neuronService.neuronsForInjection(injectionId);
-            if (this.$scope.neuronsForInjection.length > 0) {
-                this.$scope.neuronId = this.$scope.neuronsForInjection[0].id;
-            }
+            this.$scope.neuronService.neuronsForSample(sampleId).then((neurons) => {
+                this.$scope.$apply(() => {
+                    this.$scope.neuronsForSample = neurons;
+                    if (this.$scope.neuronsForSample.length > 0) {
+                        this.$scope.neuronId = this.$scope.neuronsForSample[0].id;
+                    }
+                });
+            }).catch(err => {
+                this.$scope.$apply(() => {
+                    this.$scope.neuronsForSample = [];
+                });
+                console.log(err);
+            });
         }
     }
 
@@ -113,12 +121,12 @@ class CreateTracingController {
         };
 
         this.$scope.isInCreatePost = true;
-        this.$scope.lastCreateMessage = 'Submitting...';
+        this.$scope.lastCreateMessage = "Submitting...";
 
         this.$scope.tracingService.uploadSwcFile(this.$scope.theFile, tracingInfo).then((tracing: ITracing) => {
             this.$scope.$apply(() => {
                 this.$scope.isInCreatePost = false;
-                this.$scope.lastCreateMessage = 'Success'
+                this.$scope.lastCreateMessage = "Success"
             });
         }).catch((error) => {
             this.$scope.$apply(() => {
@@ -129,4 +137,4 @@ class CreateTracingController {
     }
 }
 
-angular.module('tracingManager').controller('createTracingController', CreateTracingController);
+angular.module("tracingManager").controller("createTracingController", CreateTracingController);

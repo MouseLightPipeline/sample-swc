@@ -25,17 +25,12 @@ div(class="row", ng-controller="createTracingController")
             option(ng-repeat="option in sampleService.samples" value="{{option.id}}") {{option.idNumber}} ({{option.sampleDate | date: 'yyyy-MM-dd'}})
         small(class="text-muted") {{sampleId.length > 0 ? '': ('Select a sample for the tracing')}}
       div(class="col-sm-4 form-group")
-        label(class="control-label" for="injectionSelect") {{sampleId.length > 0 ? ( 'Injections for ' + sampleService.getDisplayNameForId(sampleId) ) : 'Injections'}}
+        label(class="control-label" for="neuronSelect") {{sampleId.length > 0 ? ( 'Neurons for ' + sampleService.getDisplayNameForId(sampleId) ) : 'Neurons'}}
         div(class="input-group input-group-sm")
-          select(ng-model="injectionId" id="injectionSelect" class="form-control form-control-sm c-select" ng-disabled="injectionsForSample.length == 0" )
-            option(ng-repeat="option in injectionsForSample" value="{{option.id}}") {{injectionService.getDisplayName(option)}}
-          small(class="text-muted") {{sampleId.length > 0 ? '': ('Select a sample to choose an injection')}}
+          select(ng-model="neuronId" id="neuronSelect" class="form-control form-control-sm c-select" ng-disabled="neuronsForSample.length == 0" )
+            option(ng-repeat="option in neuronsForSample" value="{{option.id}}") {{neuronService.getDisplayName(option)}}
+          small(class="text-muted") {{describeSamplesForNeuron()}}
       div(class="col-sm-4 form-group")
-        label(class="control-label" for="neuronSelect") {{injectionId.length > 0 ? ( 'Neurons for ' + injectionService.getDisplayNameForId(injectionId) ) : 'Neurons'}}
-        div(class="input-group input-group-sm")
-          select(ng-model="neuronId" id="neuronSelect" class="form-control form-control-sm c-select" ng-disabled="neuronsForInjection.length == 0" )
-            option(ng-repeat="option in neuronsForInjection" value="{{option.id}}") {{neuronService.getDisplayName(option)}}
-          small(class="text-muted") {{injectionId.length > 0 ? '': ('Select an injection to choose a neuron')}}
     div(class="row")
       div(class="col-sm-12")
         button(type="submit" class="btn btn-primary round outline", ng-click="send()" ng-disabled="!canCreateTracing()") Upload
