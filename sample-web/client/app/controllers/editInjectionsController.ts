@@ -101,18 +101,18 @@ class EditInjectionsController {
         };
 
         $scope.addInjection = () => this.addInjection();
-/*
+
         $scope.updateLocation = (depth: number, index: number) => {
             if (this.$scope.brainAreaNavigation.length > depth) {
                 if (this.$scope.brainAreaNavigation[depth].selectedAreaIndex != index) {
                     this.$scope.brainAreaNavigation.splice(depth + 1);
                     this.$scope.brainAreaNavigation[depth].selectedAreaIndex = index;
                     if (depth < 2 || index > 0) {
-                        this.moveToNextDepthForParent(depth + 1, this.$scope.brainAreaNavigation[depth].areas[this.$scope.brainAreaNavigation[depth].selectedAreaIndex].structureId);
+                        this.moveToNextDepthForParent(depth + 1, this.$scope.brainAreaNavigation[depth].areas[this.$scope.brainAreaNavigation[depth].selectedAreaIndex].structureId, []);
                     }
                 }
             }
-        };*/
+        };
 
         $('#editInjectionsModal').on('show.bs.modal', (event) => {
             let a = $(event.relatedTarget);
