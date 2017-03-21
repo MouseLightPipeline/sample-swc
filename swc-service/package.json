@@ -3,6 +3,14 @@
   "version": "0.0.1",
   "private": true,
   "main": "app.js",
+  "scripts": {
+    "start": "swagger project start",
+    "debug": "DEBUG=ndb* node  --trace-warnings $NODE_DEBUG_OPTION app.js",
+    "test": "swagger project test",
+    "test-docker": "docker build .",
+    "docker-build": "docker build --tag mouselightdatabrowser/swc-api .",
+    "docker-push": "docker push mouselightdatabrowser/swc-api"
+  },
   "babel": {
     "presets": [
       "latest"
@@ -33,10 +41,5 @@
     "gulp-babel": "^6.1.2",
     "should": "^7.1.0",
     "supertest": "^1.0.0"
-  },
-  "scripts": {
-    "start": "swagger project start",
-    "debug": "DEBUG=ndb* node  --trace-warnings $NODE_DEBUG_OPTION app.js",
-    "test": "swagger project test"
   }
 }

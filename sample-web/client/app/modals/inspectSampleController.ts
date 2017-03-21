@@ -51,7 +51,7 @@ class InspectSampleController implements IModalController<ISample> {
             return "(none)";
         } else {
             let transform = this.$scope.transformService.find(sample.activeRegistrationTransformId);
-            return transform.location + "(" + this.$scope.transformService.getDisplayNameForId(sample.activeRegistrationTransformId, "(name unspecified)") + ")";
+            return transform.location + " (" + this.$scope.transformService.getDisplayNameForId(sample.activeRegistrationTransformId, "(name unspecified)") + ")";
         }
     }
 

@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "start": "node app.js",
-    "debug": "node $NODE_DEBUG_OPTION dist/server/app.js"
+    "debug": "node $NODE_DEBUG_OPTION dist/server/app.js",
+    "test-docker": "docker build .",
+    "docker-build": "docker build --tag mouselightdatabrowser/swc-web .",
+    "docker-push": "docker push mouselightdatabrowser/swc-web"
   },
   "dependencies": {
     "body-parser": "^1.13.3",

@@ -3,6 +3,14 @@
   "version": "0.0.1",
   "private": true,
   "main": "app.js",
+  "scripts": {
+    "start": "swagger project start",
+    "debug": "DEBUG=ndb:sample-service* node --trace-warnings $NODE_DEBUG_OPTION app.js",
+    "test": "swagger project test",
+    "test-docker": "docker build .",
+    "docker-build": "docker build --tag mouselightdatabrowser/sample-api .",
+    "docker-push": "docker push mouselightdatabrowser/sample-api"
+  },
   "dependencies": {
     "body-parser": "^1.13.3",
     "compression": "^1.6.2",
@@ -23,10 +31,5 @@
     "gulp-plumber": "^1.1.0",
     "should": "^7.1.0",
     "supertest": "^1.0.0"
-  },
-  "scripts": {
-    "start": "swagger project start",
-    "debug": "DEBUG=ndb:sample-service* node --trace-warnings $NODE_DEBUG_OPTION app.js",
-    "test": "swagger project test"
   }
 }
