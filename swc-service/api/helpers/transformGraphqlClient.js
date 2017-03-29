@@ -43,7 +43,10 @@ class TransformApiClient {
             mutation: gql`
                 mutation applyTransform($id: String!) {
                     applyTransform(swcId: $id) {
-                        id
+                        tracing {
+                            id
+                        }
+                        errors
                     }
                 }`,
             variables: {
