@@ -7,7 +7,8 @@
   },
   "include": [
     "app.ts",
-    "api/**/*.ts"
+    "api/**/*.ts",
+    "api/graphql/**/*.ts"
   ],
   "exclude": [
     "node_modules"

@@ -1,4 +1,4 @@
-{
+export = {
   "development": {
     "username": "postgres",
     "password": "pgsecret",
@@ -26,4 +26,4 @@
     "dialect": "postgres",
     "logging": null
   }
-}
+};

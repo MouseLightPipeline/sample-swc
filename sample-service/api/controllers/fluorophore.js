@@ -3,7 +3,7 @@
 var util = require('util');
 var app = require('../../app');
 var errors = require('../helpers/errors');
-var models = require('../models/index');
+var models = require('../data-access/databaseConnector').PersistentStorageManager.Instance();
 
 module.exports = {
     get: get,

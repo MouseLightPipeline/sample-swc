@@ -1,7 +1,8 @@
-'use strict';
-
-module.exports = function (sequelize, DataTypes) {
-    const RegistrationTransform = sequelize.define('RegistrationTransform', {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TableName = "RegistrationTransform";
+function sequelizeImport(sequelize, DataTypes) {
+    const RegistrationTransform = sequelize.define(exports.TableName, {
         id: {
             primaryKey: true,
             type: DataTypes.UUID,
@@ -12,13 +13,14 @@ module.exports = function (sequelize, DataTypes) {
         notes: DataTypes.TEXT,
     }, {
         classMethods: {
-            associate: function (models) {
-                RegistrationTransform.belongsTo(models.Sample, {foreignKey: 'sampleId', as: 'sample'});
+            associate: models => {
+                RegistrationTransform.belongsTo(models.Sample, { foreignKey: "sampleId", as: "sample" });
             }
         },
         timestamps: true,
         paranoid: true
     });
-
     return RegistrationTransform;
-};
+}
+exports.sequelizeImport = sequelizeImport;
+//# sourceMappingURL=registrationTransform.js.map

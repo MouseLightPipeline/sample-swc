@@ -1,9 +1,14 @@
-'use strict';
+export const TableName = "InjectionVirus";
 
-const models = require('./index');
+export interface IInjectionVirus {
+    id: string;
+    name: string;
+    createAt: Date
+    updatedAt: Date
+}
 
-module.exports = (sequelize, DataTypes) => {
-    const InjectionVirus = sequelize.define('InjectionVirus', {
+export function sequelizeImport(sequelize, DataTypes) {
+    const InjectionVirus = sequelize.define(TableName, {
             id: {
                 primaryKey: true,
                 type: DataTypes.UUID,

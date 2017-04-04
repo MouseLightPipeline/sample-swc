@@ -12,22 +12,24 @@
     "docker-push": "docker push mouselightdatabrowser/sample-api"
   },
   "dependencies": {
-    "@types/express": "^4.0.35",
-    "@types/node": "^7.0.12",
     "body-parser": "^1.13.3",
     "compression": "^1.6.2",
     "cors": "^2.7.1",
     "csv": "^0.4.6",
     "express": "^4.12.3",
+    "graphql": "^0.9.2",
+    "graphql-server-express": "^0.6.0",
+    "graphql-tools": "^0.11.0",
     "method-override": "^2.3.6",
     "morgan": "^1.6.1",
     "pg": "^4.5.1",
     "sequelize": "^3.20.0",
-    "socket.io": "^1.4.5",
     "swagger-express-mw": "^0.1.0",
     "swagger-tools": "^0.10.1"
   },
   "devDependencies": {
+    "@types/express": "^4.0.35",
+    "@types/node": "^7.0.12",
     "del": "^2.2.0",
     "gulp": "^3.9.1",
     "gulp-plumber": "^1.1.0",

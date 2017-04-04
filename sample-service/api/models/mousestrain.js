@@ -1,7 +1,8 @@
-'use strict';
-
-module.exports = function(sequelize, DataTypes) {
-    const MouseStrain = sequelize.define('MouseStrain', {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TableName = "MouseStrain";
+function sequelizeImport(sequelize, DataTypes) {
+    const MouseStrain = sequelize.define(exports.TableName, {
         id: {
             primaryKey: true,
             type: DataTypes.UUID,
@@ -12,6 +13,8 @@ module.exports = function(sequelize, DataTypes) {
         timestamps: true,
         paranoid: true
     });
-
     return MouseStrain;
-};
+}
+exports.sequelizeImport = sequelizeImport;
+;
+//# sourceMappingURL=mousestrain.js.map

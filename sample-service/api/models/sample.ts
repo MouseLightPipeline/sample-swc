@@ -1,8 +1,19 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TableName = "Sample";
-function sequelizeImport(sequelize, DataTypes) {
-    const Sample = sequelize.define(exports.TableName, {
+export const TableName = "Sample";
+
+export interface ISample {
+    id: string;
+    idNumber: number;
+    tag: string;
+    animalId: string;
+    comment: string;
+    sampleDate: Date;
+    activeRegistrationTransformId: string;
+    createAt: Date
+    updatedAt: Date
+}
+
+export function sequelizeImport(sequelize, DataTypes) {
+    const Sample = sequelize.define(TableName, {
         id: {
             primaryKey: true,
             type: DataTypes.UUID,
@@ -29,18 +40,17 @@ function sequelizeImport(sequelize, DataTypes) {
             type: DataTypes.TEXT,
             defaultValue: '',
         },
+
     }, {
         classMethods: {
-            associate: function (models) {
-                Sample.hasMany(models.RegistrationTransform, { foreignKey: 'sampleId', as: 'registrationTransforms' });
-                Sample.belongsTo(models.MouseStrain, { foreignKey: 'mouseStrainId', as: 'mouseStrain' });
+            associate: function(models) {
+                Sample.hasMany(models.RegistrationTransform, {foreignKey: 'sampleId', as: 'registrationTransforms'});
+                Sample.belongsTo(models.MouseStrain, {foreignKey: 'mouseStrainId', as: 'mouseStrain'});
             }
         },
         timestamps: true,
         paranoid: true
     });
+
     return Sample;
-}
-exports.sequelizeImport = sequelizeImport;
-;
-//# sourceMappingURL=sample.js.map
+};

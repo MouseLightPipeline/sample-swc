@@ -2,7 +2,7 @@
 
 var util = require('util');
 var errors = require('../helpers/errors');
-var models = require('../models/index');
+var models = require('../data-access/databaseConnector').PersistentStorageManager.Instance();
 /*
  For a controller you should export the functions referenced in your Swagger document by name.
 

@@ -1,8 +1,13 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TableName = "BrainArea";
-function sequelizeImport(sequelize, DataTypes) {
-    const BrainArea = sequelize.define(exports.TableName, {
+export interface IBrainArea {
+    id: string;
+    name: string;
+    structureId: number;
+}
+
+export const TableName = "BrainArea";
+
+export function sequelizeImport(sequelize, DataTypes) {
+    const BrainArea = sequelize.define(TableName, {
         id: {
             primaryKey: true,
             type: DataTypes.UUID,
@@ -18,14 +23,13 @@ function sequelizeImport(sequelize, DataTypes) {
     }, {
         classMethods: {
             associate: models => {
-                BrainArea.hasMany(models.Injection, { foreignKey: "brainAreaId", as: "injections" });
-                BrainArea.hasMany(models.Neuron, { foreignKey: "brainAreaId", as: "neurons" });
+                BrainArea.hasMany(models.Injection, {foreignKey: "brainAreaId", as: "injections"});
+                BrainArea.hasMany(models.Neuron, {foreignKey: "brainAreaId", as: "neurons"});
             }
         },
         timestamps: true,
         paranoid: true
     });
+
     return BrainArea;
 }
-exports.sequelizeImport = sequelizeImport;
-//# sourceMappingURL=brainArea.js.map
