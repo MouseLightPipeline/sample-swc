@@ -6,7 +6,9 @@ WORKDIR /app
 COPY . .
 
 # Install production app dependencies
-RUN npm install
+RUN npm install -g yarn typescript
+
+RUN yarn install
 
 EXPOSE  9641
 

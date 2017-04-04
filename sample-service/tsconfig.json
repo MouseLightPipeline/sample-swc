@@ -1,0 +1,15 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "module": "commonjs",
+    "target": "es6",
+    "sourceMap": true
+  },
+  "include": [
+    "app.ts",
+    "api/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
