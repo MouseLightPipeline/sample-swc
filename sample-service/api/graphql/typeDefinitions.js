@@ -69,6 +69,7 @@ type Sample {
 type Neuron {
     id: String!
     idNumber: Int
+    idString: String
     tag: String
     keywords: String
     x: Float

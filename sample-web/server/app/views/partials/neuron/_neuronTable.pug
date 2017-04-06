@@ -17,7 +17,7 @@ div(ng-controller="neuronTableController")
             td
               a(ng-click="inspectNeuron(n)")
                 i(class="fa fa-info-circle right-edge icons-table")
-              span {{n.idNumber}}
+              span {{n.idString}}
             td
               a(ng-click="editNeuron(n)")
                 span {{n.tag || '(none)'}}

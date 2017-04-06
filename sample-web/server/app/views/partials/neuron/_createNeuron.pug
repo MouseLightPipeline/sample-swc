@@ -4,9 +4,9 @@ div(ng-controller="createNeuronController")
     form
       div(class="row")
         div(class="col-sm-6")
-          div(ng-class="['form-group', 'label-floating', {'has-warning': !isValidIdNumber}]")
-            label(class="control-label" for="neuronIdNumber") Neuron Id Number
-            input(type="text", class="form-control", id="neuronIdNumber", ng-model="model.idNumber")
+          div(class="form-group label-floating")
+            label(class="control-label" for="neuronId") Neuron Id
+            input(type="text", class="form-control", id="neuronId", ng-model="model.idString")
         div(class="col-sm-6")
           div(class="form-group label-floating")
             label(class="control-label" for="neuronTag") Tag (optional)

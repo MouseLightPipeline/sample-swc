@@ -2,6 +2,7 @@ interface IEditNeuronScope extends IAppScope {
     title: string;
     neuron: INeuron;
 
+    idString: string;
     tag: string;
     keywords: string;
     somaLocation: string;
@@ -36,6 +37,7 @@ class EditNeuronController implements IModalController<INeuron> {
         this.$scope.neuron = neuron;
         this.$scope.title = `Neuron ${this.$scope.neuronService.getDisplayName(neuron)}`;
 
+        this.$scope.idString = neuron.idString;
         this.$scope.tag = neuron.tag;
         this.$scope.keywords = neuron.keywords;
         this.$scope.somaLocation = `${neuron.x}, ${neuron.y}, ${neuron.z}`;
@@ -59,6 +61,8 @@ class EditNeuronController implements IModalController<INeuron> {
         } catch (err) {
             return;
         }
+
+        this.$scope.neuron.idString = this.$scope.idString;
 
         this.$scope.neuron.tag = this.$scope.tag;
 

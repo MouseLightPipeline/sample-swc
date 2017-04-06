@@ -1191,6 +1191,9 @@ definitions:
       id:
         type: string
         description: Internal id
+      idString:
+        type: string
+        description: Public id
       injectionId:
         type: string
         description: Injection id
@@ -1213,7 +1216,10 @@ definitions:
     properties:
       idNumber:
         type: integer
-        description: Public id number
+        description: Public id
+      idString:
+        type: string
+        description: Public id
       tag:
         type: string
         description: tag

@@ -72,7 +72,7 @@ function post(req, res) {
         return;
     }
 
-    models.Neuron.findAll({where: {idNumber: req.body.idNumber}}).then(function (neurons) {
+    models.Neuron.findAll({where: {idString: req.body.idString}}).then(function (neurons) {
         if (neurons != null && neurons.length > 0) {
             res.status(500).json(errors.duplicateNeuron());
         } else {
@@ -84,6 +84,8 @@ function post(req, res) {
 }
 
 function create(body, res) {
+    const idNumber = body.idNumber || 0;
+    const idString = body.idString || "";
     const injectionId = body.injectionId || null;
     const brainAreaId = body.brainAreaId || null;
     const tag = body.tag || "";
@@ -93,17 +95,17 @@ function create(body, res) {
     const z = body.z || 0;
 
     models.Neuron.create({
-        idNumber: body.idNumber,
-        tag: tag,
-        keywords: keywords,
-        injectionId: injectionId,
-        brainAreaId: brainAreaId,
-        x: x,
-        y: y,
-        z: z
+        idNumber,
+        idString,
+        tag,
+        keywords,
+        injectionId,
+        brainAreaId,
+        x,
+        y,
+        z
     }).then(function (neuron) {
         res.json(neuron);
-        app.broadcast();
     }).catch(function (err) {
         res.status(500).json(errors.sequelizeError(err));
     });
@@ -123,6 +125,7 @@ function updateNeuron(req, res) {
 
             neuron.update({
                 tag: req.body.tag,
+                idString: req.body.idString,
                 injectionId: req.body.injectionId,
                 brainAreaId: req.body.brainAreaId,
                 x: req.body.x,
@@ -157,7 +160,6 @@ function deleteNeuron(req, res) {
 
             neuron.destroy().then(function () {
                 res.json({id: neuronId});
-                app.broadcast();
             }).catch(function (err) {
                 res.status(500).json(errors.sequelizeError(err));
             });

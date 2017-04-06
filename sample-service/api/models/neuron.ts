@@ -23,6 +23,10 @@ export function sequelizeImport(sequelize, DataTypes) {
             type: DataTypes.INTEGER,
             defaultValue: -1
         },
+        idString: {
+            type: DataTypes.TEXT,
+            defaultValue: ''
+        },
         tag: {
             type: DataTypes.TEXT,
             defaultValue: ''

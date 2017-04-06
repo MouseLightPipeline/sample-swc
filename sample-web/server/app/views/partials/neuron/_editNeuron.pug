@@ -10,6 +10,9 @@ div(class="modal fade" id="editNeuronModal" tabindex="-1" role="dialog" aria-lab
       div(class="modal-body")
         form
           div(class="form-group")
+            label(class="control-label" for="editNeuronId") Id
+            input(type="text", class="form-control", id="editNeuronId" ng-model="idString")
+          div(class="form-group")
             label(class="control-label" for="editNeuronTag") Tag
             input(type="text", class="form-control", id="editNeuronTag" ng-model="tag")
           div(class="form-group")

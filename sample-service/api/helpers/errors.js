@@ -25,7 +25,7 @@ var Codes = {
     },
     DUPLICATE_NEURON_ID: {
         code: 2201,
-        message: 'A neuron with that id number already exists.'
+        message: 'A neuron with that id already exists.'
     },
     DUPLICATE_INJECTION: {
         code: 2301,
