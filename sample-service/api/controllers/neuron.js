@@ -125,6 +125,7 @@ function updateNeuron(req, res) {
 
             neuron.update({
                 tag: req.body.tag,
+                keywords: req.body.keywords,
                 idString: req.body.idString,
                 injectionId: req.body.injectionId,
                 brainAreaId: req.body.brainAreaId,
