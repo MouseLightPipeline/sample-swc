@@ -15,7 +15,8 @@ module.exports = {
 
 function get(req, res) {
     models.Sample.findAll({order:[["idNumber", "DESC"]]}).then(function (samples) {
-        res.json(samples);
+        const fixed = samples.filter(s => s.activeRegistrationTransformId !== null && s.mouseStrainId !== null);
+        res.json(fixed);
     }).catch(function(err){
         res.status(500).json(errors.sequelizeError(err));
     });
