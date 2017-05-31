@@ -1,4 +1,4 @@
-FROM node:7.5
+FROM node:7.10
 
 WORKDIR /app
 
@@ -6,7 +6,7 @@ WORKDIR /app
 COPY . .
 
 # Install production app dependencies
-RUN npm install -g yarn typescript
+RUN yarn global add typescript
 
 RUN yarn install
 
